@@ -1,0 +1,10 @@
+.DS_Store
+.settings/
+*.class
+bin/
+*.jar
+sysProps.xml
+
+# ignore Sublime Text config files
+*.sublime-project
+*.sublime-workspace
