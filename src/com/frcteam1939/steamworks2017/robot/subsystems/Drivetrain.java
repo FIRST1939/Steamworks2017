@@ -3,8 +3,10 @@ package com.frcteam1939.steamworks2017.robot.subsystems;
 import com.ctre.CANTalon;
 import com.frcteam1939.steamworks2017.robot.RobotMap;
 import com.frcteam1939.steamworks2017.robot.drivetrain.commands.DriveByJoystick;
+import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Drivetrain extends Subsystem {
@@ -17,6 +19,8 @@ public class Drivetrain extends Subsystem {
 	private CANTalon sidewinder = new CANTalon(RobotMap.sidewinderTalon);
 	
 	private RobotDrive drive = new RobotDrive(leftFront, rightFront);
+	
+	private AHRS navx;
 	
 	public Drivetrain() {
 		leftFront.setControlMode(CANTalon.TalonControlMode.PercentVbus.value);
@@ -33,6 +37,12 @@ public class Drivetrain extends Subsystem {
 		
 		sidewinder.setControlMode(CANTalon.TalonControlMode.PercentVbus.value);
 		
+		try {
+			this.navx = new AHRS(SerialPort.Port.kMXP);
+		} catch (Exception e) {
+			System.out.println("ERROR: Couldn't intialize navX");
+			e.printStackTrace();
+		}
 	}
 	
     public void initDefaultCommand() {
