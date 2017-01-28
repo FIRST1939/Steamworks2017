@@ -14,11 +14,11 @@ public class Brake extends Subsystem {
 
 	}
 
-	public void down() {
+	public void brakeDown() {
 		this.solenoid.set(true);
 	}
 
-	public void up() {
+	public void brakeUp() {
 		this.solenoid.set(false);
 	}
 

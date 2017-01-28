@@ -17,6 +17,7 @@ public class brakeDown extends Command {
 
 	@Override
 	protected void execute() {
+		Robot.brake.brakeDown();
 	}
 
 	@Override

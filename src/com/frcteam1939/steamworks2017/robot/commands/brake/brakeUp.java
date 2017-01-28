@@ -20,6 +20,7 @@ public class brakeUp extends Command {
 
 	@Override
 	protected void execute() {
+		Robot.brake.brakeUp();
 	}
 
 	@Override
