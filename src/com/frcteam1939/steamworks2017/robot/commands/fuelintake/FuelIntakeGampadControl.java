@@ -1,4 +1,4 @@
-package com.frcteam1939.steamworks2017.robot.fuelIntake.commamnds;
+package com.frcteam1939.steamworks2017.robot.commands.fuelintake;
 
 import com.frcteam1939.steamworks2017.robot.Robot;
 

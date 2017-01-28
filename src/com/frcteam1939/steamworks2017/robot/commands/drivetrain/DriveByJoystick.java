@@ -1,4 +1,4 @@
-package com.frcteam1939.steamworks2017.robot.drivetrain.commands;
+package com.frcteam1939.steamworks2017.robot.commands.drivetrain;
 
 import com.frcteam1939.steamworks2017.robot.Robot;
 

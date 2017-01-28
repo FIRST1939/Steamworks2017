@@ -2,7 +2,7 @@ package com.frcteam1939.steamworks2017.robot.subsystems;
 
 import com.ctre.CANTalon;
 import com.frcteam1939.steamworks2017.robot.RobotMap;
-import com.frcteam1939.steamworks2017.robot.fueloutput.commands.FuelOutputGamepadControl;
+import com.frcteam1939.steamworks2017.robot.commands.fueloutput.FuelOutputGamepadControl;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Solenoid;
