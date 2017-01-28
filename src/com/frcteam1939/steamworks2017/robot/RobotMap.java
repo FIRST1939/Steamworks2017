@@ -1,7 +1,7 @@
 package com.frcteam1939.steamworks2017.robot;
 
 public class RobotMap {
-	
+
 	// CANTalons
 	public static final int leftFrontTalon = 0;
 	public static final int leftMidTalon = 0;
@@ -13,7 +13,7 @@ public class RobotMap {
 	public static final int climberTalon = 0;
 	public static final int fuelIntakeTalon = 0;
 	public static final int fuelOutputTalon = 0;
-	
+
 	// Solenoids
 	public static final int PCM = 0;
 	public static final int brakeDownSolenoid = 0;
@@ -22,8 +22,8 @@ public class RobotMap {
 	public static final int gearPushSolenoid = 0;
 	public static final int sidewinderDownSolenoid = 0;
 	public static final int sidewinderUpSolenoid = 0;
-	
+
 	// DIO
 	public static final int fuelLineBreak = 0;
-	
+
 }
