@@ -8,7 +8,6 @@ public class BrakeUp extends Command {
 
 	public BrakeUp() {
 		requires(Robot.brake);
-
 	}
 
 	@Override
@@ -17,12 +16,12 @@ public class BrakeUp extends Command {
 
 	@Override
 	protected void execute() {
-		Robot.brake.BrakeUp();
+		Robot.brake.up();
 	}
 
 	@Override
 	protected boolean isFinished() {
-		return false;
+		return true;
 	}
 
 	@Override
