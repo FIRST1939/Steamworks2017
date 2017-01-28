@@ -7,12 +7,11 @@ import edu.wpi.first.wpilibj.command.Command;
 public class BrakeUp extends Command {
 
 	public BrakeUp() {
-		requires(Robot.brake);
+		this.requires(Robot.brake);
 	}
 
 	@Override
-	protected void initialize() {
-	}
+	protected void initialize() {}
 
 	@Override
 	protected void execute() {
@@ -25,10 +24,8 @@ public class BrakeUp extends Command {
 	}
 
 	@Override
-	protected void end() {
-	}
+	protected void end() {}
 
 	@Override
-	protected void interrupted() {
-	}
+	protected void interrupted() {}
 }
