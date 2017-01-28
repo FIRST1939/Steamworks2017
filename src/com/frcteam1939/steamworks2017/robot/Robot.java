@@ -1,6 +1,7 @@
 
 package com.frcteam1939.steamworks2017.robot;
 
+import com.frcteam1939.steamworks2017.robot.subsystems.Brake;
 import com.frcteam1939.steamworks2017.robot.subsystems.Climber;
 import com.frcteam1939.steamworks2017.robot.subsystems.Drivetrain;
 import com.frcteam1939.steamworks2017.robot.subsystems.FuelIntake;
@@ -18,6 +19,7 @@ public class Robot extends IterativeRobot {
 	public static final Climber climber = new Climber();
 	public static final FuelIntake fuelIntake = new FuelIntake();
 	public static final FuelOutput fuelOutput = new FuelOutput();
+	public static final Brake brake = new Brake();
 
 	public static OI oi;
 
