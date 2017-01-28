@@ -16,11 +16,12 @@ public class GearRampOut extends Command {
 
 	@Override
 	protected void execute() {
+		Robot.gearIntake.rampOut();
 	}
 
 	@Override
 	protected boolean isFinished() {
-		return false;
+		return true;
 	}
 
 	@Override
