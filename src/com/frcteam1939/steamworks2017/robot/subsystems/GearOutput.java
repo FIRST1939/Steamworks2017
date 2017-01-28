@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class GearOutput extends Subsystem {
 
-	private Solenoid gearSolenoid = new Solenoid(RobotMap.gearPushSolenoid);
+	private Solenoid gearSolenoid = new Solenoid(RobotMap.PCM, RobotMap.gearPushSolenoid);
 
 	@Override
 	public void initDefaultCommand() {

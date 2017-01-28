@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 public class FuelOutput extends Subsystem {
 
 	private CANTalon talon = new CANTalon(RobotMap.fuelOutputTalon);
-	private Solenoid door = new Solenoid(RobotMap.fuelDoorOutSolenoid);
+	private Solenoid door = new Solenoid(RobotMap.PCM, RobotMap.fuelDoorOutSolenoid);
 	private DigitalInput lineBreak = new DigitalInput(RobotMap.fuelLineBreak);
 
 	@Override

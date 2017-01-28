@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Brake extends Subsystem {
 
-	private Solenoid solenoid = new Solenoid(RobotMap.brakeDownSolenoid);
+	private Solenoid solenoid = new Solenoid(RobotMap.PCM, RobotMap.brakeDownSolenoid);
 
 	@Override
 	public void initDefaultCommand() {
