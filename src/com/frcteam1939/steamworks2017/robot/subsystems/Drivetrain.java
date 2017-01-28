@@ -5,7 +5,6 @@ import com.frcteam1939.steamworks2017.robot.RobotMap;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.DriveByJoystick;
 import com.kauailabs.navx.frc.AHRS;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -18,8 +17,6 @@ public class Drivetrain extends Subsystem {
 	private CANTalon rightMid = new CANTalon(RobotMap.rightMidTalon);
 	private CANTalon rightBack = new CANTalon(RobotMap.rightBackTalon);
 	private CANTalon sidewinder = new CANTalon(RobotMap.sidewinderTalon);
-
-	private DoubleSolenoid sidewinderDown = new DoubleSolenoid(RobotMap.sidewinderDownSolenoid);
 
 	private RobotDrive drive = new RobotDrive(this.leftFront, this.rightFront);
 
