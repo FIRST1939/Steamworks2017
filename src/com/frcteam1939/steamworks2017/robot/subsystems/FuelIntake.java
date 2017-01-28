@@ -2,7 +2,7 @@ package com.frcteam1939.steamworks2017.robot.subsystems;
 
 import com.ctre.CANTalon;
 import com.frcteam1939.steamworks2017.robot.RobotMap;
-import com.frcteam1939.steamworks2017.robot.fuelIntake.commamnds.FuelIntakeGampadControl;
+import com.frcteam1939.steamworks2017.robot.commands.fuelintake.FuelIntakeGampadControl;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 

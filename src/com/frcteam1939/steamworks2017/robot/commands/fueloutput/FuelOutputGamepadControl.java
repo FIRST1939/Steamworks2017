@@ -1,26 +1,24 @@
-package com.frcteam1939.steamworks2017.robot.fuelIntake.commamnds;
+package com.frcteam1939.steamworks2017.robot.commands.fueloutput;
 
 import com.frcteam1939.steamworks2017.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class SetFuelIntakeSpeed extends Command {
+public class FuelOutputGamepadControl extends Command {
 	
-	private double speed;
-
-    public SetFuelIntakeSpeed(double speed) {
-    	requires (Robot.fuelIntake);
-    	this.speed = speed;
+    public FuelOutputGamepadControl() {
+    	requires(Robot.fuelOutput);
     }
 
     protected void initialize() {
     }
+
     protected void execute() {
-    	Robot.fuelIntake.setOutput(speed);
+    	
     }
 
     protected boolean isFinished() {
-        return true;
+        return false;
     }
 
     protected void end() {
