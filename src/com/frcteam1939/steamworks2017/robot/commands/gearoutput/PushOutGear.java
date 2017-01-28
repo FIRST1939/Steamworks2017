@@ -4,9 +4,9 @@ import com.frcteam1939.steamworks2017.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class Push extends Command {
+public class PushOutGear extends Command {
 
-	public Push() {
+	public PushOutGear() {
 		this.requires(Robot.gearOutput);
 	}
 
@@ -16,12 +16,12 @@ public class Push extends Command {
 
 	@Override
 	protected void execute() {
-		Robot.gearOutput.push();
+		Robot.gearOutput.pushOutGear();
 	}
 
 	@Override
 	protected boolean isFinished() {
-		return false;
+		return true;
 	}
 
 	@Override

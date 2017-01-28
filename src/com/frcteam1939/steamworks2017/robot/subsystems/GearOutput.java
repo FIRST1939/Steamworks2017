@@ -13,11 +13,11 @@ public class GearOutput extends Subsystem {
 	public void initDefaultCommand() {
 	}
 
-	public void push() {
+	public void pushOutGear() {
 		this.gearSolenoid.set(true);
 	}
 
-	public void retract() {
+	public void retractGearPusher() {
 		this.gearSolenoid.set(false);
 	}
 }

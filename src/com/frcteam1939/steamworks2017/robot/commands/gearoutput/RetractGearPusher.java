@@ -4,9 +4,9 @@ import com.frcteam1939.steamworks2017.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class Retract extends Command {
+public class RetractGearPusher extends Command {
 
-	public Retract() {
+	public RetractGearPusher() {
 		this.requires(Robot.gearOutput);
 	}
 
@@ -16,12 +16,12 @@ public class Retract extends Command {
 
 	@Override
 	protected void execute() {
-		Robot.gearOutput.retract();
+		Robot.gearOutput.retractGearPusher();
 	}
 
 	@Override
 	protected boolean isFinished() {
-		return false;
+		return true;
 	}
 
 	@Override

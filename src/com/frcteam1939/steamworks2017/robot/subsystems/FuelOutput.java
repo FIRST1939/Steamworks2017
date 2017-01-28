@@ -14,20 +14,20 @@ public class FuelOutput extends Subsystem {
 	private Solenoid door = new Solenoid(RobotMap.fuelDoorOutSolenoid);
 	private DigitalInput lineBreak = new DigitalInput(RobotMap.fuelLineBreak);
 
-    public void initDefaultCommand() {
-    	setDefaultCommand(new FuelOutputGamepadControl());
-    }
-    
-    public void setOutput(double output){
-    	talon.set(output);
-    }
-    
-    public void setDoor(boolean isOut){
-    	door.set(isOut);
-    }
-    
-    public boolean isFull(){
-    	return lineBreak.get();
-    }
-}
+	@Override
+	public void initDefaultCommand() {
+		this.setDefaultCommand(new FuelOutputGamepadControl());
+	}
 
+	public void setOutput(double output) {
+		this.talon.set(output);
+	}
+
+	public void setDoor(boolean isOut) {
+		this.door.set(isOut);
+	}
+
+	public boolean isFull() {
+		return this.lineBreak.get();
+	}
+}
