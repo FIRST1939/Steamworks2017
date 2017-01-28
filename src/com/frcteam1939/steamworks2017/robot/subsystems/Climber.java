@@ -10,11 +10,9 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 public class Climber extends Subsystem {
 
 	private CANTalon talon = new CANTalon(RobotMap.climberTalon);
-	private static final int CPR = 12;
 
 	public Climber() {
-		this.talon.setFeedbackDevice(FeedbackDevice.QuadEncoder);
-		this.talon.configEncoderCodesPerRev(CPR);
+		this.talon.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
 	}
 
 	@Override
@@ -24,10 +22,6 @@ public class Climber extends Subsystem {
 
 	public void setOutput(double output) {
 		this.talon.set(output);
-	}
-
-	public double getSpeed() {
-		return this.talon.getEncPosition();
 	}
 
 }
