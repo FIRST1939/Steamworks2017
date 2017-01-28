@@ -6,23 +6,20 @@ import edu.wpi.first.wpilibj.command.Command;
 
 public class FuelIntakeGampadControl extends Command {
 
-    public FuelIntakeGampadControl() {
-    	requires(Robot.fuelIntake);
+	public FuelIntakeGampadControl() {
+		requires(Robot.fuelIntake);
 
-    }
-    protected void initialize() {
-    }
+	}
 
-    protected void execute() {
-    }
+	protected void initialize() {}
 
-    protected boolean isFinished() {
-        return false;
-    }
+	protected void execute() {}
 
-    protected void end() {
-    }
+	protected boolean isFinished() {
+		return false;
+	}
 
-    protected void interrupted() {
-    }
+	protected void end() {}
+
+	protected void interrupted() {}
 }

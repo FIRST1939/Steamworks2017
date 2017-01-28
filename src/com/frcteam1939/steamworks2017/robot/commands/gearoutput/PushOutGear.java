@@ -11,8 +11,7 @@ public class PushOutGear extends Command {
 	}
 
 	@Override
-	protected void initialize() {
-	}
+	protected void initialize() {}
 
 	@Override
 	protected void execute() {
@@ -25,10 +24,8 @@ public class PushOutGear extends Command {
 	}
 
 	@Override
-	protected void end() {
-	}
+	protected void end() {}
 
 	@Override
-	protected void interrupted() {
-	}
+	protected void interrupted() {}
 }

@@ -5,25 +5,22 @@ import com.frcteam1939.steamworks2017.robot.Robot;
 import edu.wpi.first.wpilibj.command.Command;
 
 public class FuelOutputGamepadControl extends Command {
-	
-    public FuelOutputGamepadControl() {
-    	requires(Robot.fuelOutput);
-    }
 
-    protected void initialize() {
-    }
+	public FuelOutputGamepadControl() {
+		requires(Robot.fuelOutput);
+	}
 
-    protected void execute() {
-    	
-    }
+	protected void initialize() {}
 
-    protected boolean isFinished() {
-        return false;
-    }
+	protected void execute() {
 
-    protected void end() {
-    }
+	}
 
-    protected void interrupted() {
-    }
+	protected boolean isFinished() {
+		return false;
+	}
+
+	protected void end() {}
+
+	protected void interrupted() {}
 }

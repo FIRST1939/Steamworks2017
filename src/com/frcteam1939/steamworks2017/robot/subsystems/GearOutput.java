@@ -10,8 +10,7 @@ public class GearOutput extends Subsystem {
 	private Solenoid gearSolenoid = new Solenoid(RobotMap.PCM, RobotMap.gearPushSolenoid);
 
 	@Override
-	public void initDefaultCommand() {
-	}
+	public void initDefaultCommand() {}
 
 	public void push() {
 		this.gearSolenoid.set(true);

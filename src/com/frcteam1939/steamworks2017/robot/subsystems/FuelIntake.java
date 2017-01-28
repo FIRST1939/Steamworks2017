@@ -10,11 +10,11 @@ public class FuelIntake extends Subsystem {
 
 	private CANTalon talon = new CANTalon(RobotMap.fuelIntakeTalon);
 
-    public void initDefaultCommand() {
-    	setDefaultCommand(new FuelIntakeGampadControl());
-    }
-  
-    public void setOutput(double speed){
-    	talon.set(speed);
-    }
+	public void initDefaultCommand() {
+		setDefaultCommand(new FuelIntakeGampadControl());
+	}
+
+	public void setOutput(double speed) {
+		talon.set(speed);
+	}
 }

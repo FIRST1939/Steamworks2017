@@ -5,25 +5,22 @@ import edu.wpi.first.wpilibj.command.Command;
 public class Wait extends Command {
 
 	private double timeout;
-	
-    public Wait(double timeout) {
-    	this.timeout = timeout;
-    }
 
-    protected void initialize() {
-    	this.setTimeout(timeout);
-    }
+	public Wait(double timeout) {
+		this.timeout = timeout;
+	}
 
-    protected void execute() {
-    }
+	protected void initialize() {
+		this.setTimeout(timeout);
+	}
 
-    protected boolean isFinished() {
-        return this.isTimedOut();
-    }
+	protected void execute() {}
 
-    protected void end() {
-    }
+	protected boolean isFinished() {
+		return this.isTimedOut();
+	}
 
-    protected void interrupted() {
-    }
+	protected void end() {}
+
+	protected void interrupted() {}
 }
