@@ -1,6 +1,7 @@
 
 package com.frcteam1939.steamworks2017.robot;
 
+import com.frcteam1939.steamworks2017.robot.subsystems.Climber;
 import com.frcteam1939.steamworks2017.robot.subsystems.Drivetrain;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -12,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 public class Robot extends IterativeRobot {
 
 	public static final Drivetrain drivetrain = new Drivetrain();
+	public static final Climber climber = new Climber();
 	public static OI oi;
 
 	Command autonomousCommand;
