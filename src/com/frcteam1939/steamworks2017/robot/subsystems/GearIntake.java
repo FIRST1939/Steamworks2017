@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class GearIntake extends Subsystem {
 
-	private Solenoid solenoid = new Solenoid(RobotMap.gearRampOutSolenoid);
+	private Solenoid solenoid = new Solenoid(RobotMap.PCM, RobotMap.gearRampOutSolenoid);
 
 	@Override
 	public void initDefaultCommand() {
