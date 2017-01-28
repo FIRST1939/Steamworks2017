@@ -16,7 +16,7 @@ public class PushOutGear extends Command {
 
 	@Override
 	protected void execute() {
-		Robot.gearOutput.pushOutGear();
+		Robot.gearOutput.push();
 	}
 
 	@Override

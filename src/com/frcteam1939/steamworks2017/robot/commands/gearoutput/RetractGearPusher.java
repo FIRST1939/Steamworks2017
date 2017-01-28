@@ -16,7 +16,7 @@ public class RetractGearPusher extends Command {
 
 	@Override
 	protected void execute() {
-		Robot.gearOutput.retractGearPusher();
+		Robot.gearOutput.retract();
 	}
 
 	@Override
