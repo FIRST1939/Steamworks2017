@@ -4,12 +4,9 @@ import com.frcteam1939.steamworks2017.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-/**
- *
- */
-public class brakeUp extends Command {
+public class BrakeUp extends Command {
 
-	public brakeUp() {
+	public BrakeUp() {
 		requires(Robot.brake);
 
 	}
@@ -20,7 +17,7 @@ public class brakeUp extends Command {
 
 	@Override
 	protected void execute() {
-		Robot.brake.brakeUp();
+		Robot.brake.BrakeUp();
 	}
 
 	@Override
