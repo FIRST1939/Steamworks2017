@@ -5,6 +5,7 @@ import com.frcteam1939.steamworks2017.robot.subsystems.Climber;
 import com.frcteam1939.steamworks2017.robot.subsystems.Drivetrain;
 import com.frcteam1939.steamworks2017.robot.subsystems.FuelIntake;
 import com.frcteam1939.steamworks2017.robot.subsystems.FuelOutput;
+import com.frcteam1939.steamworks2017.robot.subsystems.GearIntake;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -18,6 +19,7 @@ public class Robot extends IterativeRobot {
 	public static final Climber climber = new Climber();
 	public static final FuelIntake fuelIntake = new FuelIntake();
 	public static final FuelOutput fuelOutput = new FuelOutput();
+	public static final GearIntake gearIntake = new GearIntake();
 
 	public static OI oi;
 
