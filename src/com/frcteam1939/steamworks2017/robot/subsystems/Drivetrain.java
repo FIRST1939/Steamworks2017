@@ -17,9 +17,11 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Drivetrain extends Subsystem {
 
-	public static final double WHEEL_BASE = 25; // Inches
+	public static final double WHEEL_BASE = 32; // Inches
 	public static final double WHEEL_DIAMETER = 6; // Inches
 	public static final double MAX_SPEED = 630; // RPM
+	public static final double MAX_A = 4.0; // Max Acceleration in R/S^2
+	public static final double MAX_JERK = 4.0; // R/S^3
 	public static final int MP_UPDATE_MS = 50; // Time per MP frame
 	public static final int CPR = 256; // Counts per Revolution of Encoders
 

@@ -3,44 +3,63 @@ package com.frcteam1939.steamworks2017.util;
 import com.ctre.CANTalon.TrajectoryPoint;
 import com.frcteam1939.steamworks2017.robot.subsystems.Drivetrain;
 
-import usfirst.frc.team2168.robot.FalconPathPlanner;
+import jaci.pathfinder.Pathfinder;
+import jaci.pathfinder.Trajectory;
+import jaci.pathfinder.Trajectory.Segment;
+import jaci.pathfinder.Waypoint;
+import jaci.pathfinder.modifiers.TankModifier;
 
 public class MotionProfile {
 
-	private final int period;
-	private final FalconPathPlanner plan;
+	private static final double THROTTLE = 0.3;
+	private static final double MAX_V = Drivetrain.MAX_SPEED / 60.0 * THROTTLE;
+	private static final double MAX_A = Drivetrain.MAX_A * THROTTLE;
+	private static final double MAX_J = Drivetrain.MAX_JERK * THROTTLE;
+
+	private final double period;
+	private final Trajectory trajectory;
+	private final Trajectory leftTrajectory;
+	private final Trajectory rightTrajectory;
 	private final double totalTime;
 	private final TrajectoryPoint[] left;
 	private final TrajectoryPoint[] right;
 
-	public MotionProfile(double[][] waypoints, double time, boolean backwards) {
+	public MotionProfile(double[][] waypoints, boolean backwards) {
+		Waypoint[] points = new Waypoint[waypoints.length];
 		for (int i = 0; i < waypoints.length; i++) {
-			for (int j = 0; j < waypoints[i].length; j++) {
-				waypoints[i][j] = inchesToRev(waypoints[i][j]);
-			}
+			points[i] = new Waypoint(inchesToRev(waypoints[i][0]), inchesToRev(waypoints[i][1]), waypoints[i][2]);
 		}
-		this.period = Drivetrain.MP_UPDATE_MS;
-		this.plan = new FalconPathPlanner(waypoints);
-		this.plan.calculate(time, this.period / 1000.0, inchesToRev(Drivetrain.WHEEL_BASE));
 
-		double[] lp = normalizePositions(this.plan.leftPath);
-		double[] lv = normalizeVelocities(this.plan.smoothLeftVelocity);
-		double[] rp = normalizePositions(this.plan.rightPath);
-		double[] rv = normalizeVelocities(this.plan.smoothRightVelocity);
+		this.period = Drivetrain.MP_UPDATE_MS / 1000.0;
 
-		this.totalTime = lp.length * this.period / 1000.0;
+		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_FAST, this.period, MAX_V, MAX_A, MAX_J);
+		this.trajectory = Pathfinder.generate(points, config);
+		TankModifier modifier = new TankModifier(this.trajectory);
+		modifier.modify(inchesToRev(Drivetrain.WHEEL_BASE));
+		this.leftTrajectory = modifier.getLeftTrajectory();
+		this.rightTrajectory = modifier.getRightTrajectory();
+
+		this.totalTime = this.trajectory.length() * this.period;
 
 		if (backwards) {
-			this.left = this.generatePoints(lp, lv, false);
-			this.right = this.generatePoints(rp, rv, true);
+			this.left = generatePoints(this.leftTrajectory, false);
+			this.right = generatePoints(this.rightTrajectory, true);
 		} else {
-			this.left = this.generatePoints(lp, lv, true);
-			this.right = this.generatePoints(rp, rv, false);
+			this.left = generatePoints(this.leftTrajectory, true);
+			this.right = generatePoints(this.rightTrajectory, false);
 		}
 	}
 
-	public FalconPathPlanner getPlan() {
-		return this.plan;
+	public Trajectory getTrajectory() {
+		return this.trajectory;
+	}
+
+	public Trajectory getLeftTrajectory() {
+		return this.leftTrajectory;
+	}
+
+	public Trajectory getRightTrajectory() {
+		return this.rightTrajectory;
 	}
 
 	public double getTotalTime() {
@@ -55,17 +74,18 @@ public class MotionProfile {
 		return this.right;
 	}
 
-	private TrajectoryPoint[] generatePoints(double[] positions, double[] velocities, boolean invert) {
-		TrajectoryPoint[] points = new TrajectoryPoint[positions.length];
+	private static TrajectoryPoint[] generatePoints(Trajectory t, boolean invert) {
+		TrajectoryPoint[] points = new TrajectoryPoint[t.length()];
 		for (int i = 0; i < points.length; i++) {
+			Segment s = t.get(i);
 			TrajectoryPoint point = new TrajectoryPoint();
-			point.position = positions[i];
-			point.velocity = velocities[i] * 60;
-			point.timeDurMs = this.period;
+			point.position = s.position;
+			point.velocity = s.velocity * 60;
+			point.timeDurMs = (int) (s.dt * 1000.0);
 			point.profileSlotSelect = 1;
 			point.velocityOnly = false;
 			point.zeroPos = i == 0;
-			point.isLastPoint = i == positions.length - 1;
+			point.isLastPoint = i == t.length() - 1;
 
 			if (invert) {
 				point.position = -point.position;
@@ -77,32 +97,8 @@ public class MotionProfile {
 		return points;
 	}
 
-	private static double[] normalizePositions(double[][] p) {
-		double[] n = new double[p.length];
-		for (int i = 0; i < n.length; i++) {
-			n[i] = calcDistance(p, i);
-		}
-		return n;
-	}
-
-	private static double[] normalizeVelocities(double[][] v) {
-		double[] n = new double[v.length];
-		for (int i = 0; i < n.length; i++) {
-			n[i] = v[i][1];
-		}
-		return n;
-	}
-
 	private static double inchesToRev(double inches) {
 		return inches / (Drivetrain.WHEEL_DIAMETER * Math.PI);
-	}
-
-	private static double calcDistance(double[][] path, double term) {
-		double sum = 0;
-		for (int i = 1; i <= term; i++) {
-			sum += Math.sqrt(Math.pow(path[i][0] - path[i - 1][0], 2) + Math.pow(path[i][1] - path[i - 1][1], 2));
-		}
-		return sum;
 	}
 
 }
