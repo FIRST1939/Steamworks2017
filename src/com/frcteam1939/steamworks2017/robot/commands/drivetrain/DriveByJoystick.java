@@ -6,25 +6,64 @@ import edu.wpi.first.wpilibj.command.Command;
 
 public class DriveByJoystick extends Command {
 
+	private static double DEAD_BAND = 0.1;
+
 	public DriveByJoystick() {
-		requires(Robot.drivetrain);
+		this.requires(Robot.drivetrain);
 	}
 
+	@Override
 	protected void initialize() {}
 
+	@Override
 	protected void execute() {
 		double move = Robot.oi.left.getY();
 		double rotate = Robot.oi.right.getX();
 		double strafe = Robot.oi.right.getY();
 
+		if (Math.abs(move) < DEAD_BAND) {
+			move = 0;
+		} else {
+			move = map(move, 0, 0.5);
+		}
+		if (Math.abs(rotate) < DEAD_BAND) {
+			rotate = 0;
+		} else {
+			rotate = map(rotate, 0, 0.3);
+		}
+		if (Math.abs(strafe) < DEAD_BAND) {
+			strafe = 0;
+		} else {
+			strafe = map(strafe, 0, 0.5);
+		}
+
 		Robot.drivetrain.drive(move, rotate, strafe);
 	}
 
+	@Override
 	protected boolean isFinished() {
 		return false;
 	}
 
-	protected void end() {}
+	@Override
+	protected void end() {
+		Robot.drivetrain.drive(0, 0, 0);
+	}
 
-	protected void interrupted() {}
+	@Override
+	protected void interrupted() {
+		Robot.drivetrain.drive(0, 0, 0);
+	}
+
+	private static double map(double x, double out_min, double out_max) {
+		return map(x, DEAD_BAND, 1.0, out_min, out_max);
+	}
+
+	private static double map(double x, double in_min, double in_max, double out_min, double out_max) {
+		boolean negative = x < 0;
+		double newValue = (Math.abs(x) - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+		if (negative) return -newValue;
+		else return newValue;
+	}
+
 }
