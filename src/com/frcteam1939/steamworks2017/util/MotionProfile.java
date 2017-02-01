@@ -11,10 +11,12 @@ import jaci.pathfinder.modifiers.TankModifier;
 
 public class MotionProfile {
 
-	private static final double THROTTLE = 0.3;
-	private static final double MAX_V = Drivetrain.MAX_SPEED / 60.0 * THROTTLE;
-	private static final double MAX_A = Drivetrain.MAX_A * THROTTLE;
-	private static final double MAX_J = Drivetrain.MAX_JERK * THROTTLE;
+	private static final double V_THROTTLE = 0.2;
+	private static final double A_THROTTLE = 0.6;
+
+	private static final double MAX_V = Drivetrain.MAX_SPEED / 60.0 * V_THROTTLE;
+	private static final double MAX_A = Drivetrain.MAX_A * A_THROTTLE;
+	private static final double MAX_J = Drivetrain.MAX_JERK * A_THROTTLE;
 
 	private final double period;
 	private final Trajectory trajectory;

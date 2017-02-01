@@ -21,7 +21,7 @@ public class Drivetrain extends Subsystem {
 	public static final double WHEEL_DIAMETER = 6; // Inches
 	public static final double MAX_SPEED = 630; // RPM
 	public static final double MAX_A = 4.0; // Max Acceleration in R/S^2
-	public static final double MAX_JERK = 4.0; // R/S^3
+	public static final double MAX_JERK = 16.0; // R/S^3
 	public static final int MP_UPDATE_MS = 50; // Time per MP frame
 	public static final int CPR = 256; // Counts per Revolution of Encoders
 
@@ -33,8 +33,8 @@ public class Drivetrain extends Subsystem {
 	private static final double velI = velP / 1000.0;
 	private static final double velD = velP * 10.0;
 
-	private static final double posP = 1.0 / 5.0; // Full speed at 5 rev error
-	private static final double posI = posP / 10000.0;
+	private static final double posP = 1.0 / 4.0; // Full speed at 5 rev error
+	private static final double posI = posP / 8000.0;
 	private static final double posD = 0;// posP * 10.0;
 
 	private CANTalon frontLeft = new CANTalon(RobotMap.leftFrontTalon);
@@ -144,8 +144,8 @@ public class Drivetrain extends Subsystem {
 			this.sidewinderUp();
 		} else {
 			this.sidewinderDown();
-			this.sidewinder.set(strafeValue);
 		}
+		this.sidewinder.set(strafeValue);
 
 		// Calculate left and right speeds from move and rotate values
 		double leftMotorSpeed;
@@ -217,7 +217,7 @@ public class Drivetrain extends Subsystem {
 	private static void stopMotionProfile(CANTalon talon) {
 		talon.setProfile(1);
 		talon.changeControlMode(TalonControlMode.MotionProfile);
-		talon.set(SetValueMotionProfile.Hold.value);
+		talon.set(SetValueMotionProfile.Disable.value);
 	}
 
 	private static void setSpeed(CANTalon talon, double speed) {
