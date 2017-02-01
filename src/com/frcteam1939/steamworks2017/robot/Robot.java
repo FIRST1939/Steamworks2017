@@ -41,6 +41,11 @@ public class Robot extends IterativeRobot {
 	}
 
 	@Override
+	public void robotPeriodic() {
+		this.autonomousCommand = this.chooser.getSelected();
+	}
+
+	@Override
 	public void disabledInit() {}
 
 	@Override
@@ -50,8 +55,6 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void autonomousInit() {
-		this.autonomousCommand = this.chooser.getSelected();
-
 		if (this.autonomousCommand != null) {
 			this.autonomousCommand.start();
 		}
