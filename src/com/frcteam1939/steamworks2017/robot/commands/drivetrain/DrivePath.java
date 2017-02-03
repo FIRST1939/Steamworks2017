@@ -1,26 +1,31 @@
 package com.frcteam1939.steamworks2017.robot.commands.drivetrain;
 
 import com.ctre.CANTalon.MotionProfileStatus;
+import com.frcteam1939.steamworks2017.robot.Paths;
 import com.frcteam1939.steamworks2017.robot.Robot;
 import com.frcteam1939.steamworks2017.util.MotionProfile;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.command.Command;
 
-public class DriveMotionProfile extends Command {
+public class DrivePath extends Command {
 
-	private MotionProfile profile;
+	private MotionProfile red;
+	private MotionProfile blue;
 
 	private boolean started = false;
 	private boolean finished = false;
 
-	public DriveMotionProfile(MotionProfile profile) {
-		this.profile = profile;
+	public DrivePath(double[][] waypoints) {
+		this.red = new MotionProfile(waypoints);
+		this.blue = new MotionProfile(Paths.flip(waypoints));
 		this.requires(Robot.drivetrain);
 	}
 
 	@Override
 	protected void initialize() {
-		Robot.drivetrain.setMotionProfile(this.profile);
+		Robot.drivetrain.setMotionProfile(DriverStation.getInstance().getAlliance() == Alliance.Red ? this.red : this.blue);
 		this.started = false;
 		this.finished = false;
 		Robot.drivetrain.stopMotionProfile();

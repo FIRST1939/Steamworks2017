@@ -1,6 +1,7 @@
 package com.frcteam1939.steamworks2017.util;
 
 import com.ctre.CANTalon.TrajectoryPoint;
+import com.frcteam1939.steamworks2017.robot.Paths;
 import com.frcteam1939.steamworks2017.robot.subsystems.Drivetrain;
 
 import jaci.pathfinder.Pathfinder;
@@ -11,7 +12,7 @@ import jaci.pathfinder.modifiers.TankModifier;
 
 public class MotionProfile {
 
-	private static final double V_THROTTLE = 0.2;
+	private static final double V_THROTTLE = 0.5;
 	private static final double A_THROTTLE = 0.6;
 
 	private static final double MAX_V = Drivetrain.MAX_SPEED / 60.0 * V_THROTTLE;
@@ -26,7 +27,14 @@ public class MotionProfile {
 	private final TrajectoryPoint[] left;
 	private final TrajectoryPoint[] right;
 
+	public MotionProfile(double[][] waypoints) {
+		this(waypoints, false);
+	}
+
 	public MotionProfile(double[][] waypoints, boolean backwards) {
+		if (backwards) {
+			waypoints = Paths.invert(waypoints);
+		}
 		Waypoint[] points = new Waypoint[waypoints.length];
 		for (int i = 0; i < waypoints.length; i++) {
 			points[i] = new Waypoint(inchesToRev(waypoints[i][0]), inchesToRev(waypoints[i][1]), waypoints[i][2]);
@@ -44,8 +52,8 @@ public class MotionProfile {
 		this.totalTime = this.trajectory.length() * this.period;
 
 		if (backwards) {
-			this.left = generatePoints(this.leftTrajectory, false);
-			this.right = generatePoints(this.rightTrajectory, true);
+			this.left = generatePoints(this.rightTrajectory, false);
+			this.right = generatePoints(this.leftTrajectory, true);
 		} else {
 			this.left = generatePoints(this.leftTrajectory, true);
 			this.right = generatePoints(this.rightTrajectory, false);
