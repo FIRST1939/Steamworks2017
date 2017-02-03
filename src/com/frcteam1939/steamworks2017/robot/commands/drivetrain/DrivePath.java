@@ -18,8 +18,12 @@ public class DrivePath extends Command {
 	private boolean finished = false;
 
 	public DrivePath(double[][] waypoints) {
-		this.red = new MotionProfile(waypoints);
-		this.blue = new MotionProfile(Paths.flip(waypoints));
+		this(waypoints, false);
+	}
+
+	public DrivePath(double[][] waypoints, boolean backwards) {
+		this.red = new MotionProfile(waypoints, backwards);
+		this.blue = new MotionProfile(Paths.flip(waypoints), backwards);
 		this.requires(Robot.drivetrain);
 	}
 
