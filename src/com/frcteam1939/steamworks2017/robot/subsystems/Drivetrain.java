@@ -13,6 +13,7 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Drivetrain extends Subsystem {
@@ -45,7 +46,8 @@ public class Drivetrain extends Subsystem {
 	private CANTalon backRight = new CANTalon(RobotMap.rightBackTalon);
 	private CANTalon sidewinder = new CANTalon(RobotMap.sidewinderTalon);
 
-	private DoubleSolenoid solenoid = new DoubleSolenoid(RobotMap.PCM, RobotMap.sidewinderDownSolenoid, RobotMap.sidewinderUpSolenoid);
+	private DoubleSolenoid sidewinderSolenoid = new DoubleSolenoid(RobotMap.PCM, RobotMap.sidewinderDownSolenoid, RobotMap.sidewinderUpSolenoid);
+	private Solenoid brake = new Solenoid(RobotMap.PCM, RobotMap.brakeDownSolenoid);
 
 	private AHRS navx;
 
@@ -100,6 +102,14 @@ public class Drivetrain extends Subsystem {
 		return status;
 	}
 
+	public double getLeftSpeed() {
+		return this.frontLeft.getSpeed();
+	}
+
+	public double getRightSpeed() {
+		return this.frontRight.getSpeed();
+	}
+
 	/*
 	 * Set Methods
 	 */
@@ -126,25 +136,44 @@ public class Drivetrain extends Subsystem {
 	}
 
 	public void sidewinderDown() {
-		this.solenoid.set(DoubleSolenoid.Value.kForward);
+		this.sidewinderSolenoid.set(DoubleSolenoid.Value.kForward);
 	}
 
 	public void sidewinderUp() {
-		this.solenoid.set(DoubleSolenoid.Value.kReverse);
+		this.sidewinderSolenoid.set(DoubleSolenoid.Value.kReverse);
+	}
+
+	public void brakeDown() {
+		this.brake.set(true);
+	}
+
+	public void brakeUp() {
+		this.brake.set(false);
+	}
+
+	public void setVoltage(double voltage) {
+		if (voltage != 0) {
+			this.brakeUp();
+		}
+		setVoltage(this.frontLeft, voltage);
+		setVoltage(this.frontRight, -voltage);
+	}
+
+	public void stop() {
+		setPercentVBus(this.frontLeft, 0);
+		setPercentVBus(this.frontRight, 0);
 	}
 
 	public void driveSpeed(double left, double right) {
+		if (left != 0 || right != 0) {
+			this.brakeUp();
+		}
 		setSpeed(this.frontLeft, left);
 		setSpeed(this.frontRight, right);
 	}
 
 	public void drive(double moveValue, double rotateValue, double strafeValue) {
 		// Strafe with Sidewinder
-		if (strafeValue == 0) {
-			this.sidewinderUp();
-		} else {
-			this.sidewinderDown();
-		}
 		this.sidewinder.set(strafeValue);
 
 		// Calculate left and right speeds from move and rotate values
@@ -172,32 +201,54 @@ public class Drivetrain extends Subsystem {
 		this.driveSpeed(leftMotorSpeed * MAX_SPEED, -rightMotorSpeed * MAX_SPEED);
 	}
 
+	public void enableBraking() {
+		this.frontLeft.enableBrakeMode(true);
+		this.midLeft.enableBrakeMode(true);
+		this.backLeft.enableBrakeMode(true);
+		this.frontRight.enableBrakeMode(true);
+		this.midRight.enableBrakeMode(true);
+		this.backRight.enableBrakeMode(true);
+	}
+
+	public void disableBraking() {
+		this.frontLeft.enableBrakeMode(false);
+		this.midLeft.enableBrakeMode(false);
+		this.backLeft.enableBrakeMode(false);
+		this.frontRight.enableBrakeMode(false);
+		this.midRight.enableBrakeMode(false);
+		this.backRight.enableBrakeMode(false);
+	}
+
 	/*
 	 * Static Convience Methods
 	 */
 
 	private static void setupMasterTalon(CANTalon talon) {
-		talon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
-		talon.configEncoderCodesPerRev(CPR);
-		talon.configNominalOutputVoltage(+0.0f, -0.0f);
-		talon.configPeakOutputVoltage(+12.0f, -12.0f);
-		talon.setProfile(0);
-		talon.setF(velF);
+		talon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder); // Tell Talon that a Quadrature Encoder is attached
+		talon.configEncoderCodesPerRev(CPR); // Tell Talon the resolution of the encoder (how many signals per revolution)
+		talon.configNominalOutputVoltage(+0.0f, -0.0f); // Set the minimum output of the Talon in volts
+		talon.configPeakOutputVoltage(+12.0f, -12.0f); // Set the maximum output of the Talon in volts
+		talon.setProfile(0); // Switch to profile 0 and save PIDF terms for velocity control
 		talon.setP(velP);
 		talon.setI(velI);
 		talon.setD(velD);
-		talon.setProfile(1);
 		talon.setF(velF);
+		talon.setIZone(0); // Disable IZone
+		talon.setVoltageRampRate(24); // Set maximum change in volts per seconds
+		talon.setProfile(1); // Switch to profile 1 and save PIDF terms for position control
 		talon.setP(posP);
 		talon.setI(posI);
 		talon.setD(posD);
-		talon.setVoltageRampRate(24);
-		talon.changeMotionControlFramePeriod(MP_UPDATE_MS / 2);
+		talon.setF(velF);
+		talon.setIZone(0); // Disable IZone
+		talon.setVoltageRampRate(24); // Set maximum change in volts per seconds
+		talon.changeMotionControlFramePeriod(MP_UPDATE_MS / 2); // No idea, directly from Talon Software Refrence
+		talon.setNominalClosedLoopVoltage(12.0); // Make Talons compensate for changes in battery voltage
 	}
 
 	private static void setFollower(CANTalon talon, CANTalon master) {
-		talon.changeControlMode(TalonControlMode.Follower);
-		talon.set(master.getDeviceID());
+		talon.changeControlMode(TalonControlMode.Follower); // Tell the Talon that it should follow another Talon
+		talon.set(master.getDeviceID()); // Tell the Talon to follow the master Talon
 	}
 
 	private static void sendMotionProfile(CANTalon talon, TrajectoryPoint[] points) {
@@ -224,6 +275,17 @@ public class Drivetrain extends Subsystem {
 		talon.setProfile(0);
 		talon.changeControlMode(TalonControlMode.Speed);
 		talon.set(speed);
+	}
+
+	private static void setVoltage(CANTalon talon, double voltage) {
+		talon.changeControlMode(TalonControlMode.Voltage);
+		talon.setVoltageCompensationRampRate(24.0); // From Talon Software Refrence
+		talon.set(voltage);
+	}
+
+	private static void setPercentVBus(CANTalon talon, double percentVBus) {
+		talon.changeControlMode(TalonControlMode.PercentVbus);
+		talon.set(percentVBus);
 	}
 
 }

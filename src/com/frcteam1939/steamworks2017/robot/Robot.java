@@ -1,7 +1,6 @@
 
 package com.frcteam1939.steamworks2017.robot;
 
-import com.frcteam1939.steamworks2017.robot.subsystems.Brake;
 import com.frcteam1939.steamworks2017.robot.subsystems.Climber;
 import com.frcteam1939.steamworks2017.robot.subsystems.Drivetrain;
 import com.frcteam1939.steamworks2017.robot.subsystems.FuelIntake;
@@ -19,7 +18,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends IterativeRobot {
 
-	public static final Brake brake = new Brake();
 	public static final Drivetrain drivetrain = new Drivetrain();
 	public static final Climber climber = new Climber();
 	public static final GearIntake gearIntake = new GearIntake();
@@ -47,7 +45,9 @@ public class Robot extends IterativeRobot {
 	}
 
 	@Override
-	public void disabledInit() {}
+	public void disabledInit() {
+		Robot.drivetrain.disableBraking(); // Make robot not resist pushing while disabled
+	}
 
 	@Override
 	public void disabledPeriodic() {
@@ -56,6 +56,7 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void autonomousInit() {
+		Robot.drivetrain.enableBraking();
 		this.autonomousCommand = this.selectedCommand;
 		if (this.autonomousCommand != null) {
 			this.autonomousCommand.start();
@@ -69,6 +70,7 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void teleopInit() {
+		Robot.drivetrain.enableBraking();
 		if (this.autonomousCommand != null) {
 			this.autonomousCommand.cancel();
 		}
