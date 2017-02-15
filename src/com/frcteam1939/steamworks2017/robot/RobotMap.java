@@ -17,8 +17,7 @@ public class RobotMap {
 
 	// Solenoids
 	public static final int PCM = 0;
-	public static final int brakeDownSolenoid = 7;
-	public static final int fuelDoorOutSolenoid = 6;
+	public static final int brakeDownSolenoid = 6;
 	public static final int gearRampOutSolenoid = 5;
 	public static final int gearPushSolenoid = 2;
 	public static final int sidewinderDownSolenoid = 1;

@@ -4,8 +4,9 @@ public class Paths {
 
 	private static final double FIELD_LENGTH = 652.0;
 
-	public static final double[][] boilerToRightPeg = { { 17.5, 55.5, 0 }, { 50, 55.5, 0 }, { 107.708, 87.438, Math.toRadians(60.6) }, { 123.66, 115.753, Math.toRadians(60.6) } };
-	public static final double[][] slotsToLeftPeg = { { 17.5, 266.5, 0 }, { 50, 266.5, 0 }, { 107.708, 235.562, Math.toRadians(299.4) }, { 123.66, 207.247, Math.toRadians(299.4) } };
+	public static final double[][] boilerToBoilerPeg = { { 17.5, 55.5, 0 }, { 50, 55.5, 0 }, { 107.708, 87.438, Math.toRadians(60.6) }, { 123.66, 115.753, Math.toRadians(60.6) } };
+	public static final double[][] slotsToSlotsPeg = { { 17.5, 266.5, 0 }, { 50, 266.5, 0 }, { 107.708, 235.562, Math.toRadians(299.4) }, { 123.66, 207.247, Math.toRadians(299.4) } };
+	public static final double[][] centerToCenterPeg = { { 17.5, 161.5, 0 }, { 97.0, 161.5, 0 } };
 	public static final double[][] boilerToSlots = { { 17.5, 55.5, 0 }, { 132.5, 55.5, 0 }, { 413, 266.5, 0 } };
 	public static final double[][] slotsToSlots = { { 17.5, 266.5, 0 }, { 413, 266.5, 0 } };
 
