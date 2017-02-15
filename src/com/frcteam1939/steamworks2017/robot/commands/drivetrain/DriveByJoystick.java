@@ -19,7 +19,7 @@ public class DriveByJoystick extends Command {
 	protected void execute() {
 		double move = Robot.oi.left.getY();
 		double rotate = Robot.oi.right.getX();
-		double strafe = Robot.oi.right.getY();
+		double strafe = Robot.oi.left.getX();
 
 		boolean turbo = Robot.oi.left.getRawButton(1);
 

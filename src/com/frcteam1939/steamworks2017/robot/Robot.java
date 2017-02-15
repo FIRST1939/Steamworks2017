@@ -1,12 +1,17 @@
 
 package com.frcteam1939.steamworks2017.robot;
 
+import com.frcteam1939.steamworks2017.robot.commands.auton.PlaceGearAndBackup;
+import com.frcteam1939.steamworks2017.robot.commands.auton.PlaceGearAndCross;
+import com.frcteam1939.steamworks2017.robot.commands.drivetrain.FindMaxSpeed;
+import com.frcteam1939.steamworks2017.robot.commands.drivetrain.FindTurnF;
 import com.frcteam1939.steamworks2017.robot.subsystems.Climber;
 import com.frcteam1939.steamworks2017.robot.subsystems.Drivetrain;
 import com.frcteam1939.steamworks2017.robot.subsystems.FuelIntake;
 import com.frcteam1939.steamworks2017.robot.subsystems.FuelOutput;
 import com.frcteam1939.steamworks2017.robot.subsystems.GearIntake;
 import com.frcteam1939.steamworks2017.robot.subsystems.GearOutput;
+import com.frcteam1939.steamworks2017.robot.subsystems.SmartDashboardSubsystem;
 import com.frcteam1939.steamworks2017.util.DoNothing;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -24,6 +29,7 @@ public class Robot extends IterativeRobot {
 	public static final GearOutput gearOutput = new GearOutput();
 	public static final FuelIntake fuelIntake = new FuelIntake();
 	public static final FuelOutput fuelOutput = new FuelOutput();
+	public static final SmartDashboardSubsystem smartDashboard = new SmartDashboardSubsystem();
 
 	public static OI oi;
 
@@ -36,7 +42,14 @@ public class Robot extends IterativeRobot {
 		oi = new OI();
 
 		this.chooser.addDefault("Do Nothing", new DoNothing());
+		this.chooser.addObject("Center Peg Backup", new PlaceGearAndBackup(Paths.centerToCenterPeg));
+		this.chooser.addObject("Boiler Peg Backup", new PlaceGearAndBackup(Paths.boilerToBoilerPeg));
+		this.chooser.addObject("Slots Peg Backup", new PlaceGearAndBackup(Paths.boilerToSlots));
+		this.chooser.addObject("Boiler Peg Cross", new PlaceGearAndCross(Paths.boilerToBoilerPeg, Paths.boilerToSlots));
+		this.chooser.addObject("Slots Peg Cross", new PlaceGearAndCross(Paths.slotsToSlotsPeg, Paths.slotsToSlots));
 		SmartDashboard.putData("Autonomous Chooser", this.chooser);
+		SmartDashboard.putData(new FindMaxSpeed());
+		SmartDashboard.putData(new FindTurnF());
 	}
 
 	@Override
@@ -47,6 +60,11 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void disabledInit() {
 		Robot.drivetrain.disableBraking(); // Make robot not resist pushing while disabled
+		Robot.drivetrain.brakeUp();
+		Robot.gearIntake.rampIn();
+		Robot.gearOutput.retract();
+		Robot.fuelIntake.setOutput(0);
+		Robot.fuelOutput.setOutput(0);
 	}
 
 	@Override

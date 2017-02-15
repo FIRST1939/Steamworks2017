@@ -52,11 +52,11 @@ public class MotionProfile {
 		this.totalTime = this.trajectory.length() * this.period;
 
 		if (backwards) {
-			this.left = generatePoints(this.rightTrajectory, false);
-			this.right = generatePoints(this.leftTrajectory, true);
+			this.left = generatePoints(this.rightTrajectory, true);
+			this.right = generatePoints(this.leftTrajectory, false);
 		} else {
-			this.left = generatePoints(this.leftTrajectory, true);
-			this.right = generatePoints(this.rightTrajectory, false);
+			this.left = generatePoints(this.leftTrajectory, false);
+			this.right = generatePoints(this.rightTrajectory, true);
 		}
 	}
 

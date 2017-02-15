@@ -1,6 +1,7 @@
 package com.frcteam1939.steamworks2017.robot.commands.gearoutput;
 
 import com.frcteam1939.steamworks2017.robot.Robot;
+import com.frcteam1939.steamworks2017.robot.subsystems.FuelIntake;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -11,7 +12,9 @@ public class PushOutGear extends Command {
 	}
 
 	@Override
-	protected void initialize() {}
+	protected void initialize() {
+		Robot.fuelIntake.setOutput(FuelIntake.IN_SPEED);
+	}
 
 	@Override
 	protected void execute() {
