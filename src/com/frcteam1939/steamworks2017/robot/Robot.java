@@ -1,6 +1,8 @@
 
 package com.frcteam1939.steamworks2017.robot;
 
+import org.opencv.core.Mat;
+
 import com.frcteam1939.steamworks2017.robot.commands.auton.PlaceGearAndBackup;
 import com.frcteam1939.steamworks2017.robot.commands.auton.PlaceGearAndCross;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.FindMaxSpeed;
@@ -14,6 +16,10 @@ import com.frcteam1939.steamworks2017.robot.subsystems.GearOutput;
 import com.frcteam1939.steamworks2017.robot.subsystems.SmartDashboardSubsystem;
 import com.frcteam1939.steamworks2017.util.DoNothing;
 
+import edu.wpi.cscore.CvSink;
+import edu.wpi.cscore.CvSource;
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -32,7 +38,7 @@ public class Robot extends IterativeRobot {
 	public static final SmartDashboardSubsystem smartDashboard = new SmartDashboardSubsystem();
 
 	public static OI oi;
-
+	public GRIPipe pipe = new GRIPipe();
 	private Command selectedCommand;
 	private Command autonomousCommand;
 	private SendableChooser<Command> chooser = new SendableChooser<>();
@@ -40,7 +46,19 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		oi = new OI();
-
+		new Thread(() -> {
+			UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+            camera.setResolution(640, 480);
+            camera.setBrightness(10);
+            CvSink cvSink = CameraServer.getInstance().getVideo();
+            CvSource outputStream = CameraServer.getInstance().putVideo("Processed", 640, 480);
+            Mat source = new Mat();
+            while(!Thread.interrupted()) {
+                cvSink.grabFrame(source);
+                pipe.process(source);
+                outputStream.putFrame(pipe.rgbThresholdOutput());
+            }
+        }).start();
 		this.chooser.addDefault("Do Nothing", new DoNothing());
 		this.chooser.addObject("Center Peg Backup", new PlaceGearAndBackup(Paths.centerToCenterPeg));
 		this.chooser.addObject("Boiler Peg Backup", new PlaceGearAndBackup(Paths.boilerToBoilerPeg));
