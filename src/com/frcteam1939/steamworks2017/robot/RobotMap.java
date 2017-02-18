@@ -22,7 +22,7 @@ public class RobotMap {
 	public static final int sidewinderDownSolenoid = 1;
 	public static final int sidewinderUpSolenoid = 0;
 
-	// DIO
-	public static final int fuelLineBreak = 0;
+	// Analog
+	public static final int pressureSensor = 0;
 
 }

@@ -42,6 +42,11 @@ public class SmartDashboardUpdater extends Command {
 		SmartDashboard.putNumber("Climber Position", Robot.climber.getPosition());
 		SmartDashboard.putNumber("Climber Error", Robot.climber.getError());
 
+		SmartDashboard.putNumber("Heading", Robot.drivetrain.getHeading());
+		SmartDashboard.putNumber("Turn Speed", Robot.drivetrain.getTurnSpeed());
+
+		SmartDashboard.putNumber("Pressure", Robot.getPressure());
+
 		Robot.drivetrain.setDriveBySpeed(SmartDashboard.getBoolean("Drive By Speed", true));
 	}
 

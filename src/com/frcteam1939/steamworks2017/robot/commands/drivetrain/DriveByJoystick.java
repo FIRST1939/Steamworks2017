@@ -27,20 +27,28 @@ public class DriveByJoystick extends Command {
 			move = 0;
 		} else {
 			if (turbo) {
-				move = map(move, 0, 0.3);
+				move = map(move, 0, 1.0);
 			} else {
-				move = map(move, 0, 0.6);
+				move = map(move, 0, 0.5);
 			}
 		}
 		if (Math.abs(rotate) < DEAD_BAND) {
 			rotate = 0;
 		} else {
-			rotate = map(rotate, 0, 0.3);
+			if (turbo) {
+				rotate = map(rotate, 0, 0.7);
+			} else {
+				rotate = map(rotate, 0, 0.3);
+			}
 		}
 		if (Math.abs(strafe) < DEAD_BAND) {
 			strafe = 0;
 		} else {
-			strafe = map(strafe, 0, 0.5);
+			if (turbo) {
+				strafe = map(strafe, 0, 1.0);
+			} else {
+				strafe = map(strafe, 0, 0.5);
+			}
 		}
 
 		Robot.drivetrain.drive(move, rotate, strafe);

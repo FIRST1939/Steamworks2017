@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Drivetrain extends Subsystem {
 
@@ -24,7 +25,7 @@ public class Drivetrain extends Subsystem {
 	public static final double WHEEL_DIAMETER = 6; // Inches
 	public static final double MAX_SPEED = 430; // RPM
 	public static final double MAX_A = 6.0; // Max Acceleration in R/S^2
-	public static final double MAX_JERK = 20.0; // R/S^3
+	public static final double MAX_JERK = 10.0; // R/S^3
 	public static final int MP_UPDATE_MS = 20; // Time per MP frame
 	public static final int CPR = 256; // Counts per Revolution of Encoders
 	public static final int SIDEWINDER_CPR = 12;
@@ -32,17 +33,17 @@ public class Drivetrain extends Subsystem {
 	private static final int NATIVE_UNITS_PER_100MS = (int) (MAX_SPEED / 60.0 / 10.0 * (CPR * 4));
 
 	private static final double velF = 1023.0 / NATIVE_UNITS_PER_100MS;
-	private static final double velP = 1023.0 / MAX_SPEED;
-	private static final double velI = 0;//velP / 1000.0;
-	private static final double velD = 0;//velP * 10.0;
+	private static final double velP = 1023.0 / 1000;
+	private static final double velI = velP / 1000.0;
+	private static final double velD = velP * 10.0;
 
-	private static final double posP = 1.0 / 4.0; // Full speed at 4 rev error
-	private static final double posI = posP / 8000.0;
-	private static final double posD = 0;// posP * 10.0;
+	private static final double posP = 1.0 / 2.0;
+	private static final double posI = posP / 1000.0;
+	private static final double posD = posP * 10.0;
 
-	private static final double MAX_TURN_OUPUT = 0.5;
-	private static final double turnF = 0; // Need to measure
-	private static final double turnP = 0;
+	private static final double MAX_TURN_OUPUT = 0.2;
+	private static final double turnF = 0.071; // Need to measure
+	private static final double turnP = 1.0 / 270.0;
 	private static final double turnI = 0;
 	private static final double turnD = 0;
 
@@ -58,8 +59,7 @@ public class Drivetrain extends Subsystem {
 	private Solenoid brake = new Solenoid(RobotMap.PCM, RobotMap.brakeDownSolenoid);
 
 	private AHRS navx;
-
-	private PIDController turnPID = new PIDController(turnP, turnI, turnD, this.navx, output -> {}, 10);
+	private PIDController turnPID;
 
 	private boolean driveBySpeed = true;
 
@@ -83,6 +83,7 @@ public class Drivetrain extends Subsystem {
 		// Try to intialize the navX
 		try {
 			this.navx = new AHRS(SerialPort.Port.kMXP);
+			this.turnPID = new PIDController(turnP, turnI, turnD, this.navx, output -> {});
 		} catch (Exception e) {
 			System.out.println("ERROR: Couldn't intialize navX");
 			e.printStackTrace();
@@ -93,9 +94,10 @@ public class Drivetrain extends Subsystem {
 		this.sidewinder.setNominalClosedLoopVoltage(12.0);
 
 		this.turnPID.setInputRange(-180, 180);
-		this.turnPID.setContinuous();
+		this.turnPID.setContinuous(true);
 		this.turnPID.setOutputRange(-MAX_TURN_OUPUT, MAX_TURN_OUPUT);
 		this.turnPID.setSetpoint(0);
+		this.turnPID.enable();
 	}
 
 	@Override
@@ -168,7 +170,7 @@ public class Drivetrain extends Subsystem {
 	}
 
 	public double getHeading() {
-		return this.navx.getYaw();
+		return this.navx.pidGet();
 	}
 
 	public double getTurnSpeed() {
@@ -249,16 +251,27 @@ public class Drivetrain extends Subsystem {
 		setVoltage(this.sidewinder, voltage);
 	}
 
+	public void turnToAngle(double angle) {
+		SmartDashboard.putNumber("Turn PID Output", this.turnPID.get());
+		this.turnPID.setSetpoint(angle);
+		this.drive(0, this.turnPID.get(), 0);
+	}
+
+	public void resetGyro() {
+		this.navx.reset();
+	}
+
 	private boolean correcting = false;
 
 	public void drive(double moveValue, double rotateValue, double strafeValue) {
 		// Correct with gyro
-		if (rotateValue == 0 && moveValue != 0) {
+		if (rotateValue == 0 && strafeValue != 0 || rotateValue == 0 && moveValue != 0) {
 			if (!this.correcting) {
-				this.navx.zeroYaw();
+				this.resetGyro();
+				this.turnPID.setSetpoint(0);
 				this.correcting = true;
 			}
-			moveValue = strafeValue * 12 * turnF + this.turnPID.get();
+			rotateValue = this.turnPID.get() + turnF * strafeValue;
 		} else {
 			this.correcting = false;
 		}
@@ -293,6 +306,9 @@ public class Drivetrain extends Subsystem {
 		} else {
 			this.setPercentVBus(-leftMotorSpeed, rightMotorSpeed);
 		}
+		SmartDashboard.putNumber("Move Output", moveValue);
+		SmartDashboard.putNumber("Turn Output", rotateValue);
+		SmartDashboard.putNumber("Strafe Output", strafeValue);
 	}
 
 	public void enableBraking() {
