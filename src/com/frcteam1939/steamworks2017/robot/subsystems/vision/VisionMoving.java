@@ -33,7 +33,7 @@ public class VisionMoving {
 	static double[] centerX;
 	public static double returnCenterX(Pipeline pipe){
 		double[] defaultValue = new double[0];
-			// This is the center value returned by GRIP thank WPI
+		// This is the center value returned by GRIP thank WPI
 			if(!pipe.filterContoursOutput.isEmpty() && pipe.filterContoursOutput.size() >= 2){
 				Rect r = Imgproc.boundingRect(pipe.filterContoursOutput.get(1));
 				Rect r1 = Imgproc.boundingRect(pipe.filterContoursOutput.get(0)); 

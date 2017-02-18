@@ -14,7 +14,7 @@ import com.frcteam1939.steamworks2017.robot.subsystems.GearOutput;
 import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;
-import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.vision.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -40,21 +40,25 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void robotInit() {
+		CameraServer.getInstance().startAutomaticCapture("cam0");
 		oi = new OI();
 		// chooser.addObject("My Auto", new MyAutoCommand());
-		new Thread(() -> {
-            UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-            camera.setResolution(640, 480);
-            camera.setBrightness(10);
-            CvSink cvSink = CameraServer.getInstance().getVideo();
-            CvSource outputStream = CameraServer.getInstance().putVideo("Processed", 640, 480);
-            Mat source = new Mat();
-            while(!Thread.interrupted()) {
-                cvSink.grabFrame(source);
-                pipe.process(source);
-                outputStream.putFrame(pipe.rgbThresholdOutput());
-            }
-        }).start();
+		
+//		new Thread(() -> {
+//            UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+//            camera.setResolution(640, 480);
+//            camera.setBrightness(10);
+//            CvSink cvSink = CameraServer.getInstance().getVideo();
+//            CvSource outputStream = CameraServer.getInstance().putVideo("Processed", 640, 480);
+//            Mat source = new Mat();
+//            while(!Thread.interrupted()) {
+//                cvSink.grabFrame(source);
+//                pipe.process(source);
+//                outputStream.putFrame(pipe.rgbThresholdOutput());
+//                
+//            }
+//        }).start();
+		
 	}
 
 	@Override
