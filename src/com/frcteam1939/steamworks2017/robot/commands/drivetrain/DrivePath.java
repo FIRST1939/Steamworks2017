@@ -1,5 +1,4 @@
 package com.frcteam1939.steamworks2017.robot.commands.drivetrain;
-
 import com.ctre.CANTalon.MotionProfileStatus;
 import com.frcteam1939.steamworks2017.robot.Paths;
 import com.frcteam1939.steamworks2017.robot.Robot;

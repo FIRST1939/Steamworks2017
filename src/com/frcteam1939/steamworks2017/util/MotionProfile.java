@@ -1,12 +1,13 @@
 package com.frcteam1939.steamworks2017.util;
 
+import javax.swing.text.Segment;
+
 import com.ctre.CANTalon.TrajectoryPoint;
 import com.frcteam1939.steamworks2017.robot.Paths;
 import com.frcteam1939.steamworks2017.robot.subsystems.Drivetrain;
 
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
-import jaci.pathfinder.Trajectory.Segment;
 import jaci.pathfinder.Waypoint;
 import jaci.pathfinder.modifiers.TankModifier;
 
@@ -87,7 +88,7 @@ public class MotionProfile {
 	private static TrajectoryPoint[] generatePoints(Trajectory t, boolean invert) {
 		TrajectoryPoint[] points = new TrajectoryPoint[t.length()];
 		for (int i = 0; i < points.length; i++) {
-			Segment s = t.get(i);
+			jaci.pathfinder.Trajectory.Segment s = t.get(i);
 			TrajectoryPoint point = new TrajectoryPoint();
 			point.position = s.position;
 			point.velocity = s.velocity * 60;
