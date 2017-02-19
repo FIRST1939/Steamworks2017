@@ -1,4 +1,4 @@
-package com.frcteam1939.steamworks2017.robot;
+package com.frcteam1939.steamworks2017.robot.commands.vision;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -29,7 +29,7 @@ public class GRIPipe {
 	private Mat blurOutput = new Mat();
 	private Mat rgbThresholdOutput = new Mat();
 	private ArrayList<MatOfPoint> findContoursOutput = new ArrayList<MatOfPoint>();
-	private ArrayList<MatOfPoint> filterContoursOutput = new ArrayList<MatOfPoint>();
+	public ArrayList<MatOfPoint> filterContoursOutput = new ArrayList<MatOfPoint>();
 
 	static {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);

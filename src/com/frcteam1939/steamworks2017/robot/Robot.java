@@ -7,6 +7,10 @@ import com.frcteam1939.steamworks2017.robot.commands.auton.PlaceGearAndBackup;
 import com.frcteam1939.steamworks2017.robot.commands.auton.PlaceGearAndCross;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.FindMaxSpeed;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.FindTurnF;
+import com.frcteam1939.steamworks2017.robot.commands.vision.GRIPipe;
+import com.frcteam1939.steamworks2017.robot.commands.vision.SendAngle;
+import com.frcteam1939.steamworks2017.robot.commands.vision.SendCenterX;
+import com.frcteam1939.steamworks2017.robot.commands.vision.VisionProcessing;
 import com.frcteam1939.steamworks2017.robot.subsystems.Climber;
 import com.frcteam1939.steamworks2017.robot.subsystems.Drivetrain;
 import com.frcteam1939.steamworks2017.robot.subsystems.FuelIntake;
@@ -21,6 +25,7 @@ import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.NamedSendable;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -42,6 +47,7 @@ public class Robot extends IterativeRobot {
 	private Command selectedCommand;
 	private Command autonomousCommand;
 	private SendableChooser<Command> chooser = new SendableChooser<>();
+	public VisionProcessing processing = new VisionProcessing();
 
 	@Override
 	public void robotInit() {
@@ -68,6 +74,8 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putData("Autonomous Chooser", this.chooser);
 		SmartDashboard.putData(new FindMaxSpeed());
 		SmartDashboard.putData(new FindTurnF());
+		SmartDashboard.putData(new SendCenterX(pipe, processing));
+		SmartDashboard.putData(new SendAngle(pipe, processing));
 	}
 
 	@Override
