@@ -5,7 +5,7 @@ import com.frcteam1939.steamworks2017.robot.Robot;
 public class TuneTurnPID extends TunePID {
 
 	public TuneTurnPID() {
-		super(90, 180);
+		super(90, -90);
 	}
 
 	@Override

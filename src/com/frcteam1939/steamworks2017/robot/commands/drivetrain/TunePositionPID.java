@@ -5,13 +5,12 @@ import com.frcteam1939.steamworks2017.robot.Robot;
 public class TunePositionPID extends TunePID {
 
 	public TunePositionPID() {
-		super(5, 10);
+		super(0, 1.2732395447);
 	}
 
 	@Override
 	public void init() {
 		Robot.drivetrain.zeroEncoders();
-		Robot.drivetrain.sidewinderDown();
 	}
 
 	@Override

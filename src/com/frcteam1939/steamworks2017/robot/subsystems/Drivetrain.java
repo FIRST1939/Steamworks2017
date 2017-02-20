@@ -21,10 +21,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Drivetrain extends Subsystem {
 
-	public static final double WHEEL_BASE = 27; // Inches
+	public static final double WHEEL_BASE = 28; // Inches
 	public static final double WHEEL_DIAMETER = 6; // Inches
 	public static final double MAX_SPEED = 430; // RPM
-	public static final double MAX_A = 6.0; // Max Acceleration in R/S^2
+	public static final double MAX_A = 3.0; // Max Acceleration in R/S^2
 	public static final double MAX_JERK = MAX_A * 4; // R/S^3
 	public static final int MP_UPDATE_MS = 20; // Time per MP frame
 	public static final int CPR = 256; // Counts per Revolution of Encoders
@@ -33,13 +33,13 @@ public class Drivetrain extends Subsystem {
 	private static final int NATIVE_UNITS_PER_100MS = (int) (MAX_SPEED / 60.0 / 10.0 * (CPR * 4));
 
 	private static final double velF = 1023.0 / NATIVE_UNITS_PER_100MS;
-	private static final double velP = 0;
-	private static final double velI = 0;
-	private static final double velD = 0;
+	private static final double velP = 0.8999999999999999;
+	private static final double velI = -6.479999999481599;
+	private static final double velD = 0.0312500000025;
 
-	private static final double posP = 0;
-	private static final double posI = 0;
-	private static final double posD = 0;
+	private static final double posP = 0.6;
+	private static final double posI = -1.0800000000107999;
+	private static final double posD = 0.08333333333250001;
 
 	private static final double MAX_TURN_OUPUT = 0.5;
 	private static final double turnF = 0.071;
@@ -83,7 +83,7 @@ public class Drivetrain extends Subsystem {
 		// Try to intialize the navX
 		try {
 			this.navx = new AHRS(SerialPort.Port.kMXP);
-			this.turnPID = new PIDController(turnP, turnI, turnD, this.navx, output -> {});
+			this.turnPID = new PIDController(turnP, turnI, turnD, this.navx, output -> {}, 10);
 		} catch (Exception e) {
 			System.out.println("ERROR: Couldn't intialize navX");
 			e.printStackTrace();
@@ -314,6 +314,9 @@ public class Drivetrain extends Subsystem {
 		SmartDashboard.putNumber("Move Output", moveValue);
 		SmartDashboard.putNumber("Turn Output", rotateValue);
 		SmartDashboard.putNumber("Strafe Output", strafeValue);
+
+		SmartDashboard.putNumber("Turn Setpoint", this.turnPID.getSetpoint());
+		SmartDashboard.putNumber("Turn PID Output", this.turnPID);
 	}
 
 	public void enableBraking() {
