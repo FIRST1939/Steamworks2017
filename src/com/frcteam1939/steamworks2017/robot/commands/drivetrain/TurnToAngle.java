@@ -16,6 +16,7 @@ public class TurnToAngle extends Command {
 	@Override
 	protected void initialize() {
 		Robot.drivetrain.resetGyro();
+		Robot.drivetrain.sidewinderDown();
 		this.setTimeout(0.5);
 	}
 
@@ -32,10 +33,12 @@ public class TurnToAngle extends Command {
 	@Override
 	protected void end() {
 		Robot.drivetrain.stop();
+		Robot.drivetrain.sidewinderUp();
 	}
 
 	@Override
 	protected void interrupted() {
 		Robot.drivetrain.stop();
+		Robot.drivetrain.sidewinderUp();
 	}
 }

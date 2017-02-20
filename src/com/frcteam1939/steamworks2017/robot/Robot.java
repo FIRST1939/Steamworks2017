@@ -1,14 +1,14 @@
-
 package com.frcteam1939.steamworks2017.robot;
 
 import com.frcteam1939.steamworks2017.robot.commands.auton.PlaceGearAndBackup;
 import com.frcteam1939.steamworks2017.robot.commands.auton.PlaceGearAndCross;
 import com.frcteam1939.steamworks2017.robot.commands.auton.PlaceGearHopperBoilerBlue;
 import com.frcteam1939.steamworks2017.robot.commands.auton.PlaceGearHopperBoilerRed;
-import com.frcteam1939.steamworks2017.robot.commands.drivetrain.DriveDistance;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.FindMaxSpeed;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.FindTurnF;
-import com.frcteam1939.steamworks2017.robot.commands.drivetrain.TurnToAngle;
+import com.frcteam1939.steamworks2017.robot.commands.drivetrain.TunePositionPID;
+import com.frcteam1939.steamworks2017.robot.commands.drivetrain.TuneTurnPID;
+import com.frcteam1939.steamworks2017.robot.commands.drivetrain.TuneVelocityPID;
 import com.frcteam1939.steamworks2017.robot.subsystems.Climber;
 import com.frcteam1939.steamworks2017.robot.subsystems.Drivetrain;
 import com.frcteam1939.steamworks2017.robot.subsystems.FuelIntake;
@@ -71,8 +71,9 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putData("Autonomous Chooser", this.chooser);
 		SmartDashboard.putData(new FindMaxSpeed());
 		SmartDashboard.putData(new FindTurnF());
-		SmartDashboard.putData(new TurnToAngle(90));
-		SmartDashboard.putData(new DriveDistance(72));
+		SmartDashboard.putData(new TunePositionPID());
+		SmartDashboard.putData(new TuneTurnPID());
+		SmartDashboard.putData(new TuneVelocityPID());
 	}
 
 	@Override

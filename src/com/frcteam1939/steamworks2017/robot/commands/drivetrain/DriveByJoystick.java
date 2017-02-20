@@ -36,7 +36,7 @@ public class DriveByJoystick extends Command {
 			rotate = 0;
 		} else {
 			if (turbo) {
-				rotate = map(rotate, 0, 0.7);
+				rotate = map(rotate, 0, 0.6);
 			} else {
 				rotate = map(rotate, 0, 0.3);
 			}
