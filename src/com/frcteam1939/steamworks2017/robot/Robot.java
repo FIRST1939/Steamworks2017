@@ -1,15 +1,12 @@
-
 package com.frcteam1939.steamworks2017.robot;
 
-import org.opencv.core.Mat;
+import org.opencv.core.Rect;
+import org.opencv.imgproc.Imgproc;
 
 import com.frcteam1939.steamworks2017.robot.commands.auton.PlaceGearAndBackup;
 import com.frcteam1939.steamworks2017.robot.commands.auton.PlaceGearAndCross;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.FindMaxSpeed;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.FindTurnF;
-import com.frcteam1939.steamworks2017.robot.commands.vision.GRIPipe;
-import com.frcteam1939.steamworks2017.robot.commands.vision.SendAngle;
-import com.frcteam1939.steamworks2017.robot.commands.vision.SendCenterX;
 import com.frcteam1939.steamworks2017.robot.commands.vision.VisionProcessing;
 import com.frcteam1939.steamworks2017.robot.subsystems.Climber;
 import com.frcteam1939.steamworks2017.robot.subsystems.Drivetrain;
@@ -19,18 +16,15 @@ import com.frcteam1939.steamworks2017.robot.subsystems.GearIntake;
 import com.frcteam1939.steamworks2017.robot.subsystems.GearOutput;
 import com.frcteam1939.steamworks2017.robot.subsystems.SmartDashboardSubsystem;
 import com.frcteam1939.steamworks2017.util.DoNothing;
-
-import edu.wpi.cscore.CvSink;
-import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.NamedSendable;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.vision.VisionThread;
 
 public class Robot extends IterativeRobot {
 
@@ -43,28 +37,21 @@ public class Robot extends IterativeRobot {
 	public static final SmartDashboardSubsystem smartDashboard = new SmartDashboardSubsystem();
 
 	public static OI oi;
-	public GRIPipe pipe = new GRIPipe();
 	private Command selectedCommand;
 	private Command autonomousCommand;
 	private SendableChooser<Command> chooser = new SendableChooser<>();
 	public VisionProcessing processing = new VisionProcessing();
+	public Pipe pipe = new Pipe();
+	public final int IMG_WIDTH = 640;
+	public final int IMG_HEIGHT = 480;
+	public static double centerX = 0.0;
+	public static double angle;
+	private final Object imgLock = new Object();
 
 	@Override
 	public void robotInit() {
 		oi = new OI();
-		new Thread(() -> {
-			UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-            camera.setResolution(640, 480);
-            camera.setBrightness(10);
-            CvSink cvSink = CameraServer.getInstance().getVideo();
-            CvSource outputStream = CameraServer.getInstance().putVideo("Processed", 640, 480);
-            Mat source = new Mat();
-            while(!Thread.interrupted()) {
-                cvSink.grabFrame(source);
-                pipe.process(source);
-                outputStream.putFrame(pipe.rgbThresholdOutput());
-            }
-        }).start();
+		
 		this.chooser.addDefault("Do Nothing", new DoNothing());
 		this.chooser.addObject("Center Peg Backup", new PlaceGearAndBackup(Paths.centerToCenterPeg));
 		this.chooser.addObject("Boiler Peg Backup", new PlaceGearAndBackup(Paths.boilerToBoilerPeg));
@@ -74,8 +61,44 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putData("Autonomous Chooser", this.chooser);
 		SmartDashboard.putData(new FindMaxSpeed());
 		SmartDashboard.putData(new FindTurnF());
-		SmartDashboard.putData(new SendCenterX(pipe, processing));
-		SmartDashboard.putData(new SendAngle(pipe, processing));
+		UsbCamera cam = CameraServer.getInstance().startAutomaticCapture();
+		cam.setResolution(IMG_WIDTH, IMG_HEIGHT);
+		cam.setBrightness(10);
+		VisionThread vision = new VisionThread(cam, pipe, pipeline -> {
+			if (pipeline.filterContoursOutput().size() == 2) {
+	            Rect r = Imgproc.boundingRect(pipe.filterContoursOutput().get(0));
+	            Rect r1 = Imgproc.boundingRect(pipe.filterContoursOutput().get(1));
+	            double center = (r.x + (r.x + (r1.x +r1.width)))/2 -612;
+	            //finding the angle
+	            double constant = 8.5 / Math.abs(r.x -(r1.x + r1.width) );
+				double angleToGoal = 0;
+					//Looking for the 2 blocks to actually start trig
+				if(pipeline.filterContoursOutput().size() == 2){
+
+					
+						// this calculates the distance from the center of goal to center of webcam 
+						double distanceFromCenterPixels= (center);
+						// Converts pixels to inches using the constant from above.
+						double distanceFromCenterInch = distanceFromCenterPixels * constant;
+						angleToGoal = Math.atan(distanceFromCenterInch / (5738/Math.abs(r.x -(r1.x + r1.width))));
+						angleToGoal = Math.toDegrees(angleToGoal);
+						
+						// prints angle
+				
+						}
+					
+	            
+	            synchronized (imgLock) {
+	                centerX = center;
+	                angle = angleToGoal;
+	                System.out.println("Center X: " +centerX);
+	                System.out.println("Angle: " + angle);
+	            }
+			}
+			
+			 
+        });
+		vision.start();
 	}
 
 	@Override
