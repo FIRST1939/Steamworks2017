@@ -59,7 +59,7 @@ public class Drivetrain extends Subsystem {
 	private Solenoid brake = new Solenoid(RobotMap.PCM, RobotMap.brakeDownSolenoid);
 
 	private AHRS navx;
-	private PIDController turnPID;
+	public PIDController turnPID;
 
 	private boolean driveBySpeed = true;
 
@@ -316,7 +316,7 @@ public class Drivetrain extends Subsystem {
 		SmartDashboard.putNumber("Strafe Output", strafeValue);
 
 		SmartDashboard.putNumber("Turn Setpoint", this.turnPID.getSetpoint());
-		SmartDashboard.putNumber("Turn PID Output", this.turnPID);
+		SmartDashboard.putData("Turn PID Output", this.turnPID);
 	}
 
 	public void enableBraking() {

@@ -10,11 +10,10 @@ import com.frcteam1939.steamworks2017.robot.commands.auton.PlaceGearHopperBoiler
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.FindMaxSpeed;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.FindTurnF;
 
-import com.frcteam1939.steamworks2017.robot.commands.vision.VisionProcessing;
-
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.TunePositionPID;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.TuneTurnPID;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.TuneVelocityPID;
+import com.frcteam1939.steamworks2017.robot.commands.vision.Pipe;
 import com.frcteam1939.steamworks2017.robot.subsystems.Climber;
 import com.frcteam1939.steamworks2017.robot.subsystems.Drivetrain;
 import com.frcteam1939.steamworks2017.robot.subsystems.FuelIntake;
@@ -65,13 +64,14 @@ public class Robot extends IterativeRobot {
 	private Command selectedCommand;
 	private Command autonomousCommand;
 	private SendableChooser<Command> chooser = new SendableChooser<>();
-	public VisionProcessing processing = new VisionProcessing();
 	public Pipe pipe = new Pipe();
 	public final int IMG_WIDTH = 640;
 	public final int IMG_HEIGHT = 480;
 	public static double centerX = 0.0;
 	public static double angle;
-	private final Object imgLock = new Object();
+	public static double contours;
+	public static double distance;
+	public final static Object imgLock = new Object();
 
 	@Override
 	public void robotInit() {
@@ -91,11 +91,11 @@ public class Robot extends IterativeRobot {
 		UsbCamera cam = CameraServer.getInstance().startAutomaticCapture();
 		cam.setResolution(IMG_WIDTH, IMG_HEIGHT);
 		cam.setBrightness(10);
-		VisionThread vision = new VisionThread(cam, pipe, pipeline -> {
+		new VisionThread(cam, pipe, pipeline -> {
 			if (pipeline.filterContoursOutput().size() == 2) {
 	            Rect r = Imgproc.boundingRect(pipe.filterContoursOutput().get(0));
 	            Rect r1 = Imgproc.boundingRect(pipe.filterContoursOutput().get(1));
-	            double center = (r.x + (r.x + (r1.x +r1.width)))/2 -612;
+	            double center = (r.x + (r.x + (r1.x +r1.width)))/2 -IMG_WIDTH/2;
 	            //finding the angle
 	            double constant = 8.5 / Math.abs(r.x -(r1.x + r1.width) );
 				double angleToGoal = 0;
@@ -118,14 +118,16 @@ public class Robot extends IterativeRobot {
 	            synchronized (imgLock) {
 	                centerX = center;
 	                angle = angleToGoal;
-	                System.out.println("Center X: " +centerX);
-	                System.out.println("Angle: " + angle);
+	                contours = pipe.filterContoursOutput().size();
+	                distance = 5738/Math.abs(r.x -(r1.x + r1.width));
+//	                System.out.println("Center X: " +centerX);
+	                System.out.println("Distance: " + distance);
+	                System.out.println("contours: " + contours);
 	            }
 			}
 			
 			 
-        });
-		vision.start();
+        }).start();
 		SmartDashboard.putData(new TunePositionPID());
 		SmartDashboard.putData(new TuneTurnPID());
 		SmartDashboard.putData(new TuneVelocityPID());
