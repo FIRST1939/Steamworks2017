@@ -13,7 +13,6 @@ import com.frcteam1939.steamworks2017.robot.subsystems.FuelOutput;
 import com.frcteam1939.steamworks2017.util.Gamepad;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.command.Command;
 
 public class OI {
 
@@ -29,40 +28,11 @@ public class OI {
 		this.gamepad.b.whenPressed(new RetractGearPusher());
 		this.gamepad.rightTrigger.whenPressed(new SetFuelOutputSpeed(FuelOutput.OUT_SPEED));
 		this.gamepad.rightTrigger.whenReleased(new SetFuelOutputSpeed(0));
-
 		this.gamepad.leftTrigger.whenPressed(new SetFuelIntakeSpeed(FuelIntake.IN_SPEED));
 		this.gamepad.leftTrigger.whenReleased(new SetFuelIntakeSpeed(0));
 
 		this.gamepad.start.whenPressed(new BrakeDown());
 		this.gamepad.back.whenPressed(new BrakeUp());
-		this.gamepad.leftJoystick.whenPressed(new Command() {
-
-			@Override
-			protected void initialize() {
-				Robot.drivetrain.sidewinderDown();
-			}
-
-			@Override
-			protected boolean isFinished() {
-				// TODO Auto-generated method stub
-				return true;
-			}
-
-		});
-		this.gamepad.rightButton.whenPressed(new Command() {
-
-			@Override
-			protected void initialize() {
-				Robot.drivetrain.sidewinderUp();
-			}
-
-			@Override
-			protected boolean isFinished() {
-				// TODO Auto-generated method stub
-				return true;
-			}
-
-		});
 	}
 
 }

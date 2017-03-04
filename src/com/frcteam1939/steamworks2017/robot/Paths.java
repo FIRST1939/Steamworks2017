@@ -10,6 +10,11 @@ public class Paths {
 	public static final double[][] boilerToSlots = { { 17.5, 55.5, 0 }, { 132.5, 55.5, 0 }, { 413, 266.5, 0 } };
 	public static final double[][] slotsToSlots = { { 17.5, 266.5, 0 }, { 413, 266.5, 0 } };
 
+	public static final double[][] hopperToBoilerPeg = { { 90.5, 19.5, Math.toRadians(90) }, { 107.708, 87.438, Math.toRadians(60.6) }, { 123.66, 115.753, Math.toRadians(60.6) } };
+	public static final double[][] hopperToForward = { { 90.5, 19.5, Math.toRadians(90) }, { 90.5, 44, Math.toRadians(90) } };
+	public static final double[][] forwardToBoilerRed = { { 90.5, 44, Math.toRadians(180) }, { 32.411, 32.156, Math.toRadians(136.55) } };
+	public static final double[][] forwardToBoilerBlue = { { 32.411, 32.156, Math.toRadians(136.55) }, { 90.5, 44, Math.toRadians(180) } };
+
 	public static double[][] flip(double[][] path) {
 		double[][] n = new double[path.length][path[0].length];
 		for (int i = 0; i < path.length; i++) {

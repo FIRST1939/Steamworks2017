@@ -20,30 +20,33 @@ public class FindTurnF extends Command {
 	@Override
 	protected void initialize() {
 		if (!this.intialized) {
-			SmartDashboard.putNumber("Stafe Voltage Setpoint", 12);
+			SmartDashboard.putNumber("Stafe Voltage Setpoint", 8);
 			this.intialized = true;
 		}
 		this.currentOutput = 0;
-		this.step = 0.005;
+		this.step = 0.01;
 		this.lessThan = true;
 		Robot.drivetrain.sidewinderDown();
+		this.setTimeout(1.0);
 	}
 
 	@Override
 	protected void execute() {
 		double requestedVoltage = SmartDashboard.getNumber("Stafe Voltage Setpoint", 12);
-		if (Robot.drivetrain.getTurnSpeed() > 0) {
-			if (this.lessThan) {
-				this.step = -this.step / 2;
+		if (this.isTimedOut()) {
+			if (Robot.drivetrain.getTurnSpeed() > 0) {
+				if (this.lessThan) {
+					this.step = -this.step / 2;
+				}
+				this.lessThan = false;
+			} else {
+				if (!this.lessThan) {
+					this.step = -this.step / 2;
+				}
+				this.lessThan = true;
 			}
-			this.lessThan = false;
-		} else {
-			if (!this.lessThan) {
-				this.step = -this.step / 2;
-			}
-			this.lessThan = true;
+			this.currentOutput += this.step;
 		}
-		this.currentOutput += this.step;
 		Robot.drivetrain.drive(0, this.currentOutput, requestedVoltage / 12);
 		SmartDashboard.putNumber("Current Turn Output", this.currentOutput);
 		SmartDashboard.putNumber("Calcualted Turn F", this.currentOutput * 12 / requestedVoltage);

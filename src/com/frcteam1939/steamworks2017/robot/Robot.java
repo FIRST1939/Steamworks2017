@@ -5,9 +5,16 @@ import org.opencv.imgproc.Imgproc;
 
 import com.frcteam1939.steamworks2017.robot.commands.auton.PlaceGearAndBackup;
 import com.frcteam1939.steamworks2017.robot.commands.auton.PlaceGearAndCross;
+import com.frcteam1939.steamworks2017.robot.commands.auton.PlaceGearHopperBoilerBlue;
+import com.frcteam1939.steamworks2017.robot.commands.auton.PlaceGearHopperBoilerRed;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.FindMaxSpeed;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.FindTurnF;
+
 import com.frcteam1939.steamworks2017.robot.commands.vision.VisionProcessing;
+
+import com.frcteam1939.steamworks2017.robot.commands.drivetrain.TunePositionPID;
+import com.frcteam1939.steamworks2017.robot.commands.drivetrain.TuneTurnPID;
+import com.frcteam1939.steamworks2017.robot.commands.drivetrain.TuneVelocityPID;
 import com.frcteam1939.steamworks2017.robot.subsystems.Climber;
 import com.frcteam1939.steamworks2017.robot.subsystems.Drivetrain;
 import com.frcteam1939.steamworks2017.robot.subsystems.FuelIntake;
@@ -18,6 +25,8 @@ import com.frcteam1939.steamworks2017.robot.subsystems.SmartDashboardSubsystem;
 import com.frcteam1939.steamworks2017.util.DoNothing;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
+
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -28,15 +37,31 @@ import edu.wpi.first.wpilibj.vision.VisionThread;
 
 public class Robot extends IterativeRobot {
 
-	public static final Drivetrain drivetrain = new Drivetrain();
-	public static final Climber climber = new Climber();
-	public static final GearIntake gearIntake = new GearIntake();
-	public static final GearOutput gearOutput = new GearOutput();
-	public static final FuelIntake fuelIntake = new FuelIntake();
-	public static final FuelOutput fuelOutput = new FuelOutput();
-	public static final SmartDashboardSubsystem smartDashboard = new SmartDashboardSubsystem();
+	public static Drivetrain drivetrain;
+	public static Climber climber;
+	public static GearIntake gearIntake;
+	public static GearOutput gearOutput;
+	public static FuelIntake fuelIntake;
+	public static FuelOutput fuelOutput;
+	public static SmartDashboardSubsystem smartDashboard;
+	{
+		try {
+			drivetrain = new Drivetrain();
+			climber = new Climber();
+			gearIntake = new GearIntake();
+			gearOutput = new GearOutput();
+			fuelIntake = new FuelIntake();
+			fuelOutput = new FuelOutput();
+			smartDashboard = new SmartDashboardSubsystem();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	};
 
 	public static OI oi;
+
+	private static AnalogInput pressureSensor = new AnalogInput(RobotMap.pressureSensor);
+
 	private Command selectedCommand;
 	private Command autonomousCommand;
 	private SendableChooser<Command> chooser = new SendableChooser<>();
@@ -58,6 +83,8 @@ public class Robot extends IterativeRobot {
 		this.chooser.addObject("Slots Peg Backup", new PlaceGearAndBackup(Paths.boilerToSlots));
 		this.chooser.addObject("Boiler Peg Cross", new PlaceGearAndCross(Paths.boilerToBoilerPeg, Paths.boilerToSlots));
 		this.chooser.addObject("Slots Peg Cross", new PlaceGearAndCross(Paths.slotsToSlotsPeg, Paths.slotsToSlots));
+		this.chooser.addObject("Red Gear/Hopper/Boiler", new PlaceGearHopperBoilerRed());
+		this.chooser.addObject("Blue Gear/Hopper/Boiler", new PlaceGearHopperBoilerBlue());
 		SmartDashboard.putData("Autonomous Chooser", this.chooser);
 		SmartDashboard.putData(new FindMaxSpeed());
 		SmartDashboard.putData(new FindTurnF());
@@ -99,6 +126,9 @@ public class Robot extends IterativeRobot {
 			 
         });
 		vision.start();
+		SmartDashboard.putData(new TunePositionPID());
+		SmartDashboard.putData(new TuneTurnPID());
+		SmartDashboard.putData(new TuneVelocityPID());
 	}
 
 	@Override
@@ -110,6 +140,7 @@ public class Robot extends IterativeRobot {
 	public void disabledInit() {
 		Robot.drivetrain.disableBraking(); // Make robot not resist pushing while disabled
 		Robot.drivetrain.brakeUp();
+		Robot.climber.disableBraking();
 		Robot.gearIntake.rampIn();
 		Robot.gearOutput.retract();
 		Robot.fuelIntake.setOutput(0);
@@ -124,6 +155,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 		Robot.drivetrain.enableBraking();
+		Robot.climber.enableBraking();
 		this.autonomousCommand = this.selectedCommand;
 		if (this.autonomousCommand != null) {
 			this.autonomousCommand.start();
@@ -138,6 +170,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopInit() {
 		Robot.drivetrain.enableBraking();
+		Robot.climber.enableBraking();
 		if (this.autonomousCommand != null) {
 			this.autonomousCommand.cancel();
 		}
@@ -151,6 +184,10 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void testPeriodic() {
 		LiveWindow.run();
+	}
+
+	public static double getPressure() {
+		return 250.0 * (pressureSensor.getAverageVoltage() / 5.0) - 25.0;
 	}
 
 }

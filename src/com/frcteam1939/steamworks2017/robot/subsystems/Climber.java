@@ -54,4 +54,12 @@ public class Climber extends Subsystem {
 		return this.talon.getClosedLoopError();
 	}
 
+	public void enableBraking() {
+		this.talon.enableBrakeMode(true);
+	}
+
+	public void disableBraking() {
+		this.talon.enableBrakeMode(false);
+	}
+
 }

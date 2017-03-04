@@ -11,6 +11,10 @@ public class FuelIntake extends Subsystem {
 
 	private CANTalon talon = new CANTalon(RobotMap.fuelIntakeTalon);
 
+	public FuelIntake() {
+		this.talon.enableBrakeMode(false);
+	}
+
 	@Override
 	public void initDefaultCommand() {}
 

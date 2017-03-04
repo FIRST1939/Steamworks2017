@@ -17,14 +17,15 @@ import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Drivetrain extends Subsystem {
 
-	public static final double WHEEL_BASE = 27; // Inches
+	public static final double WHEEL_BASE = 28; // Inches
 	public static final double WHEEL_DIAMETER = 6; // Inches
 	public static final double MAX_SPEED = 430; // RPM
-	public static final double MAX_A = 6.0; // Max Acceleration in R/S^2
-	public static final double MAX_JERK = 20.0; // R/S^3
+	public static final double MAX_A = 3.0; // Max Acceleration in R/S^2
+	public static final double MAX_JERK = MAX_A * 4; // R/S^3
 	public static final int MP_UPDATE_MS = 20; // Time per MP frame
 	public static final int CPR = 256; // Counts per Revolution of Encoders
 	public static final int SIDEWINDER_CPR = 12;
@@ -32,16 +33,16 @@ public class Drivetrain extends Subsystem {
 	private static final int NATIVE_UNITS_PER_100MS = (int) (MAX_SPEED / 60.0 / 10.0 * (CPR * 4));
 
 	private static final double velF = 1023.0 / NATIVE_UNITS_PER_100MS;
-	private static final double velP = 1023.0 / MAX_SPEED;
-	private static final double velI = 0;//velP / 1000.0;
-	private static final double velD = 0;//velP * 10.0;
+	private static final double velP = 0.8999999999999999;
+	private static final double velI = -6.479999999481599;
+	private static final double velD = 0.0312500000025;
 
-	private static final double posP = 1.0 / 4.0; // Full speed at 4 rev error
-	private static final double posI = posP / 8000.0;
-	private static final double posD = 0;// posP * 10.0;
+	private static final double posP = 0.6;
+	private static final double posI = -1.0800000000107999;
+	private static final double posD = 0.08333333333250001;
 
 	private static final double MAX_TURN_OUPUT = 0.5;
-	private static final double turnF = 0; // Need to measure
+	private static final double turnF = 0.071;
 	private static final double turnP = 0;
 	private static final double turnI = 0;
 	private static final double turnD = 0;
@@ -58,8 +59,7 @@ public class Drivetrain extends Subsystem {
 	private Solenoid brake = new Solenoid(RobotMap.PCM, RobotMap.brakeDownSolenoid);
 
 	private AHRS navx;
-
-	private PIDController turnPID = new PIDController(turnP, turnI, turnD, this.navx, output -> {}, 10);
+	private PIDController turnPID;
 
 	private boolean driveBySpeed = true;
 
@@ -83,6 +83,7 @@ public class Drivetrain extends Subsystem {
 		// Try to intialize the navX
 		try {
 			this.navx = new AHRS(SerialPort.Port.kMXP);
+			this.turnPID = new PIDController(turnP, turnI, turnD, this.navx, output -> {}, 10);
 		} catch (Exception e) {
 			System.out.println("ERROR: Couldn't intialize navX");
 			e.printStackTrace();
@@ -93,9 +94,10 @@ public class Drivetrain extends Subsystem {
 		this.sidewinder.setNominalClosedLoopVoltage(12.0);
 
 		this.turnPID.setInputRange(-180, 180);
-		this.turnPID.setContinuous();
+		this.turnPID.setContinuous(true);
 		this.turnPID.setOutputRange(-MAX_TURN_OUPUT, MAX_TURN_OUPUT);
 		this.turnPID.setSetpoint(0);
+		this.turnPID.enable();
 	}
 
 	@Override
@@ -168,7 +170,7 @@ public class Drivetrain extends Subsystem {
 	}
 
 	public double getHeading() {
-		return this.navx.getYaw();
+		return this.navx.pidGet();
 	}
 
 	public double getTurnSpeed() {
@@ -245,20 +247,36 @@ public class Drivetrain extends Subsystem {
 		setSpeed(this.frontRight, right);
 	}
 
+	public void drivePosition(double left, double right) {
+		this.brakeUp();
+		setPosition(this.frontLeft, left);
+		setPosition(this.frontRight, right);
+	}
+
 	public void strafe(double voltage) {
 		setVoltage(this.sidewinder, voltage);
+	}
+
+	public void turnToAngle(double angle) {
+		this.turnPID.setSetpoint(angle);
+		this.drive(0, this.turnPID.get(), 0);
+	}
+
+	public void resetGyro() {
+		this.navx.reset();
 	}
 
 	private boolean correcting = false;
 
 	public void drive(double moveValue, double rotateValue, double strafeValue) {
 		// Correct with gyro
-		if (rotateValue == 0 && moveValue != 0) {
+		if (rotateValue == 0 && (strafeValue != 0 || moveValue != 0)) {
 			if (!this.correcting) {
-				this.navx.zeroYaw();
+				this.resetGyro();
+				this.turnPID.setSetpoint(0);
 				this.correcting = true;
 			}
-			moveValue = strafeValue * 12 * turnF + this.turnPID.get();
+			rotateValue = this.turnPID.get() + turnF * strafeValue;
 		} else {
 			this.correcting = false;
 		}
@@ -293,6 +311,12 @@ public class Drivetrain extends Subsystem {
 		} else {
 			this.setPercentVBus(-leftMotorSpeed, rightMotorSpeed);
 		}
+		SmartDashboard.putNumber("Move Output", moveValue);
+		SmartDashboard.putNumber("Turn Output", rotateValue);
+		SmartDashboard.putNumber("Strafe Output", strafeValue);
+
+		SmartDashboard.putNumber("Turn Setpoint", this.turnPID.getSetpoint());
+		SmartDashboard.putNumber("Turn PID Output", this.turnPID);
 	}
 
 	public void enableBraking() {
@@ -319,9 +343,33 @@ public class Drivetrain extends Subsystem {
 		this.driveBySpeed = driveBySpeed;
 	}
 
+	public void setVelocityPID(double P, double I, double D) {
+		setPID(this.frontLeft, 0, P, I, D, velF);
+		setPID(this.frontRight, 0, P, I, D, velF);
+	}
+
+	public void setPositionPID(double P, double I, double D) {
+		setPID(this.frontLeft, 1, P, I, D, 0);
+		setPID(this.frontRight, 1, P, I, D, 0);
+	}
+
+	public void setTurnPID(double P, double I, double D) {
+		this.turnPID.setPID(P, I, D);
+	}
+
 	/*
 	 * Static Convenience Methods
 	 */
+
+	private static void setPID(CANTalon talon, int profile, double P, double I, double D, double F) {
+		talon.setProfile(profile); // Switch to profile 0 and save PIDF terms for velocity control
+		talon.setP(P);
+		talon.setI(I);
+		talon.setD(D);
+		talon.setF(F);
+		talon.setIZone(0);
+		talon.setVoltageRampRate(MAX_JERK / MAX_A * 12);
+	}
 
 	private static void setupMasterTalon(CANTalon talon) {
 		talon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder); // Tell Talon that a Quadrature Encoder is attached
@@ -329,20 +377,8 @@ public class Drivetrain extends Subsystem {
 		talon.reverseSensor(true);
 		talon.configNominalOutputVoltage(+0.0f, -0.0f); // Set the minimum output of the Talon in volts
 		talon.configPeakOutputVoltage(+12.0f, -12.0f); // Set the maximum output of the Talon in volts
-		talon.setProfile(0); // Switch to profile 0 and save PIDF terms for velocity control
-		talon.setP(velP);
-		talon.setI(velI);
-		talon.setD(velD);
-		talon.setF(velF);
-		talon.setIZone(0); // Disable IZone
-		talon.setVoltageRampRate(24); // Set maximum change in volts per seconds
-		talon.setProfile(1); // Switch to profile 1 and save PIDF terms for position control
-		talon.setP(posP);
-		talon.setI(posI);
-		talon.setD(posD);
-		talon.setF(velF);
-		talon.setIZone(0); // Disable IZone
-		talon.setVoltageRampRate(48); // Set maximum change in volts per seconds
+		setPID(talon, 0, velP, velI, velD, velF);
+		setPID(talon, 1, posP, posI, posD, velF);
 		talon.changeMotionControlFramePeriod(MP_UPDATE_MS / 2); // No idea, directly from Talon Software Refrence
 		talon.setNominalClosedLoopVoltage(12.0); // Make Talons compensate for changes in battery voltage
 	}
@@ -387,6 +423,12 @@ public class Drivetrain extends Subsystem {
 	private static void setPercentVBus(CANTalon talon, double percentVBus) {
 		talon.changeControlMode(TalonControlMode.PercentVbus);
 		talon.set(percentVBus);
+	}
+
+	private static void setPosition(CANTalon talon, double position) {
+		talon.setProfile(1);
+		talon.changeControlMode(TalonControlMode.Position);
+		talon.set(position);
 	}
 
 }

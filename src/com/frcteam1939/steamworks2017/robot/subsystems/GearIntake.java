@@ -1,5 +1,6 @@
 package com.frcteam1939.steamworks2017.robot.subsystems;
 
+import com.frcteam1939.steamworks2017.robot.Robot;
 import com.frcteam1939.steamworks2017.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.Solenoid;
@@ -16,6 +17,7 @@ public class GearIntake extends Subsystem {
 
 	public void rampOut() {
 		this.solenoid.set(true);
+		Robot.gearOutput.retract();
 	}
 
 	public void rampIn() {
