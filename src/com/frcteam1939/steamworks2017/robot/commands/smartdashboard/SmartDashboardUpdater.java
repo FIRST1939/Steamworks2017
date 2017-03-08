@@ -1,6 +1,7 @@
 package com.frcteam1939.steamworks2017.robot.commands.smartdashboard;
 
 import com.frcteam1939.steamworks2017.robot.Robot;
+import com.frcteam1939.steamworks2017.robot.vision.Vision;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -48,6 +49,9 @@ public class SmartDashboardUpdater extends Command {
 		SmartDashboard.putNumber("Pressure", Robot.getPressure());
 
 		SmartDashboard.putBoolean("Have Gear", Robot.gearIntake.haveGear());
+
+		SmartDashboard.putNumber("Vision Angle", Vision.getAngle());
+		SmartDashboard.putNumber("Vision Distance", Vision.getDistance());
 
 		Robot.drivetrain.setDriveBySpeed(SmartDashboard.getBoolean("Drive By Speed", true));
 	}

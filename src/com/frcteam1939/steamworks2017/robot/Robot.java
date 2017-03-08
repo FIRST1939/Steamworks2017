@@ -12,11 +12,10 @@ import com.frcteam1939.steamworks2017.robot.subsystems.FuelOutput;
 import com.frcteam1939.steamworks2017.robot.subsystems.GearIntake;
 import com.frcteam1939.steamworks2017.robot.subsystems.GearOutput;
 import com.frcteam1939.steamworks2017.robot.subsystems.SmartDashboardSubsystem;
+import com.frcteam1939.steamworks2017.robot.vision.Vision;
 import com.frcteam1939.steamworks2017.util.DoNothing;
 
-import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -66,11 +65,7 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putData(new TuneTurnPID());
 		SmartDashboard.putData(new TuneVelocityPID());
 
-		UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-		camera.setBrightness(10);
-		camera.setFPS(20);
-		camera.setResolution(320, 240);
-
+		Vision.init();
 	}
 
 	@Override
