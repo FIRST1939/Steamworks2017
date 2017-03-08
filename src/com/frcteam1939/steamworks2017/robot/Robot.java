@@ -1,9 +1,5 @@
 package com.frcteam1939.steamworks2017.robot;
 
-import com.frcteam1939.steamworks2017.robot.commands.auton.PlaceGearAndBackup;
-import com.frcteam1939.steamworks2017.robot.commands.auton.PlaceGearAndCross;
-import com.frcteam1939.steamworks2017.robot.commands.auton.PlaceGearHopperBoilerBlue;
-import com.frcteam1939.steamworks2017.robot.commands.auton.PlaceGearHopperBoilerRed;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.FindMaxSpeed;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.FindTurnF;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.TunePositionPID;
@@ -18,7 +14,9 @@ import com.frcteam1939.steamworks2017.robot.subsystems.GearOutput;
 import com.frcteam1939.steamworks2017.robot.subsystems.SmartDashboardSubsystem;
 import com.frcteam1939.steamworks2017.util.DoNothing;
 
+import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -61,19 +59,18 @@ public class Robot extends IterativeRobot {
 		oi = new OI();
 
 		this.chooser.addDefault("Do Nothing", new DoNothing());
-		this.chooser.addObject("Center Peg Backup", new PlaceGearAndBackup(Paths.centerToCenterPeg));
-		this.chooser.addObject("Boiler Peg Backup", new PlaceGearAndBackup(Paths.boilerToBoilerPeg));
-		this.chooser.addObject("Slots Peg Backup", new PlaceGearAndBackup(Paths.boilerToSlots));
-		this.chooser.addObject("Boiler Peg Cross", new PlaceGearAndCross(Paths.boilerToBoilerPeg, Paths.boilerToSlots));
-		this.chooser.addObject("Slots Peg Cross", new PlaceGearAndCross(Paths.slotsToSlotsPeg, Paths.slotsToSlots));
-		this.chooser.addObject("Red Gear/Hopper/Boiler", new PlaceGearHopperBoilerRed());
-		this.chooser.addObject("Blue Gear/Hopper/Boiler", new PlaceGearHopperBoilerBlue());
 		SmartDashboard.putData("Autonomous Chooser", this.chooser);
 		SmartDashboard.putData(new FindMaxSpeed());
 		SmartDashboard.putData(new FindTurnF());
 		SmartDashboard.putData(new TunePositionPID());
 		SmartDashboard.putData(new TuneTurnPID());
 		SmartDashboard.putData(new TuneVelocityPID());
+
+		UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+		camera.setBrightness(10);
+		camera.setFPS(20);
+		camera.setResolution(320, 240);
+
 	}
 
 	@Override
@@ -132,7 +129,7 @@ public class Robot extends IterativeRobot {
 	}
 
 	public static double getPressure() {
-		return 250.0 * (pressureSensor.getAverageVoltage() / 5.0) - 25.0;
+		return 250.0 * (pressureSensor.getVoltage() / 5.0) - 25.0;
 	}
 
 }

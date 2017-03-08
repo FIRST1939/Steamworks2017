@@ -41,9 +41,9 @@ public class Drivetrain extends Subsystem {
 	private static final double posI = -1.0800000000107999;
 	private static final double posD = 0.08333333333250001;
 
-	private static final double MAX_TURN_OUPUT = 0.5;
+	private static final double MAX_TURN_OUPUT = 0.25;
 	private static final double turnF = 0.071;
-	private static final double turnP = 0;
+	private static final double turnP = 0.0025;
 	private static final double turnI = 0;
 	private static final double turnD = 0;
 
@@ -80,24 +80,17 @@ public class Drivetrain extends Subsystem {
 			Drivetrain.this.frontRight.processMotionProfileBuffer();
 		}).startPeriodic(MP_UPDATE_MS / 2000.0);
 
-		// Try to intialize the navX
-		try {
-			this.navx = new AHRS(SerialPort.Port.kMXP);
-			this.turnPID = new PIDController(turnP, turnI, turnD, this.navx, output -> {}, 10);
-		} catch (Exception e) {
-			System.out.println("ERROR: Couldn't intialize navX");
-			e.printStackTrace();
-		}
-
-		this.sidewinder.setFeedbackDevice(FeedbackDevice.QuadEncoder);
-		this.sidewinder.configEncoderCodesPerRev(SIDEWINDER_CPR);
-		this.sidewinder.setNominalClosedLoopVoltage(12.0);
-
+		this.navx = new AHRS(SerialPort.Port.kMXP);
+		this.turnPID = new PIDController(turnP, turnI, turnD, this.navx, output -> {});
 		this.turnPID.setInputRange(-180, 180);
 		this.turnPID.setContinuous(true);
 		this.turnPID.setOutputRange(-MAX_TURN_OUPUT, MAX_TURN_OUPUT);
 		this.turnPID.setSetpoint(0);
 		this.turnPID.enable();
+
+		this.sidewinder.setFeedbackDevice(FeedbackDevice.QuadEncoder);
+		this.sidewinder.configEncoderCodesPerRev(SIDEWINDER_CPR);
+		this.sidewinder.setNominalClosedLoopVoltage(12.0);
 	}
 
 	@Override
@@ -170,11 +163,13 @@ public class Drivetrain extends Subsystem {
 	}
 
 	public double getHeading() {
-		return this.navx.pidGet();
+		if (this.navx != null) return this.navx.pidGet();
+		else return 0;
 	}
 
 	public double getTurnSpeed() {
-		return this.navx.getRate();
+		if (this.navx != null) return this.navx.getRate();
+		else return 0;
 	}
 
 	/*
@@ -192,6 +187,7 @@ public class Drivetrain extends Subsystem {
 	}
 
 	public void startMotionProfile() {
+		this.brakeUp();
 		this.zeroEncoders();
 		startMotionProfile(this.frontLeft);
 		startMotionProfile(this.frontRight);
@@ -258,12 +254,16 @@ public class Drivetrain extends Subsystem {
 	}
 
 	public void turnToAngle(double angle) {
-		this.turnPID.setSetpoint(angle);
-		this.drive(0, this.turnPID.get(), 0);
+		if (this.turnPID != null) {
+			this.turnPID.setSetpoint(angle);
+			this.drive(0, this.turnPID.get(), 0);
+		}
 	}
 
 	public void resetGyro() {
-		this.navx.reset();
+		if (this.navx != null) {
+			this.navx.reset();
+		}
 	}
 
 	private boolean correcting = false;
@@ -316,7 +316,8 @@ public class Drivetrain extends Subsystem {
 		SmartDashboard.putNumber("Strafe Output", strafeValue);
 
 		SmartDashboard.putNumber("Turn Setpoint", this.turnPID.getSetpoint());
-		SmartDashboard.putNumber("Turn PID Output", this.turnPID);
+		SmartDashboard.putNumber("Turn PID Output", this.turnPID.get());
+		SmartDashboard.putNumber("Turn I", this.turnPID.getI());
 	}
 
 	public void enableBraking() {

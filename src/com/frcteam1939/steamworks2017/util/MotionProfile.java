@@ -1,5 +1,7 @@
 package com.frcteam1939.steamworks2017.util;
 
+import java.io.File;
+
 import com.ctre.CANTalon.TrajectoryPoint;
 import com.frcteam1939.steamworks2017.robot.Paths;
 import com.frcteam1939.steamworks2017.robot.subsystems.Drivetrain;
@@ -42,8 +44,22 @@ public class MotionProfile {
 
 		this.period = Drivetrain.MP_UPDATE_MS / 1000.0;
 
-		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_FAST, this.period, MAX_V, MAX_A, MAX_J);
-		this.trajectory = Pathfinder.generate(points, config);
+		Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_QUINTIC, Trajectory.Config.SAMPLES_HIGH, this.period, MAX_V, MAX_A, MAX_J);
+		String hash = hash(waypoints, config);
+
+		File file;
+		if (System.getProperty("os.name").contains("Linux")) {
+			file = new File("/home/lvuser/" + hash + ".traj");
+		} else {
+			file = new File(hash + ".traj");
+		}
+		if (file.exists()) {
+			this.trajectory = Pathfinder.readFromFile(file);
+		} else {
+			this.trajectory = Pathfinder.generate(points, config);
+			Pathfinder.writeToFile(file, this.trajectory);
+		}
+
 		TankModifier modifier = new TankModifier(this.trajectory);
 		modifier.modify(inchesToRev(Drivetrain.WHEEL_BASE));
 		this.leftTrajectory = modifier.getLeftTrajectory();
@@ -109,6 +125,22 @@ public class MotionProfile {
 
 	private static double inchesToRev(double inches) {
 		return inches / (Drivetrain.WHEEL_DIAMETER * Math.PI);
+	}
+
+	private static String hash(double[][] waypoints, Trajectory.Config config) {
+		String s = "";
+		s += config.dt + " ";
+		s += config.fit.name() + " ";
+		s += config.max_velocity + " ";
+		s += config.max_acceleration + " ";
+		s += config.max_jerk + " ";
+		s += config.sample_count + " ";
+		for (double[] d : waypoints) {
+			s += d[0] + " ";
+			s += d[1] + " ";
+			s += d[2] + " ";
+		}
+		return String.valueOf(s.hashCode());
 	}
 
 }

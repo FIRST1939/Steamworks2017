@@ -36,9 +36,9 @@ public class DriveByJoystick extends Command {
 			rotate = 0;
 		} else {
 			if (turbo) {
-				rotate = map(rotate, 0, 0.6);
+				rotate = map(rotate, 0, 0.7);
 			} else {
-				rotate = map(rotate, 0, 0.3);
+				rotate = map(rotate, 0, 0.4);
 			}
 		}
 		if (Math.abs(strafe) < DEAD_BAND) {
@@ -47,7 +47,7 @@ public class DriveByJoystick extends Command {
 			if (turbo) {
 				strafe = map(strafe, 0, 1.0);
 			} else {
-				strafe = map(strafe, 0, 0.5);
+				strafe = map(strafe, 0, 0.7);
 			}
 		}
 

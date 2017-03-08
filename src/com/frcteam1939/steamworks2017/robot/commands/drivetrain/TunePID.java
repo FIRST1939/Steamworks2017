@@ -73,6 +73,7 @@ public abstract class TunePID extends Command {
 			}
 			this.time = System.currentTimeMillis();
 		}
+		this.exec();
 	}
 
 	@Override
@@ -95,5 +96,7 @@ public abstract class TunePID extends Command {
 	public abstract void setPID(double P, double I, double D);
 
 	public abstract void setSetpoint(double setpoint);
+
+	public abstract void exec();
 
 }

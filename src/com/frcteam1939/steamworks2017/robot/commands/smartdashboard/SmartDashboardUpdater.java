@@ -47,6 +47,8 @@ public class SmartDashboardUpdater extends Command {
 
 		SmartDashboard.putNumber("Pressure", Robot.getPressure());
 
+		SmartDashboard.putBoolean("Have Gear", Robot.gearIntake.haveGear());
+
 		Robot.drivetrain.setDriveBySpeed(SmartDashboard.getBoolean("Drive By Speed", true));
 	}
 

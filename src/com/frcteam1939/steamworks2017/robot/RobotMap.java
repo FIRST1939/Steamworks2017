@@ -25,4 +25,8 @@ public class RobotMap {
 	// Analog
 	public static final int pressureSensor = 0;
 
+	// DIO
+	public static final int gearBannerSensor = 0;
+	public static final int gearLimitSwitch = 1;
+
 }

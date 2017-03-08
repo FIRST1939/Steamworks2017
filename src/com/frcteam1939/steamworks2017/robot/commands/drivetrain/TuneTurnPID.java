@@ -4,13 +4,16 @@ import com.frcteam1939.steamworks2017.robot.Robot;
 
 public class TuneTurnPID extends TunePID {
 
+	private double setpoint;
+
 	public TuneTurnPID() {
-		super(90, -90);
+		super(0, 90);
 	}
 
 	@Override
 	public void init() {
 		Robot.drivetrain.resetGyro();
+		Robot.drivetrain.sidewinderDown();
 	}
 
 	@Override
@@ -20,7 +23,12 @@ public class TuneTurnPID extends TunePID {
 
 	@Override
 	public void setSetpoint(double setpoint) {
-		Robot.drivetrain.turnToAngle(setpoint);
+		this.setpoint = setpoint;
+	}
+
+	@Override
+	public void exec() {
+		Robot.drivetrain.turnToAngle(this.setpoint);
 	}
 
 }
