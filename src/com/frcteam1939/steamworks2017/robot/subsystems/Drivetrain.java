@@ -12,17 +12,17 @@ import com.frcteam1939.steamworks2017.util.MotionProfile;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.SerialPort;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Drivetrain extends Subsystem {
 
 	public static final double WHEEL_BASE = 28; // Inches
-	public static final double WHEEL_DIAMETER = 6; // Inches
+	public static final double WHEEL_DIAMETER = 6.06; // Inches
 	public static final double MAX_SPEED = 430; // RPM
 	public static final double MAX_A = 3.0; // Max Acceleration in R/S^2
 	public static final double MAX_JERK = MAX_A * 4; // R/S^3
@@ -56,7 +56,7 @@ public class Drivetrain extends Subsystem {
 	private CANTalon sidewinder = new CANTalon(RobotMap.sidewinderTalon);
 
 	private DoubleSolenoid sidewinderSolenoid = new DoubleSolenoid(RobotMap.PCM, RobotMap.sidewinderDownSolenoid, RobotMap.sidewinderUpSolenoid);
-	private Solenoid brake = new Solenoid(RobotMap.PCM, RobotMap.brakeDownSolenoid);
+	private DoubleSolenoid brake = new DoubleSolenoid(RobotMap.PCM, RobotMap.brakeDownSolenoid, RobotMap.brakeUpSolenoid);
 
 	private AHRS navx;
 	private PIDController turnPID;
@@ -66,7 +66,7 @@ public class Drivetrain extends Subsystem {
 	public Drivetrain() {
 		// Setup Master Talons for Encoders and PID
 		setupMasterTalon(this.frontLeft);
-		setupMasterTalon(this.frontRight);
+		setupMasterTalon(this.frontRight, posP + .25, velF + .25);
 
 		// Make other Talons follow the Master Talons
 		setFollower(this.midLeft, this.frontLeft);
@@ -207,11 +207,11 @@ public class Drivetrain extends Subsystem {
 	}
 
 	public void brakeDown() {
-		this.brake.set(true);
+		this.brake.set(Value.kForward);
 	}
 
 	public void brakeUp() {
-		this.brake.set(false);
+		this.brake.set(Value.kReverse);
 	}
 
 	public void setVoltage(double voltage) {
@@ -373,13 +373,17 @@ public class Drivetrain extends Subsystem {
 	}
 
 	private static void setupMasterTalon(CANTalon talon) {
+		setupMasterTalon(talon, posP, velF);
+	}
+
+	private static void setupMasterTalon(CANTalon talon, double pP, double vF) {
 		talon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder); // Tell Talon that a Quadrature Encoder is attached
 		talon.configEncoderCodesPerRev(CPR); // Tell Talon the resolution of the encoder (how many signals per revolution)
 		talon.reverseSensor(true);
 		talon.configNominalOutputVoltage(+0.0f, -0.0f); // Set the minimum output of the Talon in volts
 		talon.configPeakOutputVoltage(+12.0f, -12.0f); // Set the maximum output of the Talon in volts
-		setPID(talon, 0, velP, velI, velD, velF);
-		setPID(talon, 1, posP, posI, posD, velF);
+		setPID(talon, 0, velP, velI, velD, vF);
+		setPID(talon, 1, pP, posI, posD, vF);
 		talon.changeMotionControlFramePeriod(MP_UPDATE_MS / 2); // No idea, directly from Talon Software Refrence
 		talon.setNominalClosedLoopVoltage(12.0); // Make Talons compensate for changes in battery voltage
 	}

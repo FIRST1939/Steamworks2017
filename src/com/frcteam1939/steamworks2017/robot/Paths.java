@@ -6,25 +6,28 @@ public class Paths {
 
 	private static final double[] boilerStart = { 8.688, 56, 0 };
 	private static final double[] boilerStartLeadup = { 35, 56, 0 };
-	private static final double[] boilerMidField = { 210, 76.392, 0 };
+	private static final double[] boilerMidField = { 120, 76.392, 0 };
 
-	private static final double[] boilerPeg = { 119.097, 108.713, Math.toRadians(60) };
+	private static final double[] boilerPeg = { 116.3, 111.5, Math.toRadians(60) };
 	private static final double[] boilerPegLeadup = { 109.097, 91.392, Math.toRadians(60) };
 	private static final double[] boilerPegBackup = { 60, 76.392, 0 };
 
 	private static final double[] slotsStart = { 8.688, 267, 0 };
 	private static final double[] slotsStartLeadup = { 35, 267, 0 };
-	private static final double[] slotsMidField = { 210, 248.108, 0 };
+	private static final double[] slotsMidField = { 120, 248.108, 0 };
 
-	private static final double[] slotsPeg = { 119.097, 215.787, Math.toRadians(300) };
+	private static final double[] slotsPeg = { 116.3, 216.5, Math.toRadians(300) };
 	private static final double[] slotsPegLeadup = { 109.097, 233.108, Math.toRadians(300) };
 	private static final double[] slotsPegBackup = { 60, 248.108, 0 };
 
 	private static final double[] centerStart = { 8.688, 162.25, 0 };
 	private static final double[] centerStartLeadup = { 35, 162.25, 0 };
 
-	private static final double[] centerPeg = { 88.188, 162.25, 0 };
+	private static final double[] centerPeg = { 86, 162.25, 0 };
 	private static final double[] centerPegLeadup = { 68.188, 162.25, 0 };
+	private static final double[] centerPegBackup = { 60, 162.25, 0 };
+	private static final double[] centerPegSlotsBackup = { 35, 140, Math.toRadians(75) };
+	private static final double[] centerPegBoilerBackup = { 35, 184, Math.toRadians(-75) };
 
 	private static final double[] oppositeSlots = { 416.5, 285, 0 };
 
@@ -46,18 +49,19 @@ public class Paths {
 	public static final double[][] backupToSlotsMidField = { slotsPegBackup, slotsMidField };
 	public static final double[][] backupBoilerToOpposite = { boilerPegBackup, boilerMidField, oppositeSlots };
 	public static final double[][] backupSlotsToOpposite = { slotsPegBackup, slotsMidField, oppositeSlots };
+	public static final double[][] backupToCenterPeg = { centerPegBackup, centerPeg };
+	public static final double[][] backupSlotsToCenterPeg = { centerPegSlotsBackup, centerPegLeadup, centerPeg };
+	public static final double[][] backupBoilerToCenterPeg = { centerPegBoilerBackup, centerPegLeadup, centerPeg };
+	public static final double[][] backupCenterToSlotsMidField = { centerPegSlotsBackup, slotsMidField };
+	public static final double[][] backupCenterToBoilerMidField = { centerPegBoilerBackup, boilerMidField };
+	public static final double[][] backupCenterToSlotsCross = { centerPegSlotsBackup, slotsMidField, oppositeSlots };
+	public static final double[][] backupCenterToBoilerCross = { centerPegBoilerBackup, boilerMidField, oppositeSlots };
 
 	public static final double[][] backupToHopper = { boilerPegBackup, hopper };
 	public static final double[][] blueBackupToHopper = { hopperBlueBackup, hopper };
 	public static final double[][] redBackupToHopper = { hopperRedBackup, hopper };
 	public static final double[][] backupToBlueGoal = { hopperBlueBackup, goalBlueLeadup, goalBlue };
 	public static final double[][] backupToRedGoal = { hopperRedBackup, goalRedLeadup, goalRed };
-
-	//public static final double[][] boilerToSlots = { { 8.688, 56, 0 }, { 132.5, 56, 0 }, { 416.5, 267, 0 } };
-	//public static final double[][] slotsToSlots = { { 8.688, 267, 0 }, { 416.5, 267, 0 } };
-
-	//public static final double[][] backupToBoilerPeg = { { 50, 83, Math.toRadians(-45) }, { 109.097, 91.392, Math.toRadians(60) }, { 119.097, 108.713, Math.toRadians(60) } };
-	//public static final double[][] backupToHopper = { { 50, 83, Math.toRadians(-45) }, { 91.5, 35, Math.toRadians(-90) }, { 91.5, 27.3125, Math.toRadians(-90) } };
 
 	public static double[][] flip(double[][] path) {
 		double[][] n = new double[path.length][path[0].length];

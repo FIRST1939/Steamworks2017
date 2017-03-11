@@ -8,6 +8,7 @@ import com.frcteam1939.steamworks2017.robot.commands.gearoutput.RetractGearPushe
 import com.frcteam1939.steamworks2017.robot.subsystems.FuelIntake;
 import com.frcteam1939.steamworks2017.robot.subsystems.FuelOutput;
 import com.frcteam1939.steamworks2017.util.Gamepad;
+import com.frcteam1939.steamworks2017.util.RunCode;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -28,6 +29,10 @@ public class OI {
 		this.gamepad.leftTrigger.whenReleased(new SetFuelIntakeSpeed(0));
 
 		new JoystickButton(this.left, 3).whenPressed(new BrakeDown());
+
+		JoystickButton wantFuel = new JoystickButton(this.right, 4);
+		wantFuel.whenPressed(new RunCode(() -> Robot.lights.setWantFuel(true)));
+		wantFuel.whenReleased(new RunCode(() -> Robot.lights.setWantFuel(false)));
 	}
 
 }

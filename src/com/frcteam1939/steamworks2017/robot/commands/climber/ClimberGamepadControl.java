@@ -8,32 +8,20 @@ public class ClimberGamepadControl extends Command {
 
 	private static final double DEAD_BAND = 0.1;
 
-	private boolean holding = false;
-
 	public ClimberGamepadControl() {
 		this.requires(Robot.climber);
 	}
 
 	@Override
-	protected void initialize() {
-		this.holding = false;
-	}
+	protected void initialize() {}
 
 	@Override
 	protected void execute() {
 		double move = Robot.oi.gamepad.getRightY();
-		if (Math.abs(move) < DEAD_BAND) {
+		if (Math.abs(move) < DEAD_BAND || move > 0) {
 			move = 0;
 		}
-		if (move == 0) {
-			if (!this.holding) {
-				Robot.climber.holdPosition();
-				this.holding = true;
-			}
-		} else {
-			Robot.climber.setOutput(move);
-			this.holding = false;
-		}
+		Robot.climber.setOutput(move);
 	}
 
 	@Override

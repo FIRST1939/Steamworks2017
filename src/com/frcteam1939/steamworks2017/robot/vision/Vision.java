@@ -5,6 +5,7 @@ import org.opencv.imgproc.Imgproc;
 
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.vision.VisionThread;
 
 public class Vision {
@@ -12,8 +13,8 @@ public class Vision {
 	private static boolean intialized = false;
 
 	private static Pipe pipe = new Pipe();
-	private static final int IMG_WIDTH = 640;
-	private static final int IMG_HEIGHT = 480;
+	private static final int IMG_WIDTH = 320;
+	private static final int IMG_HEIGHT = 240;
 	private static double centerX;
 	private static double angle;
 	private static double contours;
@@ -30,12 +31,13 @@ public class Vision {
 					Rect r = Imgproc.boundingRect(pipe.filterContoursOutput().get(0));
 					Rect r1 = Imgproc.boundingRect(pipe.filterContoursOutput().get(1));
 					double center = (r.x + r.x + r1.x + r1.width) / 2 - IMG_WIDTH / 2;
+					double LBC = Math.abs(r.x + r.width / 2 - (r1.x + r1.width / 2));
+					SmartDashboard.putNumber("Length Between Contours", LBC);
 					//finding the angle
 					double constant = 8.5 / Math.abs(r.x - (r1.x + r1.width));
 					double angleToGoal = 0;
 					//Looking for the 2 blocks to actually start trig
 					if (pipeline.filterContoursOutput().size() == 2) {
-
 						// this calculates the distance from the center of goal to center of webcam
 						double distanceFromCenterPixels = center;
 						// Converts pixels to inches using the constant from above.
@@ -48,7 +50,7 @@ public class Vision {
 						centerX = center;
 						angle = angleToGoal;
 						contours = pipe.filterContoursOutput().size();
-						distance = 5738 / Math.abs(r.x - (r1.x + r1.width));
+						distance = 2635.2 / Math.abs(r.x - (r1.x + r1.width));
 					}
 				}
 

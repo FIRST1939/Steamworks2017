@@ -1,5 +1,14 @@
 package com.frcteam1939.steamworks2017.robot;
 
+import com.frcteam1939.steamworks2017.robot.commands.auton.BoilerPegCross;
+import com.frcteam1939.steamworks2017.robot.commands.auton.BoilerPegMidField;
+import com.frcteam1939.steamworks2017.robot.commands.auton.CenterPegBackup;
+import com.frcteam1939.steamworks2017.robot.commands.auton.CenterPegBoilerCross;
+import com.frcteam1939.steamworks2017.robot.commands.auton.CenterPegBoilerMidField;
+import com.frcteam1939.steamworks2017.robot.commands.auton.CenterPegSlotsCross;
+import com.frcteam1939.steamworks2017.robot.commands.auton.CenterPegSlotsMidField;
+import com.frcteam1939.steamworks2017.robot.commands.auton.SlotsPegCross;
+import com.frcteam1939.steamworks2017.robot.commands.auton.SlotsPegMidField;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.FindMaxSpeed;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.FindTurnF;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.TunePositionPID;
@@ -11,6 +20,7 @@ import com.frcteam1939.steamworks2017.robot.subsystems.FuelIntake;
 import com.frcteam1939.steamworks2017.robot.subsystems.FuelOutput;
 import com.frcteam1939.steamworks2017.robot.subsystems.GearIntake;
 import com.frcteam1939.steamworks2017.robot.subsystems.GearOutput;
+import com.frcteam1939.steamworks2017.robot.subsystems.Lights;
 import com.frcteam1939.steamworks2017.robot.subsystems.SmartDashboardSubsystem;
 import com.frcteam1939.steamworks2017.robot.vision.Vision;
 import com.frcteam1939.steamworks2017.util.DoNothing;
@@ -31,6 +41,7 @@ public class Robot extends IterativeRobot {
 	public static GearOutput gearOutput;
 	public static FuelIntake fuelIntake;
 	public static FuelOutput fuelOutput;
+	public static Lights lights;
 	public static SmartDashboardSubsystem smartDashboard;
 	{
 		try {
@@ -40,6 +51,7 @@ public class Robot extends IterativeRobot {
 			gearOutput = new GearOutput();
 			fuelIntake = new FuelIntake();
 			fuelOutput = new FuelOutput();
+			lights = new Lights();
 			smartDashboard = new SmartDashboardSubsystem();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -58,6 +70,15 @@ public class Robot extends IterativeRobot {
 		oi = new OI();
 
 		this.chooser.addDefault("Do Nothing", new DoNothing());
+		this.chooser.addObject("Boiler Peg Cross", new BoilerPegCross());
+		this.chooser.addObject("Boiler Peg Mid Field", new BoilerPegMidField());
+		this.chooser.addObject("Slots Peg Cross", new SlotsPegCross());
+		this.chooser.addObject("Slots Peg Mid Field", new SlotsPegMidField());
+		this.chooser.addObject("Center Peg and Backup", new CenterPegBackup());
+		this.chooser.addObject("Center Peg Boiler Mid Field", new CenterPegBoilerMidField());
+		this.chooser.addObject("Center Peg Boiler Cross", new CenterPegBoilerCross());
+		this.chooser.addObject("Center Peg Slots Mid Field", new CenterPegSlotsMidField());
+		this.chooser.addObject("Center Peg Slots Cross", new CenterPegSlotsCross());
 		SmartDashboard.putData("Autonomous Chooser", this.chooser);
 		SmartDashboard.putData(new FindMaxSpeed());
 		SmartDashboard.putData(new FindTurnF());

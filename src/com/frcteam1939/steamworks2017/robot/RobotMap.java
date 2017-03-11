@@ -16,11 +16,12 @@ public class RobotMap {
 
 	// Solenoids
 	public static final int PCM = 0;
-	public static final int brakeDownSolenoid = 6;
+	public static final int brakeDownSolenoid = 0;
+	public static final int brakeUpSolenoid = 1;
 	public static final int gearRampOutSolenoid = 5;
 	public static final int gearPushSolenoid = 2;
-	public static final int sidewinderDownSolenoid = 1;
-	public static final int sidewinderUpSolenoid = 0;
+	public static final int sidewinderDownSolenoid = 4;
+	public static final int sidewinderUpSolenoid = 3;
 
 	// Analog
 	public static final int pressureSensor = 0;
@@ -28,5 +29,9 @@ public class RobotMap {
 	// DIO
 	public static final int gearBannerSensor = 0;
 	public static final int gearLimitSwitch = 1;
+	public static final int pinOne = 2;
+	public static final int pinTwo = 3;
+	public static final int pinThree = 4;
+	public static final int pinFour = 5;
 
 }
