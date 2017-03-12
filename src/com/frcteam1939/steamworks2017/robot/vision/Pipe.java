@@ -14,8 +14,20 @@ import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
 import edu.wpi.first.wpilibj.vision.VisionPipeline;
-
+	/**
+	 * 
+	 * @author Paul Case
+	 * @author GRIP
+	 *
+	 */
 public class Pipe implements VisionPipeline {
+	/*
+	 * Quick Vocab Lesson:
+	 * rgbThreshold = RedGreenBlue Threshold(pretty self explanatory)
+	 * Contours = Shapes in image AKA the targets
+	 * Thresholds are in 0-255 format
+	 * This code is the processing of the image from the camera, 
+	 */
 
 	//Outputs
 	private Mat rgbThresholdOutput = new Mat();
@@ -42,7 +54,7 @@ public class Pipe implements VisionPipeline {
 		boolean findContoursExternalOnly = false;
 		this.findContours(findContoursInput, findContoursExternalOnly, this.findContoursOutput);
 
-		// Step Filter_Contours0:
+		// Filters the Conttours by a:
 		ArrayList<MatOfPoint> filterContoursContours = this.findContoursOutput;
 		double filterContoursMinArea = 100.0;
 		double filterContoursMinPerimeter = 0;
