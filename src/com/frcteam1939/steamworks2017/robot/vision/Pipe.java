@@ -26,7 +26,7 @@ public class Pipe implements VisionPipeline {
 	 * rgbThreshold = RedGreenBlue Threshold(pretty self explanatory)
 	 * Contours = Shapes in image AKA the targets
 	 * Thresholds are in 0-255 format
-	 * This code is the processing of the image from the camera, 
+	 * This code is the processing of the image from the camera
 	 */
 
 	//Outputs

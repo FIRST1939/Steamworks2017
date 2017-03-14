@@ -43,6 +43,8 @@ public class SmartDashboardUpdater extends Command {
 		SmartDashboard.putBoolean("On Peg", Robot.gearOutput.onPeg());
 
 		SmartDashboard.putNumber("Vision Angle", Vision.getAngle());
+		SmartDashboard.putNumber("Vision CenterX", Vision.getCenterX());
+		SmartDashboard.putNumber("Vison Contours", Vision.getContours());
 		SmartDashboard.putNumber("Vision Distance", Vision.getDistance());
 
 		Robot.drivetrain.setDriveBySpeed(SmartDashboard.getBoolean("Drive By Speed", true));

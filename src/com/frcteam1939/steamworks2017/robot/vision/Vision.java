@@ -13,6 +13,7 @@ public class Vision {
 	private static boolean intialized = false;
 
 	private static Pipe pipe = new Pipe();
+	//set these to the Image width and Height of the camera in pixels (ie 320Pixels by 240 pixels)
 	private static final int IMG_WIDTH = 320;
 	private static final int IMG_HEIGHT = 240;
 	/*	To calculate the distance constant, choose 5 distances for the robot to sit 
@@ -27,7 +28,9 @@ public class Vision {
 	private static double contours;
 	private static double distance;
 	private final static Object imgLock = new Object();
-
+	/**
+	 * Starts Vision Tracking and initiates the Camera
+	 */
 	public static void init() {
 		if (!intialized) {
 			//Sets Camera to the first camera it finds
@@ -56,7 +59,9 @@ public class Vision {
 					double LBC = Math.abs(r.x + r.width / 2 - (r1.x + r1.width / 2));
 					SmartDashboard.putNumber("Length Between Contours", LBC);
 					//finding the angle
+					//finds the ratio of inches to pixels
 					double constant = 8.5 / Math.abs(r.x - (r1.x + r1.width));
+					//resets the angle
 					double angleToGoal = 0;
 					//Looking for the 2 blocks to actually start trig
 					if (pipeline.filterContoursOutput().size() == 2) {
@@ -84,17 +89,37 @@ public class Vision {
 			intialized = true;
 		}
 	}
+	/**
+	 * Return the number of targets it detects AKA the number of contours
+	 * @return contours
+	 */
+	public static double getContours(){
+		synchronized (imgLock){
+			return contours;
+		}
+	}
+	/**
+	 * Returns the center of the two targets, center = 0; neg = left; pos = right
+	 * @return center
+	 */
 	public static double getCenterX(){
 		synchronized (imgLock) {
 			return centerX;
 		}
 	}
+	/**
+	 * Returns the angle in degrees
+	 * @return The angle
+	 */
 	public static double getAngle() {
 		synchronized (imgLock) {
 			return angle;
 		}
 	}
-
+	/** 
+	 * Returns the distance to the target in inches
+	 * @return distance
+	 */
 	public static double getDistance() {
 		synchronized (imgLock) {
 			return distance;
