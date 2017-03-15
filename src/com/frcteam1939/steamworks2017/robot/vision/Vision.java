@@ -16,13 +16,14 @@ public class Vision {
 	//set these to the Image width and Height of the camera in pixels (ie 320Pixels by 240 pixels)
 	private static final int IMG_WIDTH = 320;
 	private static final int IMG_HEIGHT = 240;
-	/*	To calculate the distance constant, choose 5 distances for the robot to sit 
+	/**	To calculate the distance constant, choose 5 distances for the robot to sit 
 	 * (12, 24, 48, 60, 72 in). Move your robot to each of these distances and record
 	 *  the variable lengthBetweenContours, then write that down. Multiply the distance
 	 *  and lengthBetweenContours and write what you get down. After you do that for 
 	 *  all of the values, average everything and that's the distance constant.
 	 */
 	private static final double DISTANCE_CONSTANT = 2635.2;
+	private static double lengthBetweenContours;
 	private static double centerX;
 	private static double angle;
 	private static double contours;
@@ -57,7 +58,6 @@ public class Vision {
 					*of the center of the first rectanlge minus the center of the second rectangle					 * 
 					 */
 					double LBC = Math.abs(r.x + r.width / 2 - (r1.x + r1.width / 2));
-					SmartDashboard.putNumber("Length Between Contours", LBC);
 					//finding the angle
 					//finds the ratio of inches to pixels
 					double constant = 8.5 / Math.abs(r.x - (r1.x + r1.width));
@@ -78,6 +78,7 @@ public class Vision {
 					synchronized (imgLock) {
 						//setting the variables
 						centerX = center;
+						lengthBetweenContours = LBC;
 						angle = angleToGoal;
 						contours = pipe.filterContoursOutput().size();
 						//finds the distance by taking the distance constant(see explanation above) and dividing it by the length between contours
@@ -96,6 +97,15 @@ public class Vision {
 	public static double getContours(){
 		synchronized (imgLock){
 			return contours;
+		}
+	}
+	/**
+	 * returns the length in pixels between the two targets
+	 * @return length between contours(in pixels)
+	 */
+	public static double getLengthBetweenContours(){
+		synchronized (imgLock){
+			return lengthBetweenContours;
 		}
 	}
 	/**

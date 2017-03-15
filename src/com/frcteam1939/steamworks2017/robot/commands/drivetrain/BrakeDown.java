@@ -13,6 +13,7 @@ public class BrakeDown extends Command {
 
 	@Override
 	protected void execute() {
+		//setting the brake to push out
 		Robot.drivetrain.brakeDown();
 	}
 

@@ -13,6 +13,7 @@ public class BrakeUp extends Command {
 
 	@Override
 	protected void execute() {
+		// setting the brake to retract
 		Robot.drivetrain.brakeUp();
 	}
 
