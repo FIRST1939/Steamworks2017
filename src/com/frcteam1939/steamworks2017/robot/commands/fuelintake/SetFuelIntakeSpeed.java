@@ -9,6 +9,7 @@ public class SetFuelIntakeSpeed extends Command {
 	private double speed;
 
 	public SetFuelIntakeSpeed(double speed) {
+		// command requires the fuel intake
 		requires(Robot.fuelIntake);
 		this.speed = speed;
 	}

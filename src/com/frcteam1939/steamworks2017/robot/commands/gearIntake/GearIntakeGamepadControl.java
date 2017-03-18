@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.command.Command;
 public class GearIntakeGamepadControl extends Command {
 
 	public GearIntakeGamepadControl() {
+		//requires a gear intake to run
 		this.requires(Robot.gearIntake);
 	}
 
@@ -15,9 +16,14 @@ public class GearIntakeGamepadControl extends Command {
 
 	@Override
 	protected void execute() {
+		// checking if x on gamepad is pressed and the robot does not have a gear
 		if (Robot.oi.gamepad.x.get() && !Robot.gearIntake.haveGear()) {
+			// opening the ramp
 			Robot.gearIntake.rampOut();
-		} else if (Robot.oi.gamepad.a.get() || Robot.gearIntake.haveGear()) {
+		}
+		//checking if a on the gamepad is pressed and if the robot has a gear
+		else if (Robot.oi.gamepad.a.get() || Robot.gearIntake.haveGear()) {
+			// closes ramp
 			Robot.gearIntake.rampIn();
 		}
 	}

@@ -8,16 +8,19 @@ import edu.wpi.first.wpilibj.command.Command;
 public class RetractGearPusher extends Command {
 
 	public RetractGearPusher() {
+		// requires a gear output to run
 		this.requires(Robot.gearOutput);
 	}
 
 	@Override
 	protected void initialize() {
+		// sets fuel output to push gear out
 		Robot.fuelIntake.setOutput(FuelIntake.IN_SPEED);
 	}
 
 	@Override
 	protected void execute() {
+		//closes clamps
 		Robot.gearOutput.retract();
 	}
 

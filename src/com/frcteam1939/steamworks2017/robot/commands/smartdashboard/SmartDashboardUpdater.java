@@ -16,7 +16,9 @@ public class SmartDashboardUpdater extends Command {
 
 	@Override
 	protected void initialize() {
+		// checking if the SmartDashboard is not initalized
 		if (!this.intialized) {
+			// 
 			SmartDashboard.putBoolean("Drive By Speed", true);
 			this.intialized = true;
 		}
@@ -33,19 +35,18 @@ public class SmartDashboardUpdater extends Command {
 		 *
 		 * SmartDashboard.putNumber("Climber Speed", Robot.climber.getSpeed()); SmartDashboard.putNumber("Climber Position", Robot.climber.getPosition()); SmartDashboard.putNumber("Climber Error", Robot.climber.getError());
 		 */
-
+		// DriveTrain PID
 		SmartDashboard.putNumber("Heading", Robot.drivetrain.getHeading());
 		SmartDashboard.putNumber("Turn Speed", Robot.drivetrain.getTurnSpeed());
-
+		// Pneumatics Pressure
 		SmartDashboard.putNumber("Pressure", Robot.getPressure());
-
+		//Peg/Gear Checks
 		SmartDashboard.putBoolean("Have Gear", Robot.gearIntake.haveGear());
 		SmartDashboard.putBoolean("On Peg", Robot.gearOutput.onPeg());
-
+		// Vision Tracking
 		SmartDashboard.putNumber("Vision Angle", Vision.getAngle());
 		SmartDashboard.putNumber("Vision CenterX", Vision.getCenterX());
 		SmartDashboard.putNumber("Vison Contours", Vision.getContours());
-		SmartDashboard.putNumber("Vision Length Between Contours", Vision.getLengthBetweenContours());
 		SmartDashboard.putNumber("Vision Distance", Vision.getDistance());
 
 		Robot.drivetrain.setDriveBySpeed(SmartDashboard.getBoolean("Drive By Speed", true));

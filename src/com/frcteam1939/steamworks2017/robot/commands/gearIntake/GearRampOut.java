@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.command.Command;
 public class GearRampOut extends Command {
 
 	public GearRampOut() {
+		//requires a gear intake
 		this.requires(Robot.gearIntake);
 	}
 
@@ -15,6 +16,7 @@ public class GearRampOut extends Command {
 
 	@Override
 	protected void execute() {
+		// opens ramp
 		Robot.gearIntake.rampOut();
 	}
 
