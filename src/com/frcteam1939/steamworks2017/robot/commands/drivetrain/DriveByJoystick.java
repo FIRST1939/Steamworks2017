@@ -57,9 +57,9 @@ public class DriveByJoystick extends Command {
 		} else {
 			Robot.drivetrain.sidewinderDown();
 			if (turbo) {
-				strafe = map(strafe, 0.3, 1.0, 0, 1.0);
+				strafe = map(strafe, 0.4, 1.0, 0.2, 1.0);
 			} else {
-				strafe = map(strafe, 0.3, 1.0, 0, 0.7);
+				strafe = map(strafe, 0.4, 1.0, 0.2, 0.7);
 			}
 		}
 

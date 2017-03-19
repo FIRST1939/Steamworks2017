@@ -16,12 +16,12 @@ public class RobotMap {
 
 	// Solenoids
 	public static final int PCM = 0;
-	public static final int brakeDownSolenoid = 0;
-	public static final int brakeUpSolenoid = 1;
+	public static final int brakeDownSolenoid = 4; // 0
+	public static final int brakeUpSolenoid = 3; // 1
 	public static final int gearRampOutSolenoid = 5;
 	public static final int gearPushSolenoid = 2;
-	public static final int sidewinderDownSolenoid = 4;
-	public static final int sidewinderUpSolenoid = 3;
+	public static final int sidewinderDownSolenoid = 0; // 4
+	public static final int sidewinderUpSolenoid = 1; // 3
 
 	// Analog
 	public static final int pressureSensor = 0;

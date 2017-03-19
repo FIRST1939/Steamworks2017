@@ -1,5 +1,6 @@
 package com.frcteam1939.steamworks2017.robot;
 
+import com.frcteam1939.steamworks2017.robot.commands.auton.BoilerPegBackup;
 import com.frcteam1939.steamworks2017.robot.commands.auton.BoilerPegCross;
 import com.frcteam1939.steamworks2017.robot.commands.auton.BoilerPegMidField;
 import com.frcteam1939.steamworks2017.robot.commands.auton.CenterPegBackup;
@@ -7,6 +8,7 @@ import com.frcteam1939.steamworks2017.robot.commands.auton.CenterPegBoilerCross;
 import com.frcteam1939.steamworks2017.robot.commands.auton.CenterPegBoilerMidField;
 import com.frcteam1939.steamworks2017.robot.commands.auton.CenterPegSlotsCross;
 import com.frcteam1939.steamworks2017.robot.commands.auton.CenterPegSlotsMidField;
+import com.frcteam1939.steamworks2017.robot.commands.auton.SlotsPegBackup;
 import com.frcteam1939.steamworks2017.robot.commands.auton.SlotsPegCross;
 import com.frcteam1939.steamworks2017.robot.commands.auton.SlotsPegMidField;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.FindMaxSpeed;
@@ -79,6 +81,8 @@ public class Robot extends IterativeRobot {
 		this.chooser.addObject("Center Peg Boiler Cross", new CenterPegBoilerCross());
 		this.chooser.addObject("Center Peg Slots Mid Field", new CenterPegSlotsMidField());
 		this.chooser.addObject("Center Peg Slots Cross", new CenterPegSlotsCross());
+		this.chooser.addObject("Boiler Peg Backup", new BoilerPegBackup());
+		this.chooser.addObject("Slots Peg Backup", new SlotsPegBackup());
 		SmartDashboard.putData("Autonomous Chooser", this.chooser);
 		SmartDashboard.putData(new FindMaxSpeed());
 		SmartDashboard.putData(new FindTurnF());
