@@ -28,7 +28,7 @@ public class Vision {
 	private static double angle;
 	private static double contours;
 	private static double distance;
-	private final static Object imgLock = new Object();
+	public final static Object imgLock = new Object();
 	/**
 	 * Starts Vision Tracking and initiates the Camera
 	 */

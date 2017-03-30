@@ -18,7 +18,7 @@ public class SmartDashboardUpdater extends Command {
 	protected void initialize() {
 		// checking if the SmartDashboard is not initalized
 		if (!this.intialized) {
-			// 
+			// Setting drive by Speed to true, setting initalized to true
 			SmartDashboard.putBoolean("Drive By Speed", true);
 			this.intialized = true;
 		}
@@ -48,6 +48,7 @@ public class SmartDashboardUpdater extends Command {
 		SmartDashboard.putNumber("Vision CenterX", Vision.getCenterX());
 		SmartDashboard.putNumber("Vison Contours", Vision.getContours());
 		SmartDashboard.putNumber("Vision Distance", Vision.getDistance());
+		SmartDashboard.putBoolean("See Full Peg", Vision.getContours() == 2);
 
 		Robot.drivetrain.setDriveBySpeed(SmartDashboard.getBoolean("Drive By Speed", true));
 	}

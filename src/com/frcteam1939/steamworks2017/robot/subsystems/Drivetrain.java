@@ -319,8 +319,11 @@ public class Drivetrain extends Subsystem {
 		SmartDashboard.putNumber("Turn PID Output", this.turnPID.get());
 		SmartDashboard.putNumber("Turn I", this.turnPID.getI());
 	}
-
+	/**
+	 * Turns on braking for wheels
+	 */
 	public void enableBraking() {
+		// turning on braking for all wheels
 		this.frontLeft.enableBrakeMode(true);
 		this.midLeft.enableBrakeMode(true);
 		this.backLeft.enableBrakeMode(true);
@@ -329,8 +332,11 @@ public class Drivetrain extends Subsystem {
 		this.backRight.enableBrakeMode(true);
 		this.sidewinder.enableBrakeMode(true);
 	}
-
+/**
+ * Turns off braking for wheels
+ */
 	public void disableBraking() {
+		// turning off braking for all wheels
 		this.frontLeft.enableBrakeMode(false);
 		this.midLeft.enableBrakeMode(false);
 		this.backLeft.enableBrakeMode(false);
@@ -339,7 +345,10 @@ public class Drivetrain extends Subsystem {
 		this.backRight.enableBrakeMode(false);
 		this.sidewinder.enableBrakeMode(false);
 	}
-
+	/**
+	 * setting the drive speed
+	 * @param driveBySpeed the speed to set
+	 */
 	public void setDriveBySpeed(boolean driveBySpeed) {
 		this.driveBySpeed = driveBySpeed;
 	}

@@ -7,9 +7,9 @@ import com.frcteam1939.steamworks2017.robot.RobotMap;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class FuelOutput extends Subsystem {
-
+	// setting OUT_SPEED to forward at 100%
 	public static final double OUT_SPEED = 1.0;
-
+	//creating 
 	private CANTalon talon = new CANTalon(RobotMap.fuelOutputTalon);
 
 	public FuelOutput() {
