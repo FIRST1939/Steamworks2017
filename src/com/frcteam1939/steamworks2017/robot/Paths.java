@@ -10,6 +10,7 @@ public class Paths {
 
 	private static final double[] boilerPeg = { 116.3, 111.5, Math.toRadians(60) };
 	private static final double[] boilerPegLeadup = { 109.097, 91.392, Math.toRadians(60) };
+	private static final double[] boilerPegLeadupVision = { 100.097, 91.392, Math.toRadians(60) };
 	private static final double[] boilerPegBackup = { 60, 76.392, 0 };
 
 	private static final double[] slotsStart = { 8.688, 267, 0 };
@@ -19,7 +20,6 @@ public class Paths {
 	private static final double[] slotsPeg = { 116.3, 216.5, Math.toRadians(300) };
 	private static final double[] slotsPegLeadup = { 109.097, 233.108, Math.toRadians(300) };
 	private static final double[] slotsPegBackup = { 60, 248.108, 0 };
-
 	private static final double[] centerStart = { 8.688, 162.25, 0 };
 	private static final double[] centerStartLeadup = { 35, 162.25, 0 };
 
@@ -40,7 +40,9 @@ public class Paths {
 	private static final double[] goalRedLeadup = { 50, 21.5, Math.toRadians(180) };
 
 	public static final double[][] boilerToBoilerPeg = { boilerStart, boilerStartLeadup, boilerPegLeadup, boilerPeg };
+	public static final double [][]  boilerToBoilerPegVision = { boilerStart, boilerStartLeadup, boilerPegLeadupVision};
 	public static final double[][] slotsToSlotsPeg = { slotsStart, slotsStartLeadup, slotsPegLeadup, slotsPeg };
+	public static final double[][] pegToMidField = {};
 	public static final double[][] centerToCenterPeg = { centerStart, centerStartLeadup, centerPegLeadup, centerPeg };
 
 	public static final double[][] backupToBoilerPeg = { boilerPegBackup, boilerPegLeadup, boilerPeg };

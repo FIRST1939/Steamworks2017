@@ -9,11 +9,12 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 /**
  *
  */
-public class VisionCenterPeg extends CommandGroup {
+public class VisionSidePeg extends CommandGroup {
 
-    public VisionCenterPeg() {
+    public VisionSidePeg() {
+        addSequential(new DrivePath(Paths.boilerToBoilerPegVision));
         addSequential(new AimForCenter());
-        addSequential(new DrivePath(Paths.centerToCenterPeg));
+        addSequential(new DriveUntilLimit());
         addSequential(new PlaceGear());
     }
 }
