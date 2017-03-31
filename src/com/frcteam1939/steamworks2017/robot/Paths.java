@@ -40,8 +40,11 @@ public class Paths {
 	private static final double[] goalRedLeadup = { 50, 21.5, Math.toRadians(180) };
 
 	public static final double[][] boilerToBoilerPeg = { boilerStart, boilerStartLeadup, boilerPegLeadup, boilerPeg };
+	public static final double[][] boilerToBoilerVision = { boilerStart, boilerStartLeadup, boilerPegLeadup };
 	public static final double[][] slotsToSlotsPeg = { slotsStart, slotsStartLeadup, slotsPegLeadup, slotsPeg };
+	public static final double[][] slotsToSlotsVision = { slotsStart, slotsStartLeadup, slotsPegLeadup };
 	public static final double[][] centerToCenterPeg = { centerStart, centerStartLeadup, centerPegLeadup, centerPeg };
+	public static final double[][] centerToCenterVision = { centerStart, centerStartLeadup, centerPegLeadup };
 
 	public static final double[][] backupToBoilerPeg = { boilerPegBackup, boilerPegLeadup, boilerPeg };
 	public static final double[][] backupToSlotsPeg = { slotsPegBackup, slotsPegLeadup, slotsPeg };
