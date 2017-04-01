@@ -8,7 +8,7 @@ public class Paths {
 	private static final double[] boilerStartLeadup = { 35, 56, 0 };
 	private static final double[] boilerMidField = { 120, 76.392, 0 };
 
-	private static final double[] boilerPeg = { 116.3, 111.5, Math.toRadians(70) };
+	private static final double[] boilerPeg = { 116.3 - 10.3923048454, 111.5 + 6, Math.toRadians(60) };
 	private static final double[] boilerPegLeadup = { boilerPeg[0] + 20 * Math.cos(boilerPeg[2] + Math.PI), boilerPeg[1] + 20 * Math.sin(boilerPeg[2] + Math.PI), boilerPeg[2] };
 	private static final double[] boilerPegBackup = { 60, 76.392, 0 };
 
@@ -16,7 +16,7 @@ public class Paths {
 	private static final double[] slotsStartLeadup = { 15, 267, 0 };
 	private static final double[] slotsMidField = { 120, 248.108, 0 };
 
-	private static final double[] slotsPeg = { 116.3, 216.5, Math.toRadians(300) };
+	private static final double[] slotsPeg = { 116.3 - 5.1961524227, 216.5 - 3, Math.toRadians(300) };
 	private static final double[] slotsPegLeadup = { slotsPeg[0] + 20 * Math.cos(slotsPeg[2] + Math.PI), slotsPeg[1] + 20 * Math.sin(slotsPeg[2] + Math.PI), slotsPeg[2] };
 	private static final double[] slotsPegBackup = { 60, 248.108, 0 };
 
