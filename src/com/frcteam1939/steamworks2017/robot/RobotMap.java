@@ -12,7 +12,7 @@ public class RobotMap {
 	public static final int rightBackTalon = 20;
 	public static final int fuelOutputTalon = 21;
 	public static final int fuelIntakeTalon = 22;
-	public static final int climberTalon = 23;
+	public static final int climberTalon = 24;
 
 	// Solenoids
 	public static final int PCM = 0;
