@@ -42,7 +42,7 @@ public class Vision {
 						double distanceFromCenterPixels = center;
 						// Converts pixels to inches using the constant from above.
 						double distanceFromCenterInch = distanceFromCenterPixels * constant;
-						angleToGoal = Math.atan(distanceFromCenterInch / (5738 / Math.abs(r.x - (r1.x + r1.width))));
+						angleToGoal = Math.atan(distanceFromCenterInch / (2635.2 / Math.abs(r.x - (r1.x + r1.width))));
 						angleToGoal = Math.toDegrees(angleToGoal);
 					}
 
