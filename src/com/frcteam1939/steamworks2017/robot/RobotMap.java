@@ -3,8 +3,7 @@ package com.frcteam1939.steamworks2017.robot;
 public class RobotMap {
 
 	// CANTalons
-
-	public static final int sidewinderTalon = 24;
+	public static final int sidewinderTalon = 0;
 	public static final int leftFrontTalon = 10;
 	public static final int leftMidTalon = 0;
 	public static final int leftBackTalon = 11;
@@ -17,13 +16,22 @@ public class RobotMap {
 
 	// Solenoids
 	public static final int PCM = 0;
-	public static final int brakeDownSolenoid = 6;
+	public static final int brakeDownSolenoid = 4; // 0
+	public static final int brakeUpSolenoid = 3; // 1
 	public static final int gearRampOutSolenoid = 5;
 	public static final int gearPushSolenoid = 2;
-	public static final int sidewinderDownSolenoid = 1;
-	public static final int sidewinderUpSolenoid = 0;
+	public static final int sidewinderDownSolenoid = 0; // 4
+	public static final int sidewinderUpSolenoid = 1; // 3
+
+	// Analog
+	public static final int pressureSensor = 0;
 
 	// DIO
-	public static final int fuelLineBreak = 0;
+	public static final int gearBannerSensor = 0;
+	public static final int gearLimitSwitch = 1;
+	public static final int pinOne = 2;
+	public static final int pinTwo = 3;
+	public static final int pinThree = 4;
+	public static final int pinFour = 5;
 
 }

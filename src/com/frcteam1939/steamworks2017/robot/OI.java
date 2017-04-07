@@ -1,19 +1,17 @@
 package com.frcteam1939.steamworks2017.robot;
 
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.BrakeDown;
-import com.frcteam1939.steamworks2017.robot.commands.drivetrain.BrakeUp;
 import com.frcteam1939.steamworks2017.robot.commands.fuelintake.SetFuelIntakeSpeed;
 import com.frcteam1939.steamworks2017.robot.commands.fueloutput.SetFuelOutputSpeed;
-import com.frcteam1939.steamworks2017.robot.commands.gearIntake.GearRampIn;
-import com.frcteam1939.steamworks2017.robot.commands.gearIntake.GearRampOut;
 import com.frcteam1939.steamworks2017.robot.commands.gearoutput.PushOutGear;
 import com.frcteam1939.steamworks2017.robot.commands.gearoutput.RetractGearPusher;
 import com.frcteam1939.steamworks2017.robot.subsystems.FuelIntake;
 import com.frcteam1939.steamworks2017.robot.subsystems.FuelOutput;
 import com.frcteam1939.steamworks2017.util.Gamepad;
+import com.frcteam1939.steamworks2017.util.RunCode;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 public class OI {
 
@@ -23,46 +21,18 @@ public class OI {
 	public final Gamepad gamepad = new Gamepad(2);
 
 	public OI() {
-		this.gamepad.x.whenPressed(new GearRampOut());
-		this.gamepad.a.whenPressed(new GearRampIn());
 		this.gamepad.y.whenPressed(new PushOutGear());
 		this.gamepad.b.whenPressed(new RetractGearPusher());
 		this.gamepad.rightTrigger.whenPressed(new SetFuelOutputSpeed(FuelOutput.OUT_SPEED));
 		this.gamepad.rightTrigger.whenReleased(new SetFuelOutputSpeed(0));
-
 		this.gamepad.leftTrigger.whenPressed(new SetFuelIntakeSpeed(FuelIntake.IN_SPEED));
 		this.gamepad.leftTrigger.whenReleased(new SetFuelIntakeSpeed(0));
 
-		this.gamepad.start.whenPressed(new BrakeDown());
-		this.gamepad.back.whenPressed(new BrakeUp());
-		this.gamepad.leftJoystick.whenPressed(new Command() {
+		new JoystickButton(this.left, 3).whenPressed(new BrakeDown());
 
-			@Override
-			protected void initialize() {
-				Robot.drivetrain.sidewinderDown();
-			}
-
-			@Override
-			protected boolean isFinished() {
-				// TODO Auto-generated method stub
-				return true;
-			}
-
-		});
-		this.gamepad.rightButton.whenPressed(new Command() {
-
-			@Override
-			protected void initialize() {
-				Robot.drivetrain.sidewinderUp();
-			}
-
-			@Override
-			protected boolean isFinished() {
-				// TODO Auto-generated method stub
-				return true;
-			}
-
-		});
+		JoystickButton wantFuel = new JoystickButton(this.right, 4);
+		wantFuel.whenPressed(new RunCode(() -> Robot.lights.setWantFuel(true)));
+		wantFuel.whenReleased(new RunCode(() -> Robot.lights.setWantFuel(false)));
 	}
 
 }
