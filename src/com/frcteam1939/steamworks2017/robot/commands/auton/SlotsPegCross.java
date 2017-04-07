@@ -10,7 +10,6 @@ public class SlotsPegCross extends CommandGroup {
 	public SlotsPegCross() {
 		this.addSequential(new DrivePath(Paths.slotsToSlotsPeg));
 		this.addSequential(new PlaceGear());
-		this.addSequential(new DrivePath(Paths.backupToSlotsPeg, true));
-		this.addSequential(new DrivePath(Paths.backupSlotsToOpposite));
+		this.addSequential(new ConditionallyDriveAway(Paths.backupToSlotsPeg, Paths.backupSlotsToOpposite));
 	}
 }

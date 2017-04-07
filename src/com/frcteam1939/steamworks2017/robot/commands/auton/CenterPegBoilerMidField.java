@@ -10,7 +10,6 @@ public class CenterPegBoilerMidField extends CommandGroup {
 	public CenterPegBoilerMidField() {
 		this.addSequential(new DrivePath(Paths.centerToCenterPeg));
 		this.addSequential(new PlaceGear());
-		this.addSequential(new DrivePath(Paths.backupBoilerToCenterPeg, true));
-		this.addSequential(new DrivePath(Paths.backupCenterToBoilerMidField));
+		this.addSequential(new ConditionallyDriveAway(Paths.backupBoilerToCenterPeg, Paths.backupCenterToBoilerMidField));
 	}
 }

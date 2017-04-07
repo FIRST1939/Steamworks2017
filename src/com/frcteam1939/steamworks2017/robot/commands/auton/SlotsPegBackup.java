@@ -10,6 +10,6 @@ public class SlotsPegBackup extends CommandGroup {
 	public SlotsPegBackup() {
 		this.addSequential(new DrivePath(Paths.slotsToSlotsPeg));
 		this.addSequential(new PlaceGear());
-		this.addSequential(new DrivePath(Paths.backupToSlotsPeg, true));
+		this.addSequential(new Backup());
 	}
 }

@@ -31,20 +31,9 @@ public class Paths {
 
 	private static final double[] oppositeSlots = { 416.5, 285, 0 };
 
-	private static final double[] hopper = { 91.5, 27.313, Math.toRadians(-90) };
-	private static final double[] hopperBlueBackup = { 21.5, 100, Math.toRadians(-90) };
-	private static final double[] hopperRedBackup = { 150, 60, Math.toRadians(180) };
-	private static final double[] goalBlue = { 26.362, 38.378, Math.toRadians(310) };
-	private static final double[] goalBlueLeadup = { 21.5, 50, Math.toRadians(-90) };
-	private static final double[] goalRed = { 38.971, 26.424, Math.toRadians(130) };
-	private static final double[] goalRedLeadup = { 50, 21.5, Math.toRadians(180) };
-
 	public static final double[][] boilerToBoilerPeg = { boilerStart, boilerStartLeadup, boilerPegLeadup, boilerPeg };
-	public static final double[][] boilerToBoilerVision = { boilerStart, boilerStartLeadup, boilerPegLeadup };
 	public static final double[][] slotsToSlotsPeg = { slotsStart, slotsStartLeadup, slotsPegLeadup, slotsPeg };
-	public static final double[][] slotsToSlotsVision = { slotsStart, slotsStartLeadup, slotsPegLeadup };
 	public static final double[][] centerToCenterPeg = { centerStart, centerStartLeadup, centerPegLeadup, centerPeg };
-	public static final double[][] centerToCenterVision = { centerStart, centerStartLeadup, centerPegLeadup };
 
 	public static final double[][] backupToBoilerPeg = { boilerPegBackup, boilerPegLeadup, boilerPeg };
 	public static final double[][] backupToSlotsPeg = { slotsPegBackup, slotsPegLeadup, slotsPeg };
@@ -60,11 +49,7 @@ public class Paths {
 	public static final double[][] backupCenterToSlotsCross = { centerPegSlotsBackup, slotsMidField, oppositeSlots };
 	public static final double[][] backupCenterToBoilerCross = { centerPegBoilerBackup, boilerMidField, oppositeSlots };
 
-	public static final double[][] backupToHopper = { boilerPegBackup, hopper };
-	public static final double[][] blueBackupToHopper = { hopperBlueBackup, hopper };
-	public static final double[][] redBackupToHopper = { hopperRedBackup, hopper };
-	public static final double[][] backupToBlueGoal = { hopperBlueBackup, goalBlueLeadup, goalBlue };
-	public static final double[][] backupToRedGoal = { hopperRedBackup, goalRedLeadup, goalRed };
+	public static final double[][] backup = { { 0, 0, 0 }, { 24, 0, 0 } };
 
 	public static double[][] flip(double[][] path) {
 		double[][] n = new double[path.length][path[0].length];

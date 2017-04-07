@@ -10,7 +10,6 @@ public class CenterPegSlotsCross extends CommandGroup {
 	public CenterPegSlotsCross() {
 		this.addSequential(new DrivePath(Paths.centerToCenterPeg));
 		this.addSequential(new PlaceGear());
-		this.addSequential(new DrivePath(Paths.backupSlotsToCenterPeg, true));
-		this.addSequential(new DrivePath(Paths.backupCenterToSlotsCross));
+		this.addSequential(new ConditionallyDriveAway(Paths.backupSlotsToCenterPeg, Paths.backupCenterToSlotsCross));
 	}
 }

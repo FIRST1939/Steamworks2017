@@ -10,7 +10,6 @@ public class SlotsPegMidField extends CommandGroup {
 	public SlotsPegMidField() {
 		this.addSequential(new DrivePath(Paths.slotsToSlotsPeg));
 		this.addSequential(new PlaceGear());
-		this.addSequential(new DrivePath(Paths.backupToSlotsPeg, true));
-		this.addSequential(new DrivePath(Paths.backupToSlotsMidField));
+		this.addSequential(new ConditionallyDriveAway(Paths.backupToSlotsPeg, Paths.backupToSlotsMidField));
 	}
 }

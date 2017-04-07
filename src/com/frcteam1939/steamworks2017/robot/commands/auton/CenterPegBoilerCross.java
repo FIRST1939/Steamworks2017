@@ -10,7 +10,6 @@ public class CenterPegBoilerCross extends CommandGroup {
 	public CenterPegBoilerCross() {
 		this.addSequential(new DrivePath(Paths.centerToCenterPeg));
 		this.addSequential(new PlaceGear());
-		this.addSequential(new DrivePath(Paths.backupBoilerToCenterPeg, true));
-		this.addSequential(new DrivePath(Paths.backupCenterToBoilerCross));
+		this.addSequential(new ConditionallyDriveAway(Paths.backupBoilerToCenterPeg, Paths.backupCenterToBoilerCross));
 	}
 }

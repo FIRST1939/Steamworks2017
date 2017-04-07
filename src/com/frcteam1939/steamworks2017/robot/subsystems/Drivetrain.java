@@ -6,6 +6,7 @@ import com.ctre.CANTalon.MotionProfileStatus;
 import com.ctre.CANTalon.SetValueMotionProfile;
 import com.ctre.CANTalon.TalonControlMode;
 import com.ctre.CANTalon.TrajectoryPoint;
+import com.frcteam1939.steamworks2017.robot.Robot;
 import com.frcteam1939.steamworks2017.robot.RobotMap;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.DriveByJoystick;
 import com.frcteam1939.steamworks2017.util.MotionProfile;
@@ -254,10 +255,8 @@ public class Drivetrain extends Subsystem {
 	}
 
 	public void turnToAngle(double angle) {
-		if (this.turnPID != null) {
-			this.turnPID.setSetpoint(angle);
-			this.drive(0, this.turnPID.get(), 0);
-		}
+		double distance = Math.toRadians(angle) * (Drivetrain.WHEEL_BASE / 2);
+		Robot.drivetrain.driveDistance(distance, distance);
 	}
 
 	public void resetGyro() {
@@ -318,6 +317,11 @@ public class Drivetrain extends Subsystem {
 		SmartDashboard.putNumber("Turn Setpoint", this.turnPID.getSetpoint());
 		SmartDashboard.putNumber("Turn PID Output", this.turnPID.get());
 		SmartDashboard.putNumber("Turn I", this.turnPID.getI());
+	}
+
+	public void driveDistance(double left, double right) {
+		driveDistance(this.frontLeft, left);
+		driveDistance(this.frontRight, right);
 	}
 
 	public void enableBraking() {
@@ -386,6 +390,8 @@ public class Drivetrain extends Subsystem {
 		setPID(talon, 1, pP, posI, posD, vF);
 		talon.changeMotionControlFramePeriod(MP_UPDATE_MS / 2); // No idea, directly from Talon Software Refrence
 		talon.setNominalClosedLoopVoltage(12.0); // Make Talons compensate for changes in battery voltage
+		talon.setMotionMagicCruiseVelocity(Drivetrain.MAX_SPEED * 0.7);
+		talon.setMotionMagicAcceleration(Drivetrain.MAX_A * 0.7);
 	}
 
 	private static void setFollower(CANTalon talon, CANTalon master) {
@@ -434,6 +440,12 @@ public class Drivetrain extends Subsystem {
 		talon.setProfile(1);
 		talon.changeControlMode(TalonControlMode.Position);
 		talon.set(position);
+	}
+
+	private static void driveDistance(CANTalon talon, double distance) {
+		Robot.drivetrain.zeroEncoders();
+		talon.changeControlMode(TalonControlMode.MotionMagic);
+		talon.set(distance / (Drivetrain.WHEEL_DIAMETER * Math.PI));
 	}
 
 }

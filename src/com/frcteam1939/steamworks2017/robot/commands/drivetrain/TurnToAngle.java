@@ -15,30 +15,25 @@ public class TurnToAngle extends Command {
 
 	@Override
 	protected void initialize() {
-		Robot.drivetrain.resetGyro();
-		Robot.drivetrain.sidewinderDown();
+		Robot.drivetrain.turnToAngle(this.angle);
 		this.setTimeout(0.5);
 	}
 
 	@Override
-	protected void execute() {
-		Robot.drivetrain.turnToAngle(this.angle);
-	}
+	protected void execute() {}
 
 	@Override
 	protected boolean isFinished() {
-		return this.isTimedOut() && Math.abs(Robot.drivetrain.getLeftSpeed()) < 1;
+		return this.isTimedOut() && Robot.drivetrain.getLeftSpeed() == 0 && Robot.drivetrain.getRightSpeed() == 0;
 	}
 
 	@Override
 	protected void end() {
 		Robot.drivetrain.stop();
-		Robot.drivetrain.sidewinderUp();
 	}
 
 	@Override
 	protected void interrupted() {
 		Robot.drivetrain.stop();
-		Robot.drivetrain.sidewinderUp();
 	}
 }

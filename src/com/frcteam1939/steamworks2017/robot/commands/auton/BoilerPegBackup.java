@@ -10,6 +10,6 @@ public class BoilerPegBackup extends CommandGroup {
 	public BoilerPegBackup() {
 		this.addSequential(new DrivePath(Paths.boilerToBoilerPeg));
 		this.addSequential(new PlaceGear());
-		this.addSequential(new DrivePath(Paths.backupToBoilerPeg, true));
+		this.addSequential(new Backup());
 	}
 }

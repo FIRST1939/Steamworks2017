@@ -10,7 +10,6 @@ public class CenterPegSlotsMidField extends CommandGroup {
 	public CenterPegSlotsMidField() {
 		this.addSequential(new DrivePath(Paths.centerToCenterPeg));
 		this.addSequential(new PlaceGear());
-		this.addSequential(new DrivePath(Paths.backupSlotsToCenterPeg, true));
-		this.addSequential(new DrivePath(Paths.backupCenterToSlotsMidField));
+		this.addSequential(new ConditionallyDriveAway(Paths.backupSlotsToCenterPeg, Paths.backupCenterToSlotsMidField));
 	}
 }
