@@ -11,7 +11,9 @@ import com.frcteam1939.steamworks2017.robot.commands.auton.CenterPegSlotsMidFiel
 import com.frcteam1939.steamworks2017.robot.commands.auton.SlotsPegBackup;
 import com.frcteam1939.steamworks2017.robot.commands.auton.SlotsPegCross;
 import com.frcteam1939.steamworks2017.robot.commands.auton.SlotsPegMidField;
+import com.frcteam1939.steamworks2017.robot.commands.drivetrain.CalibrateWheelbase;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.FindMaxSpeed;
+import com.frcteam1939.steamworks2017.robot.commands.drivetrain.FindRightDriveF;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.FindTurnF;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.TunePositionPID;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.TuneTurnPID;
@@ -89,6 +91,8 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putData(new TunePositionPID());
 		SmartDashboard.putData(new TuneTurnPID());
 		SmartDashboard.putData(new TuneVelocityPID());
+		SmartDashboard.putData(new CalibrateWheelbase());
+		SmartDashboard.putData(new FindRightDriveF());
 
 		Vision.init();
 	}
@@ -96,6 +100,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotPeriodic() {
 		this.selectedCommand = this.chooser.getSelected();
+		SmartDashboard.putString("Selected Autonomous", this.selectedCommand.getName());
 	}
 
 	@Override
