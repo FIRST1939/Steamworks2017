@@ -308,9 +308,9 @@ public class Drivetrain extends Subsystem {
 
 		// Tell Drivetrain to move
 		if (this.driveBySpeed) {
-			this.driveSpeed(leftMotorSpeed * MAX_SPEED, -rightMotorSpeed * MAX_SPEED);
+			this.driveSpeed(-leftMotorSpeed * MAX_SPEED, rightMotorSpeed * MAX_SPEED);
 		} else {
-			this.setPercentVBus(leftMotorSpeed, -rightMotorSpeed);
+			this.setPercentVBus(-leftMotorSpeed, rightMotorSpeed);
 		}
 		SmartDashboard.putNumber("Move Output", moveValue);
 		SmartDashboard.putNumber("Turn Output", rotateValue);
@@ -393,6 +393,7 @@ public class Drivetrain extends Subsystem {
 	private static void setupMasterTalon(CANTalon talon, double vF) {
 		talon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder); // Tell Talon that a Quadrature Encoder is attached
 		talon.configEncoderCodesPerRev(CPR); // Tell Talon the resolution of the encoder (how many signals per revolution)
+		talon.reverseSensor(true);
 		talon.configNominalOutputVoltage(+0.0f, -0.0f); // Set the minimum output of the Talon in volts
 		talon.configPeakOutputVoltage(+12.0f, -12.0f); // Set the maximum output of the Talon in volts
 		setPID(talon, 0, velP, velI, velD, vF);
