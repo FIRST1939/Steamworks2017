@@ -84,11 +84,13 @@ public abstract class TunePID extends Command {
 	@Override
 	protected void end() {
 		Robot.drivetrain.stop();
+		Robot.drivetrain.resetConfigs();
 	}
 
 	@Override
 	protected void interrupted() {
 		Robot.drivetrain.stop();
+		Robot.drivetrain.resetConfigs();
 	}
 
 	public abstract void init();

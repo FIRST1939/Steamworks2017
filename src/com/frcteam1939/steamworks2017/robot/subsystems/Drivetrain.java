@@ -34,13 +34,14 @@ public class Drivetrain extends Subsystem {
 
 	private static final int NATIVE_UNITS_PER_100MS = (int) (MAX_SPEED / 60.0 / 10.0 * (CPR * 4));
 
-	private static final double velF = 1023.0 / NATIVE_UNITS_PER_100MS;
+	public static final double velF = 1023.0 / NATIVE_UNITS_PER_100MS;
+	private static final double velFRightAdjustment = .15;
 	private static final double velP = 0.8999999999999999;
-	private static final double velI = -6.479999999481599;
+	private static final double velI = 0;
 	private static final double velD = 0.0312500000025;
 
 	private static final double posP = 0.6;
-	private static final double posI = -1.0800000000107999;
+	private static final double posI = 1.0800000000107999 / 1000;
 	private static final double posD = 0.08333333333250001;
 
 	private static final double MAX_TURN_OUPUT = 0.25;
@@ -67,8 +68,7 @@ public class Drivetrain extends Subsystem {
 
 	public Drivetrain() {
 		// Setup Master Talons for Encoders and PID
-		setupMasterTalon(this.frontLeft);
-		setupMasterTalon(this.frontRight, posP + .25, velF + .25);
+		this.resetConfigs();
 
 		// Make other Talons follow the Master Talons
 		setFollower(this.midLeft, this.frontLeft);
@@ -256,6 +256,7 @@ public class Drivetrain extends Subsystem {
 	}
 
 	public void turnToAngle(double angle) {
+		Robot.drivetrain.zeroEncoders();
 		double distance = Math.toRadians(angle) * (Drivetrain.WHEEL_BASE / 2);
 		Robot.drivetrain.driveDistance(distance, distance);
 	}
@@ -363,6 +364,18 @@ public class Drivetrain extends Subsystem {
 		this.turnPID.setPID(P, I, D);
 	}
 
+	public void setRightF(double F) {
+		this.frontRight.setProfile(0);
+		this.frontRight.setF(F);
+		this.frontRight.setProfile(1);
+		this.frontRight.setF(F);
+	}
+
+	public void resetConfigs() {
+		setupMasterTalon(this.frontLeft, velF);
+		setupMasterTalon(this.frontRight, velF + velFRightAdjustment);
+	}
+
 	/*
 	 * Static Convenience Methods
 	 */
@@ -377,21 +390,17 @@ public class Drivetrain extends Subsystem {
 		talon.setVoltageRampRate(MAX_JERK / MAX_A * 12);
 	}
 
-	private static void setupMasterTalon(CANTalon talon) {
-		setupMasterTalon(talon, posP, velF);
-	}
-
-	private static void setupMasterTalon(CANTalon talon, double pP, double vF) {
+	private static void setupMasterTalon(CANTalon talon, double vF) {
 		talon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder); // Tell Talon that a Quadrature Encoder is attached
 		talon.configEncoderCodesPerRev(CPR); // Tell Talon the resolution of the encoder (how many signals per revolution)
 		talon.configNominalOutputVoltage(+0.0f, -0.0f); // Set the minimum output of the Talon in volts
 		talon.configPeakOutputVoltage(+12.0f, -12.0f); // Set the maximum output of the Talon in volts
 		setPID(talon, 0, velP, velI, velD, vF);
-		setPID(talon, 1, pP, posI, posD, vF);
+		setPID(talon, 1, posP, posI, posD, vF);
 		talon.changeMotionControlFramePeriod(MP_UPDATE_MS / 2); // No idea, directly from Talon Software Refrence
 		talon.setNominalClosedLoopVoltage(12.0); // Make Talons compensate for changes in battery voltage
 		talon.setMotionMagicCruiseVelocity(Drivetrain.MAX_SPEED * 0.7);
-		talon.setMotionMagicAcceleration(Drivetrain.MAX_A * 0.7);
+		talon.setMotionMagicAcceleration(Drivetrain.MAX_A * 0.7 * 60);
 	}
 
 	private static void setFollower(CANTalon talon, CANTalon master) {
@@ -443,8 +452,8 @@ public class Drivetrain extends Subsystem {
 	}
 
 	private static void driveDistance(CANTalon talon, double distance) {
-		Robot.drivetrain.zeroEncoders();
 		talon.changeControlMode(TalonControlMode.MotionMagic);
+		talon.setProfile(1);
 		talon.set(distance / (Drivetrain.WHEEL_DIAMETER * Math.PI));
 	}
 

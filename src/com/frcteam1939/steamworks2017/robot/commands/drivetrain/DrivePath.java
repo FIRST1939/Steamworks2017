@@ -42,7 +42,7 @@ public class DrivePath extends Command {
 
 		if (!this.started) {
 			// Check if both Talons have points in buffer
-			if (left.btmBufferCnt > 10 && right.btmBufferCnt > 10) {
+			if (left.btmBufferCnt > 5 && right.btmBufferCnt > 5) {
 				Robot.drivetrain.startMotionProfile();
 				Robot.drivetrain.brakeUp();
 				this.started = true;
