@@ -16,9 +16,9 @@ public class GearIntakeGamepadControl extends Command {
 
 	@Override
 	protected void execute() {
-		if (Robot.oi.gamepad.x.get() && !Robot.gearIntake.haveGear() || SmartDashboard.getBoolean("Ramp Override", false)) {
+		if (Robot.oi.gamepad.x.get() && (!Robot.gearIntake.haveGear() || SmartDashboard.getBoolean("Ramp Override", false))) {
 			Robot.gearIntake.rampOut();
-		} else if (Robot.oi.gamepad.a.get() || Robot.gearIntake.haveGear()) {
+		} else if (Robot.oi.gamepad.a.get() || Robot.gearIntake.haveGear() && !SmartDashboard.getBoolean("Ramp Override", false)) {
 			Robot.gearIntake.rampIn();
 		}
 	}

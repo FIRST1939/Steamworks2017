@@ -35,8 +35,6 @@ public class Lights extends Subsystem {
 						i = 6;
 					} else if (Lights.this.wantFuel) {
 						i = 12;
-					} else if (false) {
-						i = 10;
 					} else {
 						i = 4;
 					}

@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.PIDController;
-import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -35,13 +35,13 @@ public class Drivetrain extends Subsystem {
 	private static final int NATIVE_UNITS_PER_100MS = (int) (MAX_SPEED / 60.0 / 10.0 * (CPR * 4));
 
 	public static final double velF = 1023.0 / NATIVE_UNITS_PER_100MS;
-	private static final double velFRightAdjustment = .15;
+	private static final double velFRightAdjustment = .1;
 	private static final double velP = 0.8999999999999999;
 	private static final double velI = 0;
 	private static final double velD = 0.0312500000025;
 
 	private static final double posP = 0.6;
-	private static final double posI = 1.0800000000107999 / 1000;
+	private static final double posI = 1.1 / 1000;
 	private static final double posD = 0.08333333333250001;
 
 	private static final double MAX_TURN_OUPUT = 0.25;
@@ -82,7 +82,7 @@ public class Drivetrain extends Subsystem {
 			Drivetrain.this.frontRight.processMotionProfileBuffer();
 		}).startPeriodic(MP_UPDATE_MS / 2000.0);
 
-		this.navx = new AHRS(SerialPort.Port.kMXP);
+		this.navx = new AHRS(SPI.Port.kMXP);
 		this.turnPID = new PIDController(turnP, turnI, turnD, this.navx, output -> {});
 		this.turnPID.setInputRange(-180, 180);
 		this.turnPID.setContinuous(true);

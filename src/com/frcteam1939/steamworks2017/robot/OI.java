@@ -28,6 +28,7 @@ public class OI {
 		this.gamepad.leftTrigger.whenPressed(new SetFuelIntakeSpeed(FuelIntake.IN_SPEED));
 		this.gamepad.leftTrigger.whenReleased(new SetFuelIntakeSpeed(0));
 
+		new JoystickButton(this.left, 2).whenPressed(new BrakeDown());
 		new JoystickButton(this.left, 3).whenPressed(new BrakeDown());
 
 		JoystickButton wantFuel = new JoystickButton(this.right, 4);

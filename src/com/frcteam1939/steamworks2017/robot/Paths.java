@@ -8,7 +8,7 @@ public class Paths {
 	private static final double[] boilerStartLeadup = { 15, 56, 0 };
 	private static final double[] boilerMidField = { 120, 70, 0 };
 
-	private static final double[] boilerPeg = { 118.25, 107.25, Math.toRadians(60) };
+	private static final double[] boilerPeg = { 114.5, 101.5, Math.toRadians(60) };
 	private static final double[] boilerPegLeadup = { boilerPeg[0] + 15 * Math.cos(boilerPeg[2] + Math.PI), boilerPeg[1] + 15 * Math.sin(boilerPeg[2] + Math.PI), boilerPeg[2] };
 	private static final double[] boilerPegBackup = { 60, 70, 0 };
 
@@ -16,14 +16,17 @@ public class Paths {
 	private static final double[] slotsStartLeadup = { 15, 267, 0 };
 	private static final double[] slotsMidField = { 120, 254, 0 };
 
-	private static final double[] slotsPeg = { 118.25, 217.25, Math.toRadians(300) };
+	private static final double[] slotsPeg = { 118.25 + 21 * Math.cos(5 * Math.PI / 6) + 30 * Math.cos(5 * Math.PI / 3), 217.25 + 21 * Math.sin(5 * Math.PI / 6) + 30 * Math.sin(5 * Math.PI / 3), Math.toRadians(300) };
 	private static final double[] slotsPegLeadup = { slotsPeg[0] + 15 * Math.cos(slotsPeg[2] + Math.PI), slotsPeg[1] + 15 * Math.sin(slotsPeg[2] + Math.PI), slotsPeg[2] };
 	private static final double[] slotsPegBackup = { 60, 254, 0 };
+
+	private static final double[] slotsPegRed = { 118.25 + 28 * Math.cos(5 * Math.PI / 6) + 35 * Math.cos(5 * Math.PI / 3), 217.25 + 28 * Math.sin(5 * Math.PI / 6) + 35 * Math.sin(5 * Math.PI / 3), Math.toRadians(300) };
+	private static final double[] slotsPegLeadupRed = { slotsPegRed[0] + 15 * Math.cos(slotsPegRed[2] + Math.PI), slotsPegRed[1] + 15 * Math.sin(slotsPegRed[2] + Math.PI), slotsPegRed[2] };
 
 	private static final double[] centerStart = { 8.688, 162.25, 0 };
 	private static final double[] centerStartLeadup = { 15, 162.25, 0 };
 
-	private static final double[] centerPeg = { 84.5, 162.25, 0 };
+	private static final double[] centerPeg = { 90, 162.25, 0 };
 	private static final double[] centerPegLeadup = { centerPeg[0] - 15, 162.25, 0 };
 	private static final double[] centerPegBackup = { 60, 162.25, 0 };
 	private static final double[] centerPegSlotsBackup = { 35, 140, Math.toRadians(75) };
@@ -40,7 +43,7 @@ public class Paths {
 	public static final double[][] backupToBoilerMidField = { boilerPegBackup, boilerMidField };
 	public static final double[][] backupToSlotsMidField = { slotsPegBackup, slotsMidField };
 	public static final double[][] backupBoilerToOpposite = { boilerPegBackup, boilerMidField, oppositeSlots };
-	public static final double[][] backupSlotsToOpposite = { slotsPegBackup, slotsMidField, oppositeSlots };
+	public static final double[][] backupSlotsToOpposite = { slotsPegBackup, oppositeSlots };
 	public static final double[][] backupToCenterPeg = { centerPegBackup, centerPeg };
 	public static final double[][] backupSlotsToCenterPeg = { centerPegSlotsBackup, centerPegLeadup, centerPeg };
 	public static final double[][] backupBoilerToCenterPeg = { centerPegBoilerBackup, centerPegLeadup, centerPeg };
@@ -48,6 +51,9 @@ public class Paths {
 	public static final double[][] backupCenterToBoilerMidField = { centerPegBoilerBackup, boilerMidField };
 	public static final double[][] backupCenterToSlotsCross = { centerPegSlotsBackup, slotsMidField, oppositeSlots };
 	public static final double[][] backupCenterToBoilerCross = { centerPegBoilerBackup, boilerMidField, oppositeSlots };
+
+	public static final double[][] redSlotsToSlotsPeg = { slotsStart, slotsStartLeadup, slotsPegLeadupRed, slotsPegRed };
+	public static final double[][] redBackupToSlotsPeg = { slotsPegBackup, slotsPegLeadupRed, slotsPegRed };
 
 	public static final double[][] backup = { { 0, 0, 0 }, { 24, 0, 0 } };
 

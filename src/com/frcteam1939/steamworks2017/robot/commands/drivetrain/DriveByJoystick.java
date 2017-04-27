@@ -23,16 +23,6 @@ public class DriveByJoystick extends Command {
 
 		boolean turbo = Robot.oi.left.getRawButton(1) || Robot.oi.right.getRawButton(1);
 
-		// J-Turn Button
-		if (Robot.oi.left.getRawButton(2)) {
-			Robot.drivetrain.sidewinderDown();
-			Robot.drivetrain.disableBraking();
-			turbo = true;
-			move = 0;
-		} else {
-			Robot.drivetrain.enableBraking();
-		}
-
 		if (Math.abs(move) < DEAD_BAND) {
 			move = 0;
 		} else {
@@ -46,20 +36,20 @@ public class DriveByJoystick extends Command {
 			rotate = 0;
 		} else {
 			if (turbo) {
-				rotate = map(rotate, 0, 0.7);
+				rotate = map(rotate, 0, 0.6);
 			} else {
-				rotate = map(rotate, 0, 0.4);
+				rotate = map(rotate, 0, 0.3);
 			}
 		}
-		if (Math.abs(strafe) < 0.4) {
+		if (Math.abs(strafe) < 0.5) {
 			Robot.drivetrain.sidewinderUp();
 			strafe = 0;
 		} else {
 			Robot.drivetrain.sidewinderDown();
 			if (turbo) {
-				strafe = map(strafe, 0.4, 1.0, 0.2, 1.0);
+				strafe = map(strafe, 0.5, 1.0, 0.3, 1.0);
 			} else {
-				strafe = map(strafe, 0.4, 1.0, 0.2, 0.7);
+				strafe = map(strafe, 0.5, 1.0, 0.3, 0.7);
 			}
 		}
 

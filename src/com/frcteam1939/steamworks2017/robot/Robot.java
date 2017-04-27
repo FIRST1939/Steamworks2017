@@ -8,6 +8,7 @@ import com.frcteam1939.steamworks2017.robot.commands.auton.CenterPegBoilerCross;
 import com.frcteam1939.steamworks2017.robot.commands.auton.CenterPegBoilerMidField;
 import com.frcteam1939.steamworks2017.robot.commands.auton.CenterPegSlotsCross;
 import com.frcteam1939.steamworks2017.robot.commands.auton.CenterPegSlotsMidField;
+import com.frcteam1939.steamworks2017.robot.commands.auton.RedSlotsPegBackup;
 import com.frcteam1939.steamworks2017.robot.commands.auton.SlotsPegBackup;
 import com.frcteam1939.steamworks2017.robot.commands.auton.SlotsPegCross;
 import com.frcteam1939.steamworks2017.robot.commands.auton.SlotsPegMidField;
@@ -26,10 +27,11 @@ import com.frcteam1939.steamworks2017.robot.subsystems.GearIntake;
 import com.frcteam1939.steamworks2017.robot.subsystems.GearOutput;
 import com.frcteam1939.steamworks2017.robot.subsystems.Lights;
 import com.frcteam1939.steamworks2017.robot.subsystems.SmartDashboardSubsystem;
-import com.frcteam1939.steamworks2017.robot.vision.Vision;
 import com.frcteam1939.steamworks2017.util.DoNothing;
 
+import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -71,20 +73,23 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void robotInit() {
+		System.out.println("\n==========================================");
+		System.out.println("         Steamwork2017 Intializing");
 		oi = new OI();
 
 		this.chooser.addDefault("Do Nothing", new DoNothing());
+		this.chooser.addObject("Boiler Peg Backup", new BoilerPegBackup());
 		this.chooser.addObject("Boiler Peg Cross", new BoilerPegCross());
 		this.chooser.addObject("Boiler Peg Mid Field", new BoilerPegMidField());
+		this.chooser.addObject("Slots Peg Backup", new SlotsPegBackup());
 		this.chooser.addObject("Slots Peg Cross", new SlotsPegCross());
 		this.chooser.addObject("Slots Peg Mid Field", new SlotsPegMidField());
-		this.chooser.addObject("Center Peg and Backup", new CenterPegBackup());
+		this.chooser.addObject("Red Slots Backup", new RedSlotsPegBackup());
+		this.chooser.addObject("Center Peg Backup", new CenterPegBackup());
 		this.chooser.addObject("Center Peg Boiler Mid Field", new CenterPegBoilerMidField());
 		this.chooser.addObject("Center Peg Boiler Cross", new CenterPegBoilerCross());
 		this.chooser.addObject("Center Peg Slots Mid Field", new CenterPegSlotsMidField());
 		this.chooser.addObject("Center Peg Slots Cross", new CenterPegSlotsCross());
-		this.chooser.addObject("Boiler Peg Backup", new BoilerPegBackup());
-		this.chooser.addObject("Slots Peg Backup", new SlotsPegBackup());
 		SmartDashboard.putData("Autonomous Chooser", this.chooser);
 		SmartDashboard.putData(new FindMaxSpeed());
 		SmartDashboard.putData(new FindTurnF());
@@ -94,7 +99,12 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putData(new CalibrateWheelbase());
 		SmartDashboard.putData(new FindRightDriveF());
 
-		Vision.init();
+		UsbCamera cam = CameraServer.getInstance().startAutomaticCapture();
+		cam.setResolution(320, 240);
+		cam.setBrightness(10);
+
+		System.out.println("           Finished Intializing");
+		System.out.println("==========================================/n");
 	}
 
 	@Override

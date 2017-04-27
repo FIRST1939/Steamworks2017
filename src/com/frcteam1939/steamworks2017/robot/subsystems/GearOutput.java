@@ -26,6 +26,6 @@ public class GearOutput extends Subsystem {
 	}
 
 	public boolean onPeg() {
-		return !this.limitSwitch.get();
+		return this.limitSwitch.get();
 	}
 }

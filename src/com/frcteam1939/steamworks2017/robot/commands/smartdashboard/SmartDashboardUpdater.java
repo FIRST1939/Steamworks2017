@@ -1,7 +1,6 @@
 package com.frcteam1939.steamworks2017.robot.commands.smartdashboard;
 
 import com.frcteam1939.steamworks2017.robot.Robot;
-import com.frcteam1939.steamworks2017.robot.vision.Vision;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -26,7 +25,6 @@ public class SmartDashboardUpdater extends Command {
 
 	@Override
 	protected void execute() {
-
 		SmartDashboard.putNumber("Left Speed", Robot.drivetrain.getLeftSpeed());
 		SmartDashboard.putNumber("Left Position", Robot.drivetrain.getLeftPosition());
 		SmartDashboard.putNumber("Left Voltage", Robot.drivetrain.getLeftVolts());
@@ -49,9 +47,6 @@ public class SmartDashboardUpdater extends Command {
 
 		SmartDashboard.putBoolean("Have Gear", Robot.gearIntake.haveGear());
 		SmartDashboard.putBoolean("On Peg", Robot.gearOutput.onPeg());
-
-		SmartDashboard.putNumber("Vision Angle", Vision.getAngle());
-		SmartDashboard.putNumber("Vision Distance", Vision.getDistance());
 
 		Robot.drivetrain.setDriveBySpeed(SmartDashboard.getBoolean("Drive By Speed", true));
 	}
