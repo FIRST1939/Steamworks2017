@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.command.Command;
 public class AimAngle extends Command {
 	double degree;
     public AimAngle() {
+    	requires(Robot.camera);
         requires(Robot.drivetrain);
     }
 
@@ -19,8 +20,8 @@ public class AimAngle extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	if (Vision.getContours() == 2){
-    		degree = Vision.getAngle(); 
+    	if (Robot.camera.getContours() == 2){
+    		degree = Robot.camera.getAngle(); 
     		Robot.drivetrain.drive(0, degree, 0);
     	}
     }

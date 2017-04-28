@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.command.Command;
 public class AimCenter extends Command {
 	double center;
     public AimCenter() {
+    	requires(Robot.camera);
         requires(Robot.drivetrain);
     }
 
@@ -19,7 +20,7 @@ public class AimCenter extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	center = Vision.getCenterX();
+    	center =Robot.camera.getCenterX();
     	Robot.drivetrain.drive(0,0,center*0.002);
     }
 

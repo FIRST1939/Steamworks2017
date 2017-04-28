@@ -9,6 +9,7 @@ import com.ctre.CANTalon.TrajectoryPoint;
 import com.frcteam1939.steamworks2017.robot.RobotMap;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.DriveByJoystick;
 import com.frcteam1939.steamworks2017.util.MotionProfile;
+//import com.frcteam1939.steamworks2017.util.MotionProfile;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -291,15 +292,18 @@ public class Drivetrain extends Subsystem {
 			if (rotateValue > 0.0) {
 				leftMotorSpeed = moveValue - rotateValue;
 				rightMotorSpeed = Math.max(moveValue, rotateValue);
-			} else {
+			}
+			else {
 				leftMotorSpeed = Math.max(moveValue, -rotateValue);
 				rightMotorSpeed = moveValue + rotateValue;
 			}
-		} else {
+		} 
+		else {
 			if (rotateValue > 0.0) {
 				leftMotorSpeed = -Math.max(-moveValue, rotateValue);
 				rightMotorSpeed = moveValue + rotateValue;
-			} else {
+			} 
+			else {
 				leftMotorSpeed = moveValue - rotateValue;
 				rightMotorSpeed = -Math.max(-moveValue, -rotateValue);
 			}

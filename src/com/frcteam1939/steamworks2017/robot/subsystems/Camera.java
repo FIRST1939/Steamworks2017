@@ -1,17 +1,21 @@
-package com.frcteam1939.steamworks2017.robot.vision;
+package com.frcteam1939.steamworks2017.robot.subsystems;
 
 import org.opencv.core.Rect;
 import org.opencv.imgproc.Imgproc;
 
+import com.frcteam1939.steamworks2017.robot.vision.Pipe;
+
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.vision.VisionThread;
 
-public class Vision {
-
+/**
+ *
+ */
+public class Camera extends Subsystem {
+	
 	private static boolean intialized = false;
-
 	private static Pipe pipe = new Pipe();
 	//set these to the Image width and Height of the camera in pixels (ie 320Pixels by 240 pixels)
 	private static final int IMG_WIDTH = 320;
@@ -28,19 +32,29 @@ public class Vision {
 	private static double angle;
 	private static double contours;
 	private static double distance;
+	private UsbCamera cam;
 	public final static Object imgLock = new Object();
-	/**
-	 * Starts Vision Tracking and initiates the Camera
-	 */
-	public static void init() {
-		if (!intialized) {
-			//Sets Camera to the first camera it finds
-			UsbCamera cam = CameraServer.getInstance().startAutomaticCapture();
-			//setting the resolution to the image width and length(see above)
-			cam.setResolution(IMG_WIDTH, IMG_HEIGHT);
-			// setting the brightness of the camera to 10%
-			cam.setBrightness(10);
-			//processing thread
+	
+    public void initDefaultCommand() {
+        // Set the default command for a subsystem here.
+        //setDefaultCommand(new MySpecialCommand());
+    }
+    
+    public Camera(){
+    	//Sets Camera to the first camera it finds
+    	cam = CameraServer.getInstance().startAutomaticCapture();
+		//setting the resolution to the image width and length(see above)
+		cam.setResolution(IMG_WIDTH, IMG_HEIGHT);
+		// setting the brightness of the camera to 10%
+		cam.setBrightness(10);
+    }
+    /**
+     * Vision processing thread
+     */
+    public void visionInit(){
+    	if (!intialized) {
+			
+			
 			new VisionThread(cam, pipe, pipeline -> {
 				// checks if it only sees 2 targets
 				if (pipeline.filterContoursOutput().size() == 2) {
@@ -89,8 +103,8 @@ public class Vision {
 			}).start();
 			intialized = true;
 		}
-	}
-	/**
+    }
+    /**
 	 * Return the number of targets it detects AKA the number of contours
 	 * @return contours
 	 */
@@ -135,5 +149,5 @@ public class Vision {
 			return distance;
 		}
 	}
-
 }
+

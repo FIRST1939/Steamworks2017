@@ -13,7 +13,7 @@ public class VisionCenterPeg extends CommandGroup {
 
     public VisionCenterPeg() {
         addSequential(new AimForCenter());
-        addSequential(new DrivePath(Paths.centerToCenterPeg));
+        addSequential(new DriveUntilLimit());
         addSequential(new PlaceGear());
     }
 }

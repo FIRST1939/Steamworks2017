@@ -1,8 +1,6 @@
 package com.frcteam1939.steamworks2017.robot.commands.smartdashboard;
 
 import com.frcteam1939.steamworks2017.robot.Robot;
-import com.frcteam1939.steamworks2017.robot.vision.Vision;
-
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -43,12 +41,12 @@ public class SmartDashboardUpdater extends Command {
 		//Peg/Gear Checks
 		SmartDashboard.putBoolean("Have Gear", Robot.gearIntake.haveGear());
 		SmartDashboard.putBoolean("On Peg", Robot.gearOutput.onPeg());
-		// Vision Tracking
-		SmartDashboard.putNumber("Vision Angle", Vision.getAngle());
-		SmartDashboard.putNumber("Vision CenterX", Vision.getCenterX());
-		SmartDashboard.putNumber("Vison Contours", Vision.getContours());
-		SmartDashboard.putNumber("Vision Distance", Vision.getDistance());
-		SmartDashboard.putBoolean("See Full Peg", Vision.getContours() == 2);
+		// Robot.camera Tracking
+		SmartDashboard.putNumber("Robot.camera Angle", Robot.camera.getAngle());
+		SmartDashboard.putNumber("Robot.camera CenterX", Robot.camera.getCenterX());
+		SmartDashboard.putNumber("Vison Contours", Robot.camera.getContours());
+		SmartDashboard.putNumber("Robot.camera Distance", Robot.camera.getDistance());
+		SmartDashboard.putBoolean("See Full Peg", Robot.camera.getContours() == 2);
 
 		Robot.drivetrain.setDriveBySpeed(SmartDashboard.getBoolean("Drive By Speed", true));
 	}

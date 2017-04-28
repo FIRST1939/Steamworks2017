@@ -9,11 +9,14 @@ import com.frcteam1939.steamworks2017.robot.commands.auton.CenterPegSlotsCross;
 import com.frcteam1939.steamworks2017.robot.commands.auton.CenterPegSlotsMidField;
 import com.frcteam1939.steamworks2017.robot.commands.auton.SlotsPegCross;
 import com.frcteam1939.steamworks2017.robot.commands.auton.SlotsPegMidField;
+import com.frcteam1939.steamworks2017.robot.commands.auton.VisionCenterPeg;
+import com.frcteam1939.steamworks2017.robot.commands.auton.VisionSidePeg;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.FindMaxSpeed;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.FindTurnF;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.TunePositionPID;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.TuneTurnPID;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.TuneVelocityPID;
+import com.frcteam1939.steamworks2017.robot.subsystems.Camera;
 import com.frcteam1939.steamworks2017.robot.subsystems.Climber;
 import com.frcteam1939.steamworks2017.robot.subsystems.Drivetrain;
 import com.frcteam1939.steamworks2017.robot.subsystems.FuelIntake;
@@ -22,10 +25,8 @@ import com.frcteam1939.steamworks2017.robot.subsystems.GearIntake;
 import com.frcteam1939.steamworks2017.robot.subsystems.GearOutput;
 import com.frcteam1939.steamworks2017.robot.subsystems.Lights;
 import com.frcteam1939.steamworks2017.robot.subsystems.SmartDashboardSubsystem;
-import com.frcteam1939.steamworks2017.robot.vision.Vision;
 import com.frcteam1939.steamworks2017.util.DoNothing;
 
-import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -33,7 +34,6 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.CameraServer;
 
 public class Robot extends IterativeRobot {
 	//Creating Objects for Drivetrain, climbers, lights, gear intakes, etc.
@@ -44,10 +44,12 @@ public class Robot extends IterativeRobot {
 	public static FuelIntake fuelIntake;
 	public static FuelOutput fuelOutput;
 	public static Lights lights;
+	public static Camera camera;
 	public static SmartDashboardSubsystem smartDashboard;
 	{
 		try {
 			//setting Objects for Drivetrain, climbers, lights, gear intakes, etc.
+			camera = new Camera();
 			drivetrain = new Drivetrain();
 			climber = new Climber();
 			gearIntake = new GearIntake();
@@ -75,6 +77,7 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		// Creates a new OI for the joySticks and gamepad controller
 		oi = new OI();
+		camera.visionInit();
 		//setting default Auto to do nothing
 		this.chooser.addDefault("Do Nothing", new DoNothing());
 		// adding auto codes to the selection menu
@@ -87,6 +90,8 @@ public class Robot extends IterativeRobot {
 		this.chooser.addObject("Center Peg Boiler Cross", new CenterPegBoilerCross());
 		this.chooser.addObject("Center Peg Slots Mid Field", new CenterPegSlotsMidField());
 		this.chooser.addObject("Center Peg Slots Cross", new CenterPegSlotsCross());
+		this.chooser.addObject("Vision Center Peg", new VisionCenterPeg());
+		this.chooser.addObject("Vision Side Peg", new VisionSidePeg());
 		//adding the auto chooser to the dashboard
 		SmartDashboard.putData("Autonomous Chooser", this.chooser);
 		// sends the maximum voltage and current voltage of the right and left drivetrain to dashboard
@@ -100,7 +105,6 @@ public class Robot extends IterativeRobot {
 		// sends the tune velosity value for PID to Dashboard
 		SmartDashboard.putData(new TuneVelocityPID());
 		// Starting up vision tracking and the camera streaming
-		Vision.init();
 	}
 
 	@Override
