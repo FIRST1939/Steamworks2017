@@ -31,7 +31,7 @@ public class Drivetrain extends Subsystem {
 	private static final int NATIVE_UNITS_PER_100MS = (int) (MAX_SPEED / 60.0 / 10.0 * (CPR * 4));
 
 	public static final double velF = 1023.0 / NATIVE_UNITS_PER_100MS;
-	private static final double velFRightAdjustment = .1;
+	private static final double velFRightAdjustment = 0;
 	private static final double velP = 0.8999999999999999;
 	private static final double velI = 0;
 	private static final double velD = 0.0312500000025;
