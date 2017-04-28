@@ -1,14 +1,39 @@
 package com.frcteam1939.steamworks2017.robot.commands.drivetrain;
 
-import edu.wpi.first.wpilibj.command.CommandGroup;
+import com.frcteam1939.steamworks2017.robot.Robot;
 
-public class DriveDistance extends CommandGroup {
+import edu.wpi.first.wpilibj.command.Command;
 
-	public DriveDistance(double distance) {
-		boolean backwards = distance < 0;
-		distance = Math.abs(distance);
-		double[][] waypoints = { { 0, 0, 0 }, { distance, 0, 0 } };
-		this.addSequential(new DrivePath(waypoints, backwards));
+public class DriveDistance extends Command {
+
+	private double inches;
+
+	public DriveDistance(double inches) {
+		this.requires(Robot.drivetrain);
+		this.inches = inches;
 	}
 
+	@Override
+	protected void initialize() {
+		Robot.drivetrain.driveDistance(this.inches);
+		this.setTimeout(0.5);
+	}
+
+	@Override
+	protected void execute() {}
+
+	@Override
+	protected boolean isFinished() {
+		return this.isTimedOut() && !Robot.drivetrain.isMoving();
+	}
+
+	@Override
+	protected void end() {
+		Robot.drivetrain.stop();
+	}
+
+	@Override
+	protected void interrupted() {
+		Robot.drivetrain.stop();
+	}
 }

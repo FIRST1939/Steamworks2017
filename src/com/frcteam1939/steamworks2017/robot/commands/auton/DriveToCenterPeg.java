@@ -5,10 +5,11 @@ import com.frcteam1939.steamworks2017.robot.commands.drivetrain.DriveDistance;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
-public class SlotsPegBackup extends CommandGroup {
+public class DriveToCenterPeg extends CommandGroup {
 
-	public SlotsPegBackup() {
-		this.addSequential(new DriveToSlotsPeg());
-		this.addSequential(new DriveDistance(DistanceConstants.BACKUP));
+	public DriveToCenterPeg() {
+		this.addSequential(new DriveDistance(DistanceConstants.CENTER));
+		this.addSequential(new PlaceGear());
 	}
+
 }

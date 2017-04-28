@@ -24,7 +24,7 @@ public class TurnToAngle extends Command {
 
 	@Override
 	protected boolean isFinished() {
-		return this.isTimedOut() && Robot.drivetrain.getLeftSpeed() == 0 && Robot.drivetrain.getRightSpeed() == 0;
+		return this.isTimedOut() && !Robot.drivetrain.isMoving();
 	}
 
 	@Override

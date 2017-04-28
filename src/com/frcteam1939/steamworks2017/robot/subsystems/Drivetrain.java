@@ -2,14 +2,10 @@ package com.frcteam1939.steamworks2017.robot.subsystems;
 
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.FeedbackDevice;
-import com.ctre.CANTalon.MotionProfileStatus;
-import com.ctre.CANTalon.SetValueMotionProfile;
 import com.ctre.CANTalon.TalonControlMode;
-import com.ctre.CANTalon.TrajectoryPoint;
 import com.frcteam1939.steamworks2017.robot.Robot;
 import com.frcteam1939.steamworks2017.robot.RobotMap;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.DriveByJoystick;
-import com.frcteam1939.steamworks2017.util.MotionProfile;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -22,8 +18,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Drivetrain extends Subsystem {
 
-	public static final double WHEEL_BASE = 28; // Inches
-	public static final double WHEEL_DIAMETER = 6.06; // Inches
+	public static final double WHEEL_BASE = 30; // Inches
+	public static final double WHEEL_DIAMETER = 6; // Inches
 	public static final double MAX_SPEED = 430; // RPM
 	public static final double MAX_A = 3.0; // Max Acceleration in R/S^2
 	public static final double MAX_JERK = MAX_A * 4; // R/S^3
@@ -104,16 +100,8 @@ public class Drivetrain extends Subsystem {
 	 * Get Methods
 	 */
 
-	public MotionProfileStatus getLeftMotionProfileStatus() {
-		MotionProfileStatus status = new MotionProfileStatus();
-		this.frontLeft.getMotionProfileStatus(status);
-		return status;
-	}
-
-	public MotionProfileStatus getRightMotionProfileStatus() {
-		MotionProfileStatus status = new MotionProfileStatus();
-		this.frontRight.getMotionProfileStatus(status);
-		return status;
+	public boolean isMoving() {
+		return this.getLeftSpeed() != 0 || this.getRightSpeed() != 0;
 	}
 
 	public double getLeftSpeed() {
@@ -183,23 +171,6 @@ public class Drivetrain extends Subsystem {
 		this.frontRight.setEncPosition(0);
 	}
 
-	public void setMotionProfile(MotionProfile profile) {
-		sendMotionProfile(this.frontLeft, profile.getLeftPoints());
-		sendMotionProfile(this.frontRight, profile.getRightPoints());
-	}
-
-	public void startMotionProfile() {
-		this.brakeUp();
-		this.zeroEncoders();
-		startMotionProfile(this.frontLeft);
-		startMotionProfile(this.frontRight);
-	}
-
-	public void stopMotionProfile() {
-		stopMotionProfile(this.frontLeft);
-		stopMotionProfile(this.frontRight);
-	}
-
 	public void sidewinderDown() {
 		this.sidewinderSolenoid.set(DoubleSolenoid.Value.kForward);
 	}
@@ -256,7 +227,6 @@ public class Drivetrain extends Subsystem {
 	}
 
 	public void turnToAngle(double angle) {
-		Robot.drivetrain.zeroEncoders();
 		double distance = Math.toRadians(angle) * (Drivetrain.WHEEL_BASE / 2);
 		Robot.drivetrain.driveDistance(distance, distance);
 	}
@@ -321,7 +291,13 @@ public class Drivetrain extends Subsystem {
 		SmartDashboard.putNumber("Turn I", this.turnPID.getI());
 	}
 
+	public void driveDistance(double distance) {
+		this.driveDistance(-distance, distance);
+	}
+
 	public void driveDistance(double left, double right) {
+		this.brakeUp();
+		this.zeroEncoders();
 		driveDistance(this.frontLeft, left);
 		driveDistance(this.frontRight, right);
 	}
@@ -407,26 +383,6 @@ public class Drivetrain extends Subsystem {
 	private static void setFollower(CANTalon talon, CANTalon master) {
 		talon.changeControlMode(TalonControlMode.Follower); // Tell the Talon that it should follow another Talon
 		talon.set(master.getDeviceID()); // Tell the Talon to follow the master Talon
-	}
-
-	private static void sendMotionProfile(CANTalon talon, TrajectoryPoint[] points) {
-		talon.clearMotionProfileTrajectories();
-		talon.clearMotionProfileHasUnderrun();
-		for (TrajectoryPoint point : points) {
-			talon.pushMotionProfileTrajectory(point);
-		}
-	}
-
-	private static void startMotionProfile(CANTalon talon) {
-		talon.setProfile(1);
-		talon.changeControlMode(TalonControlMode.MotionProfile);
-		talon.set(SetValueMotionProfile.Enable.value);
-	}
-
-	private static void stopMotionProfile(CANTalon talon) {
-		talon.setProfile(1);
-		talon.changeControlMode(TalonControlMode.MotionProfile);
-		talon.set(SetValueMotionProfile.Disable.value);
 	}
 
 	private static void setSpeed(CANTalon talon, double speed) {
