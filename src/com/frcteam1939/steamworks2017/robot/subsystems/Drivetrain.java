@@ -241,7 +241,7 @@ public class Drivetrain extends Subsystem {
 
 	public void drive(double moveValue, double rotateValue, double strafeValue) {
 		// Correct with gyro
-		if (rotateValue == 0 && (strafeValue != 0 || moveValue != 0)) {
+		if (rotateValue == 0 && strafeValue != 0) {
 			if (!this.correcting) {
 				this.resetGyro();
 				this.turnPID.setSetpoint(0);
