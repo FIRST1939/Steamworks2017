@@ -101,7 +101,7 @@ public class Drivetrain extends Subsystem {
 	 */
 
 	public boolean isMoving() {
-		return this.getLeftSpeed() != 0 || this.getRightSpeed() != 0;
+		return Math.abs(this.getLeftSpeed()) > 1 || Math.abs(this.getRightSpeed()) > 1;
 	}
 
 	public double getLeftSpeed() {
@@ -292,7 +292,7 @@ public class Drivetrain extends Subsystem {
 	}
 
 	public void driveDistance(double distance) {
-		this.driveDistance(-distance, distance);
+		this.driveDistance(distance, -distance);
 	}
 
 	public void driveDistance(double left, double right) {
