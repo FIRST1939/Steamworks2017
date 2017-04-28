@@ -26,7 +26,7 @@ public class Paths {
 	private static final double[] centerStart = { 8.688, 162.25, 0 };
 	private static final double[] centerStartLeadup = { 15, 162.25, 0 };
 
-	private static final double[] centerPeg = { 90, 162.25, 0 };
+	private static final double[] centerPeg = { 86, 162.25, 0 };
 	private static final double[] centerPegLeadup = { centerPeg[0] - 15, 162.25, 0 };
 	private static final double[] centerPegBackup = { 60, 162.25, 0 };
 	private static final double[] centerPegSlotsBackup = { 35, 140, Math.toRadians(75) };
