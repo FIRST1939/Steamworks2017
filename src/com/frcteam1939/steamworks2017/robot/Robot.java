@@ -19,6 +19,7 @@ import com.frcteam1939.steamworks2017.robot.commands.drivetrain.FindTurnF;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.TunePositionPID;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.TuneTurnPID;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.TuneVelocityPID;
+import com.frcteam1939.steamworks2017.robot.subsystems.Camera;
 import com.frcteam1939.steamworks2017.robot.subsystems.Climber;
 import com.frcteam1939.steamworks2017.robot.subsystems.Drivetrain;
 import com.frcteam1939.steamworks2017.robot.subsystems.FuelIntake;
@@ -29,9 +30,7 @@ import com.frcteam1939.steamworks2017.robot.subsystems.Lights;
 import com.frcteam1939.steamworks2017.robot.subsystems.SmartDashboardSubsystem;
 import com.frcteam1939.steamworks2017.util.DoNothing;
 
-import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -48,9 +47,11 @@ public class Robot extends IterativeRobot {
 	public static FuelIntake fuelIntake;
 	public static FuelOutput fuelOutput;
 	public static Lights lights;
+	public static Camera camera;
 	public static SmartDashboardSubsystem smartDashboard;
 	{
 		try {
+			camera = new Camera();
 			drivetrain = new Drivetrain();
 			climber = new Climber();
 			gearIntake = new GearIntake();
@@ -98,10 +99,6 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putData(new TuneVelocityPID());
 		SmartDashboard.putData(new CalibrateWheelbase());
 		SmartDashboard.putData(new FindRightDriveF());
-
-		UsbCamera cam = CameraServer.getInstance().startAutomaticCapture();
-		cam.setResolution(320, 240);
-		cam.setBrightness(10);
 
 		System.out.println("           Finished Intializing");
 		System.out.println("==========================================/n");
