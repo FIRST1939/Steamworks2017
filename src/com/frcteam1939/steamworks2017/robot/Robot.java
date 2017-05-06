@@ -4,9 +4,11 @@ import com.frcteam1939.steamworks2017.robot.commands.auton.BoilerPegBackup;
 import com.frcteam1939.steamworks2017.robot.commands.auton.CenterPegBackup;
 import com.frcteam1939.steamworks2017.robot.commands.auton.SlotsPegBackup;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.CalibrateWheelbase;
+import com.frcteam1939.steamworks2017.robot.commands.drivetrain.DriveDistance;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.FindMaxSpeed;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.FindRightDriveF;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.FindTurnF;
+import com.frcteam1939.steamworks2017.robot.commands.drivetrain.ResetGyro;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.TunePositionPID;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.TuneTurnPID;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.TuneVelocityPID;
@@ -81,10 +83,12 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putData(new TuneVelocityPID());
 		SmartDashboard.putData(new CalibrateWheelbase());
 		SmartDashboard.putData(new FindRightDriveF());
+		SmartDashboard.putData(new DriveDistance(72));
+		SmartDashboard.putData(new ResetGyro());
 
 		UsbCamera cam = CameraServer.getInstance().startAutomaticCapture();
 		cam.setResolution(320, 240);
-		cam.setBrightness(10);
+		cam.setBrightness(1000);
 
 		System.out.println("           Finished Intializing");
 		System.out.println("==========================================/n");
