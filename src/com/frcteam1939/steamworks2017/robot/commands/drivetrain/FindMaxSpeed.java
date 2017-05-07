@@ -26,7 +26,8 @@ public class FindMaxSpeed extends Command {
 		double maxOutput = SmartDashboard.getNumber("Maximum Output Voltage", 0);
 		double voltage = maxOutput * Robot.oi.left.getY();
 		SmartDashboard.putNumber("Current Voltage", voltage);
-		Robot.drivetrain.setVoltage(voltage);
+		Robot.drivetrain.setRightVoltage(voltage);
+		Robot.drivetrain.setLeftVoltage(-voltage);
 
 		double left = Robot.drivetrain.getLeftSpeed();
 		if (Math.abs(left) > this.maxLeftSpeed) {

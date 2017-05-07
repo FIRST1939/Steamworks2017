@@ -135,6 +135,8 @@ public class Robot extends IterativeRobot {
 	public void teleopInit() {
 		Robot.drivetrain.enableBraking();
 		Robot.climber.enableBraking();
+		Robot.drivetrain.setRightVoltage(12);
+		Robot.drivetrain.setLeftVoltage(-12);
 		if (this.autonomousCommand != null) {
 			this.autonomousCommand.cancel();
 		}

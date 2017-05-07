@@ -153,13 +153,19 @@ public class Drivetrain extends Subsystem {
 	}
 
 	public double getHeading() {
-		if (this.navx != null) return this.navx.pidGet();
-		else return 0;
+		if (this.navx != null) {
+			return this.navx.pidGet();
+		} else {
+			return 0;
+		}
 	}
 
 	public double getTurnSpeed() {
-		if (this.navx != null) return this.navx.getRate();
-		else return 0;
+		if (this.navx != null) {
+			return this.navx.getRate();
+		} else {
+			return 0;
+		}
 	}
 
 	/*
@@ -187,12 +193,18 @@ public class Drivetrain extends Subsystem {
 		this.brake.set(Value.kReverse);
 	}
 
-	public void setVoltage(double voltage) {
+	public void setRightVoltage(double voltage) {
+		if (voltage != 0) {
+			this.brakeUp();
+		}
+		setVoltage(this.frontRight, voltage);
+	}
+
+	public void setLeftVoltage(double voltage) {
 		if (voltage != 0) {
 			this.brakeUp();
 		}
 		setVoltage(this.frontLeft, voltage);
-		setVoltage(this.frontRight, -voltage);
 	}
 
 	public void stop() {
