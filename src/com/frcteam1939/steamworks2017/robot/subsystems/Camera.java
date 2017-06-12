@@ -38,7 +38,7 @@ public class Camera extends Subsystem {
     public Camera(){
     	cam = CameraServer.getInstance().startAutomaticCapture();
 		cam.setResolution(IMG_WIDTH, IMG_HEIGHT);
-		cam.setBrightness(10);
+		cam.setExposureManual(10);
     }
 
     public void initDefaultCommand() {
@@ -103,7 +103,7 @@ public class Camera extends Subsystem {
    	 * Return the number of targets it detects AKA the number of contours
    	 * @return contours
    	 */
-   	public static double getContours(){
+   	public double getContours(){
    		synchronized (imgLock){
    			return contours;
    		}
@@ -112,7 +112,7 @@ public class Camera extends Subsystem {
    	 * returns the length in pixels between the two targets
    	 * @return length between contours(in pixels)
    	 */
-   	public static double getLengthBetweenContours(){
+   	public double getLengthBetweenContours(){
    		synchronized (imgLock){
    			return lengthBetweenContours;
    		}
@@ -121,7 +121,7 @@ public class Camera extends Subsystem {
    	 * Returns the center of the two targets, center = 0; neg = left; pos = right
    	 * @return center
    	 */
-   	public static double getCenterX(){
+   	public double getCenterX(){
    		synchronized (imgLock) {
    			return centerX;
    		}
@@ -130,7 +130,7 @@ public class Camera extends Subsystem {
    	 * Returns the angle in degrees
    	 * @return The angle
    	 */
-   	public static double getAngle() {
+   	public double getAngle() {
    		synchronized (imgLock) {
    			return angle;
    		}
@@ -139,7 +139,7 @@ public class Camera extends Subsystem {
    	 * Returns the distance to the target in inches
    	 * @return distance
    	 */
-   	public static double getDistance() {
+   	public double getDistance() {
    		synchronized (imgLock) {
    			return distance;
    		}

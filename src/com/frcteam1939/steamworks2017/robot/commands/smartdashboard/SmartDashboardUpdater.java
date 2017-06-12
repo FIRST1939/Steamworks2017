@@ -42,6 +42,9 @@ public class SmartDashboardUpdater extends Command {
 
 		SmartDashboard.putNumber("Heading", Robot.drivetrain.getHeading());
 		SmartDashboard.putNumber("Turn Speed", Robot.drivetrain.getTurnSpeed());
+		
+		SmartDashboard.putNumber("Vision Contours", Robot.camera.getContours());
+		SmartDashboard.putNumber("Vision CenterX", Robot.camera.getCenterX());
 
 		SmartDashboard.putNumber("Pressure", Robot.getPressure());
 

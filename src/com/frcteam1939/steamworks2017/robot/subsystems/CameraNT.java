@@ -40,4 +40,9 @@ public class CameraNT extends Subsystem {
 		cam.setBrightness(10);
 		centerX = NetworkTable.getTable("GRIP/myContoursReport");
     }
+	@Override
+	protected void initDefaultCommand() {
+		// TODO Auto-generated method stub
+		
+	}
 }
