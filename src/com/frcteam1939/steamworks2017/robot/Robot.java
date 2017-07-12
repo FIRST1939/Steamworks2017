@@ -3,15 +3,12 @@ package com.frcteam1939.steamworks2017.robot;
 import com.frcteam1939.steamworks2017.robot.commands.auton.BoilerPegBackup;
 import com.frcteam1939.steamworks2017.robot.commands.auton.CenterPegBackup;
 import com.frcteam1939.steamworks2017.robot.commands.auton.SlotsPegBackup;
-import com.frcteam1939.steamworks2017.robot.commands.drivetrain.CalibrateWheelbase;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.DriveDistance;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.FindMaxSpeed;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.FindRightDriveF;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.FindTurnF;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.ResetGyro;
-import com.frcteam1939.steamworks2017.robot.commands.drivetrain.TunePositionPID;
-import com.frcteam1939.steamworks2017.robot.commands.drivetrain.TuneTurnPID;
-import com.frcteam1939.steamworks2017.robot.commands.drivetrain.TuneVelocityPID;
+import com.frcteam1939.steamworks2017.robot.commands.drivetrain.TurnToAngle;
 import com.frcteam1939.steamworks2017.robot.subsystems.Climber;
 import com.frcteam1939.steamworks2017.robot.subsystems.Drivetrain;
 import com.frcteam1939.steamworks2017.robot.subsystems.FuelIntake;
@@ -78,17 +75,16 @@ public class Robot extends IterativeRobot {
 
 		SmartDashboard.putData(new FindMaxSpeed());
 		SmartDashboard.putData(new FindTurnF());
-		SmartDashboard.putData(new TunePositionPID());
-		SmartDashboard.putData(new TuneTurnPID());
-		SmartDashboard.putData(new TuneVelocityPID());
-		SmartDashboard.putData(new CalibrateWheelbase());
 		SmartDashboard.putData(new FindRightDriveF());
-		SmartDashboard.putData(new DriveDistance(72));
+		SmartDashboard.putData(new DriveDistance(36));
+		SmartDashboard.putData(new TurnToAngle(90));
 		SmartDashboard.putData(new ResetGyro());
 
 		UsbCamera cam = CameraServer.getInstance().startAutomaticCapture();
 		cam.setResolution(320, 240);
-		cam.setBrightness(1000);
+		cam.setBrightness(10);
+
+		SmartDashboard.putData(Scheduler.getInstance());
 
 		System.out.println("           Finished Intializing");
 		System.out.println("==========================================/n");

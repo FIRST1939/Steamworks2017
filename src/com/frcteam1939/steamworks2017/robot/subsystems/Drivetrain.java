@@ -1,24 +1,21 @@
 package com.frcteam1939.steamworks2017.robot.subsystems;
 
 import com.ctre.CANTalon;
-import com.ctre.CANTalon.FeedbackDevice;
 import com.ctre.CANTalon.TalonControlMode;
-import com.frcteam1939.steamworks2017.robot.Robot;
 import com.frcteam1939.steamworks2017.robot.RobotMap;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.DriveByJoystick;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Drivetrain extends Subsystem {
 
-	public static final double WHEEL_BASE = 30; // Inches
 	public static final double WHEEL_DIAMETER = 6; // Inches
 	public static final double MAX_SPEED = 430; // RPM
 	public static final double MAX_A = 3.0; // Max Acceleration in R/S^2
@@ -31,18 +28,18 @@ public class Drivetrain extends Subsystem {
 	private static final int NATIVE_UNITS_PER_100MS = (int) (MAX_SPEED / 60.0 / 10.0 * (CPR * 4));
 
 	public static final double velF = 1.4;
-	private static final double velFRightAdjustment = -0.25;
+	private static final double velFRightAdjustment = 0.0;
 	private static final double velP = 0.8999999999999999;
 	private static final double velI = 0;
 	private static final double velD = 0.0312500000025;
 
-	private static final double posP = 0.6;
-	private static final double posI = 1.1 / 1000;
-	private static final double posD = 0.08333333333250001;
+	private static final double posP = 0.4;
+	private static final double posI = 0.0;
+	private static final double posD = 0.0;
 
 	private static final double MAX_TURN_OUPUT = 0.25;
 	private static final double turnF = 0.071;
-	private static final double turnP = 0.0025;
+	private static final double turnP = 0.02;
 	private static final double turnI = 0;
 	private static final double turnD = 0;
 
@@ -58,7 +55,8 @@ public class Drivetrain extends Subsystem {
 	private DoubleSolenoid brake = new DoubleSolenoid(RobotMap.PCM, RobotMap.brakeDownSolenoid, RobotMap.brakeUpSolenoid);
 
 	private AHRS navx;
-	private PIDController turnPID;
+	public PIDController posPID;
+	public PIDController turnPID;
 
 	private boolean driveBySpeed = true;
 
@@ -72,13 +70,12 @@ public class Drivetrain extends Subsystem {
 		setFollower(this.midRight, this.frontRight);
 		setFollower(this.backRight, this.frontRight);
 
-		// Force Motion Profile Updates to be sent to Master Talons
-		new Notifier(() -> {
-			Drivetrain.this.frontLeft.processMotionProfileBuffer();
-			Drivetrain.this.frontRight.processMotionProfileBuffer();
-		}).startPeriodic(MP_UPDATE_MS / 2000.0);
+		this.frontLeft.setPIDSourceType(PIDSourceType.kDisplacement);
+		this.posPID = new PIDController(posP, posI, posD, this.frontLeft, output -> {});
+		this.posPID.setOutputRange(-0.4, 0.4);
 
 		this.navx = new AHRS(SPI.Port.kMXP);
+		this.navx.setPIDSourceType(PIDSourceType.kDisplacement);
 		this.turnPID = new PIDController(turnP, turnI, turnD, this.navx, output -> {});
 		this.turnPID.setInputRange(-180, 180);
 		this.turnPID.setContinuous(true);
@@ -86,8 +83,6 @@ public class Drivetrain extends Subsystem {
 		this.turnPID.setSetpoint(0);
 		this.turnPID.enable();
 
-		this.sidewinder.setFeedbackDevice(FeedbackDevice.QuadEncoder);
-		this.sidewinder.configEncoderCodesPerRev(SIDEWINDER_CPR);
 		this.sidewinder.setNominalClosedLoopVoltage(12.0);
 	}
 
@@ -112,10 +107,6 @@ public class Drivetrain extends Subsystem {
 		return this.frontRight.getSpeed();
 	}
 
-	public double getSidewinderSpeed() {
-		return this.sidewinder.getSpeed();
-	}
-
 	public double getLeftPosition() {
 		return this.frontLeft.getPosition();
 	}
@@ -124,20 +115,12 @@ public class Drivetrain extends Subsystem {
 		return this.frontRight.getPosition();
 	}
 
-	public double getSidewinderPosition() {
-		return this.sidewinder.getPosition();
-	}
-
 	public double getLeftError() {
 		return this.frontLeft.getClosedLoopError();
 	}
 
 	public double getRightError() {
 		return this.frontRight.getClosedLoopError();
-	}
-
-	public double getSidewinderError() {
-		return this.sidewinder.getClosedLoopError();
 	}
 
 	public double getLeftVolts() {
@@ -153,12 +136,12 @@ public class Drivetrain extends Subsystem {
 	}
 
 	public double getHeading() {
-		if (this.navx != null) return this.navx.pidGet();
+		if (this.navx.isConnected()) return this.navx.pidGet();
 		else return 0;
 	}
 
 	public double getTurnSpeed() {
-		if (this.navx != null) return this.navx.getRate();
+		if (this.navx.isConnected()) return this.navx.getRate();
 		else return 0;
 	}
 
@@ -216,19 +199,8 @@ public class Drivetrain extends Subsystem {
 		setSpeed(this.frontRight, right);
 	}
 
-	public void drivePosition(double left, double right) {
-		this.brakeUp();
-		setPosition(this.frontLeft, left);
-		setPosition(this.frontRight, right);
-	}
-
 	public void strafe(double voltage) {
 		setVoltage(this.sidewinder, voltage);
-	}
-
-	public void turnToAngle(double angle) {
-		double distance = Math.toRadians(angle) * (Drivetrain.WHEEL_BASE / 2);
-		Robot.drivetrain.driveDistance(distance, distance);
 	}
 
 	public void resetGyro() {
@@ -241,14 +213,16 @@ public class Drivetrain extends Subsystem {
 
 	public void drive(double moveValue, double rotateValue, double strafeValue) {
 		// Correct with gyro
-		if (rotateValue == 0 && strafeValue != 0) {
+		if (rotateValue == 0 && (moveValue != 0 || strafeValue != 0)) {
 			if (!this.correcting) {
 				this.resetGyro();
+				this.turnPID.reset();
+				this.turnPID.enable();
 				this.turnPID.setSetpoint(0);
 				this.correcting = true;
 			}
 			rotateValue = this.turnPID.get() + turnF * strafeValue;
-		} else {
+		} else if (this.correcting) {
 			this.correcting = false;
 		}
 
@@ -288,18 +262,9 @@ public class Drivetrain extends Subsystem {
 
 		SmartDashboard.putNumber("Turn Setpoint", this.turnPID.getSetpoint());
 		SmartDashboard.putNumber("Turn PID Output", this.turnPID.get());
-		SmartDashboard.putNumber("Turn I", this.turnPID.getI());
-	}
-
-	public void driveDistance(double distance) {
-		this.driveDistance(distance, -distance);
-	}
-
-	public void driveDistance(double left, double right) {
-		this.brakeUp();
-		this.zeroEncoders();
-		driveDistance(this.frontLeft, left);
-		driveDistance(this.frontRight, right);
+		SmartDashboard.putNumber("Pos Setpoint", this.posPID.getSetpoint());
+		SmartDashboard.putNumber("Pos PID Input", this.frontLeft.pidGet());
+		SmartDashboard.putNumber("Pos PID Output", this.posPID.get());
 	}
 
 	public void enableBraking() {
@@ -352,6 +317,16 @@ public class Drivetrain extends Subsystem {
 		setupMasterTalon(this.frontRight, velF + velFRightAdjustment);
 	}
 
+	public void setRampRate(double left, double right) {
+		this.frontLeft.setVoltageRampRate(left);
+		this.frontRight.setVoltageRampRate(right);
+	}
+
+	public void resetRampRate() {
+		this.frontLeft.setVoltageRampRate(MAX_JERK / MAX_A * 12);
+		this.frontRight.setVoltageRampRate(MAX_JERK / MAX_A * 12);
+	}
+
 	/*
 	 * Static Convenience Methods
 	 */
@@ -400,18 +375,6 @@ public class Drivetrain extends Subsystem {
 	private static void setPercentVBus(CANTalon talon, double percentVBus) {
 		talon.changeControlMode(TalonControlMode.PercentVbus);
 		talon.set(percentVBus);
-	}
-
-	private static void setPosition(CANTalon talon, double position) {
-		talon.setProfile(1);
-		talon.changeControlMode(TalonControlMode.Position);
-		talon.set(position);
-	}
-
-	private static void driveDistance(CANTalon talon, double distance) {
-		talon.changeControlMode(TalonControlMode.MotionMagic);
-		talon.setProfile(1);
-		talon.set(distance / (Drivetrain.WHEEL_DIAMETER * Math.PI));
 	}
 
 }

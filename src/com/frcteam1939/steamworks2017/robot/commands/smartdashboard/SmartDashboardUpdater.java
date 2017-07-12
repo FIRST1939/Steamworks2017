@@ -35,11 +35,6 @@ public class SmartDashboardUpdater extends Command {
 		SmartDashboard.putNumber("Right Voltage", Robot.drivetrain.getRightVolts());
 		SmartDashboard.putNumber("Right Error", Robot.drivetrain.getRightError());
 
-		//SmartDashboard.putNumber("Sidewinder Speed", Robot.drivetrain.getSidewinderSpeed());
-		//SmartDashboard.putNumber("Sidewinder Position", Robot.drivetrain.getSidewinderPosition());
-		//SmartDashboard.putNumber("Sidewinder Voltage", Robot.drivetrain.getSidewinderVolts());
-		//SmartDashboard.putNumber("Sidewinder Error", Robot.drivetrain.getSidewinderError());
-
 		SmartDashboard.putNumber("Heading", Robot.drivetrain.getHeading());
 		SmartDashboard.putNumber("Turn Speed", Robot.drivetrain.getTurnSpeed());
 
@@ -50,6 +45,8 @@ public class SmartDashboardUpdater extends Command {
 		SmartDashboard.putBoolean("Is Moving", Robot.drivetrain.isMoving());
 
 		Robot.drivetrain.setDriveBySpeed(SmartDashboard.getBoolean("Drive By Speed", true));
+		SmartDashboard.putData("Turn PID", Robot.drivetrain.turnPID);
+		SmartDashboard.putData("Move PID", Robot.drivetrain.posPID);
 	}
 
 	@Override
