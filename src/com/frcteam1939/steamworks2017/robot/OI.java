@@ -5,6 +5,8 @@ import com.frcteam1939.steamworks2017.robot.commands.fuelintake.SetFuelIntakeSpe
 import com.frcteam1939.steamworks2017.robot.commands.fueloutput.SetFuelOutputSpeed;
 import com.frcteam1939.steamworks2017.robot.commands.gearoutput.PushOutGear;
 import com.frcteam1939.steamworks2017.robot.commands.gearoutput.RetractGearPusher;
+import com.frcteam1939.steamworks2017.robot.subsystems.FuelIntake;
+import com.frcteam1939.steamworks2017.robot.subsystems.FuelOutput;
 import com.frcteam1939.steamworks2017.util.Gamepad;
 import com.frcteam1939.steamworks2017.util.RunCode;
 
@@ -21,9 +23,9 @@ public class OI {
 	public OI() {
 		this.gamepad.y.whenPressed(new PushOutGear());
 		this.gamepad.b.whenPressed(new RetractGearPusher());
-		// this.gamepad.rightTrigger.whenPressed(new SetFuelOutputSpeed(FuelOutput.OUT_SPEED));
+		this.gamepad.rightButton.whenPressed(new SetFuelOutputSpeed(FuelOutput.OUT_SPEED));
 		this.gamepad.rightButton.whenReleased(new SetFuelOutputSpeed(0));
-		// this.gamepad.leftTrigger.whenPressed(new SetFuelIntakeSpeed(FuelIntake.IN_SPEED));
+		this.gamepad.leftButton.whenPressed(new SetFuelIntakeSpeed(FuelIntake.IN_SPEED));
 		this.gamepad.leftButton.whenReleased(new SetFuelIntakeSpeed(0));
 
 		new JoystickButton(this.left, 2).whenPressed(new BrakeDown());
