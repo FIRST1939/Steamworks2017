@@ -23,10 +23,10 @@ public class OI {
 	public OI() {
 		this.gamepad.y.whenPressed(new PushOutGear());
 		this.gamepad.b.whenPressed(new RetractGearPusher());
-		this.gamepad.rightButton.whenPressed(new SetFuelOutputSpeed(FuelOutput.OUT_SPEED));
-		this.gamepad.rightButton.whenReleased(new SetFuelOutputSpeed(0));
-		this.gamepad.leftButton.whenPressed(new SetFuelIntakeSpeed(FuelIntake.IN_SPEED));
-		this.gamepad.leftButton.whenReleased(new SetFuelIntakeSpeed(0));
+		this.gamepad.rightTrigger.whenPressed(new SetFuelOutputSpeed(FuelOutput.OUT_SPEED));
+		this.gamepad.rightTrigger.whenReleased(new SetFuelOutputSpeed(0));
+		this.gamepad.leftTrigger.whenPressed(new SetFuelIntakeSpeed(FuelIntake.IN_SPEED));
+		this.gamepad.leftTrigger.whenReleased(new SetFuelIntakeSpeed(0));
 
 		new JoystickButton(this.left, 2).whenPressed(new BrakeDown());
 		new JoystickButton(this.left, 3).whenPressed(new BrakeDown());
