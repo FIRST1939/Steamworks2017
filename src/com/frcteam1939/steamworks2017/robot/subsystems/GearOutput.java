@@ -11,6 +11,8 @@ public class GearOutput extends Subsystem {
 
 	private Solenoid gearSolenoid = new Solenoid(RobotMap.PCM, RobotMap.gearPushSolenoid);
 	private DigitalInput limitSwitch = new DigitalInput(RobotMap.gearLimitSwitch);
+	private DigitalInput rightBannerSensor = new DigitalInput(RobotMap.rightBannerSensor);
+	private DigitalInput leftBannerSensor = new DigitalInput(RobotMap.leftBannerSensor);
 
 	@Override
 	public void initDefaultCommand() {}
@@ -27,5 +29,13 @@ public class GearOutput extends Subsystem {
 
 	public boolean onPeg() {
 		return this.limitSwitch.get();
+	}
+
+	public boolean rightIsAligned() {
+		return !this.rightBannerSensor.get();
+	}
+
+	public boolean leftIsAligned() {
+		return !this.leftBannerSensor.get();
 	}
 }

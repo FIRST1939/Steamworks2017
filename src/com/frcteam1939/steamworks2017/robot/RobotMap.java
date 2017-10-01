@@ -29,6 +29,8 @@ public class RobotMap {
 	// DIO
 	public static final int gearBannerSensor = 0;
 	public static final int gearLimitSwitch = 1;
+	public static final int rightBannerSensor = 0;
+	public static final int leftBannerSensor = 0;
 	public static final int pinOne = 2;
 	public static final int pinTwo = 3;
 	public static final int pinThree = 4;
