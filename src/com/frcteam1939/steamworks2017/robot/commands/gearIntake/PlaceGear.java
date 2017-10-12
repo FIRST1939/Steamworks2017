@@ -1,4 +1,4 @@
-package com.frcteam1939.steamworks2017.robot.commands.auton;
+package com.frcteam1939.steamworks2017.robot.commands.gearIntake;
 
 import com.frcteam1939.steamworks2017.robot.commands.fuelintake.SetFuelIntakeSpeed;
 import com.frcteam1939.steamworks2017.robot.commands.gearoutput.PushOutGear;
