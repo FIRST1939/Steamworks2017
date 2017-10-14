@@ -31,4 +31,7 @@ public class GearIntake extends Subsystem {
 		return this.banner.get();
 	}
 
+	public boolean test() {
+		return !this.banner.get();
+	}
 }

@@ -43,6 +43,7 @@ public class SmartDashboardUpdater extends Command {
 		SmartDashboard.putBoolean("Have Gear", Robot.gearIntake.haveGear());
 		SmartDashboard.putBoolean("On Peg", Robot.gearOutput.onPeg());
 		SmartDashboard.putBoolean("Is Moving", Robot.drivetrain.isMoving());
+		SmartDashboard.putBoolean("Test", Robot.gearIntake.test());
 
 		Robot.drivetrain.setDriveBySpeed(SmartDashboard.getBoolean("Drive By Speed", true));
 		SmartDashboard.putData("Turn PID", Robot.drivetrain.turnPID);

@@ -18,6 +18,6 @@ public class DriveToBlueSlotsPeg extends CommandGroup {
 		} else if (Robot.gearOutput.rightIsAligned()) {
 			this.addSequential(new DriveDistance(DistanceConstants.SLOTS_SECOND));
 		}
-
+		this.addSequential(new PlaceGear());
 	}
 }
