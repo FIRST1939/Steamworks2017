@@ -1,12 +1,6 @@
 package com.frcteam1939.steamworks2017.robot;
 
 import com.frcteam1939.steamworks2017.robot.commands.auton.DriveToBlueSlotsPeg;
-import com.frcteam1939.steamworks2017.robot.commands.drivetrain.DriveDistance;
-import com.frcteam1939.steamworks2017.robot.commands.drivetrain.FindMaxSpeed;
-import com.frcteam1939.steamworks2017.robot.commands.drivetrain.FindRightDriveF;
-import com.frcteam1939.steamworks2017.robot.commands.drivetrain.FindTurnF;
-import com.frcteam1939.steamworks2017.robot.commands.drivetrain.ResetGyro;
-import com.frcteam1939.steamworks2017.robot.commands.drivetrain.TurnToAngle;
 import com.frcteam1939.steamworks2017.robot.subsystems.Climber;
 import com.frcteam1939.steamworks2017.robot.subsystems.Drivetrain;
 import com.frcteam1939.steamworks2017.robot.subsystems.FuelIntake;
@@ -65,19 +59,19 @@ public class Robot extends IterativeRobot {
 		System.out.println("         Steamwork2017 Intializing");
 		oi = new OI();
 
+		this.chooser.addObject("Blue Slots Peg Backup", new DriveToBlueSlotsPeg());
 		// this.chooser.addObject("Center Peg Backup", new CenterPegBackup());
 		// this.chooser.addObject("Boiler Peg Backup", new BoilerPegBackup());
 		// this.chooser.addObject("Slots Peg Backup", new SlotsPegBackup());
-		this.chooser.addObject("Blue Slots", new DriveToBlueSlotsPeg());
 		this.chooser.addDefault("Do Nothing", new DoNothing());
 		SmartDashboard.putData("Autonomous Chooser", this.chooser);
 
-		SmartDashboard.putData(new FindMaxSpeed());
-		SmartDashboard.putData(new FindTurnF());
-		SmartDashboard.putData(new FindRightDriveF());
-		SmartDashboard.putData(new DriveDistance(36));
-		SmartDashboard.putData(new TurnToAngle(90));
-		SmartDashboard.putData(new ResetGyro());
+		// SmartDashboard.putData(new FindMaxSpeed());
+		// SmartDashboard.putData(new FindTurnF());
+		// SmartDashboard.putData(new FindRightDriveF());
+		// SmartDashboard.putData(new DriveDistance(36));
+		// SmartDashboard.putData(new TurnToAngle(90));
+		// SmartDashboard.putData(new ResetGyro());
 
 		UsbCamera cam = CameraServer.getInstance().startAutomaticCapture();
 		cam.setResolution(320, 240);
