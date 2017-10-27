@@ -1,6 +1,10 @@
 package com.frcteam1939.steamworks2017.robot;
 
+import com.frcteam1939.steamworks2017.robot.commands.auton.CenterPegBackup;
+import com.frcteam1939.steamworks2017.robot.commands.auton.DriveToBlueBoilerPeg;
 import com.frcteam1939.steamworks2017.robot.commands.auton.DriveToBlueSlotsPeg;
+import com.frcteam1939.steamworks2017.robot.commands.auton.DriveToRedBoilerPeg;
+import com.frcteam1939.steamworks2017.robot.commands.auton.DriveToRedSlotsPeg;
 import com.frcteam1939.steamworks2017.robot.subsystems.Climber;
 import com.frcteam1939.steamworks2017.robot.subsystems.Drivetrain;
 import com.frcteam1939.steamworks2017.robot.subsystems.FuelIntake;
@@ -60,7 +64,10 @@ public class Robot extends IterativeRobot {
 		oi = new OI();
 
 		this.chooser.addObject("Blue Slots Peg Backup", new DriveToBlueSlotsPeg());
-		// this.chooser.addObject("Center Peg Backup", new CenterPegBackup());
+		this.chooser.addObject("Blue Boiler Peg Backup", new DriveToBlueBoilerPeg());
+		this.chooser.addObject("Red Slots Peg Backup", new DriveToRedSlotsPeg());
+		this.chooser.addObject("Red Boiler Peg Backup", new DriveToRedBoilerPeg());
+		this.chooser.addObject("Center Peg Backup", new CenterPegBackup());
 		// this.chooser.addObject("Boiler Peg Backup", new BoilerPegBackup());
 		// this.chooser.addObject("Slots Peg Backup", new SlotsPegBackup());
 		this.chooser.addDefault("Do Nothing", new DoNothing());

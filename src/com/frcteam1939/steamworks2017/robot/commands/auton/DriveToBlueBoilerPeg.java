@@ -19,5 +19,6 @@ public class DriveToBlueBoilerPeg extends CommandGroup {
 			this.addSequential(new DriveDistance(DistanceConstants.BOILER_SECOND));
 		}
 		this.addSequential(new PlaceGear());
+		this.addSequential(new DriveDistance(DistanceConstants.BACKUP));
 	}
 }

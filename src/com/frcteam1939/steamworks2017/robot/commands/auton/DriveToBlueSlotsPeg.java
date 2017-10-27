@@ -19,5 +19,6 @@ public class DriveToBlueSlotsPeg extends CommandGroup {
 			this.addSequential(new DriveDistance(DistanceConstants.SLOTS_SECOND));
 		}
 		this.addSequential(new PlaceGear());
+		this.addSequential(new DriveDistance(DistanceConstants.BACKUP));
 	}
 }
