@@ -1,28 +1,23 @@
 package com.frcteam1939.steamworks2017.robot.commands.auton;
 
+import com.frcteam1939.steamworks2017.robot.DistanceConstants;
+import com.frcteam1939.steamworks2017.robot.Robot;
+import com.frcteam1939.steamworks2017.robot.commands.drivetrain.DriveDistance;
+import com.frcteam1939.steamworks2017.robot.commands.drivetrain.TurnToAngle;
+import com.frcteam1939.steamworks2017.robot.commands.gearIntake.PlaceGear;
+
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
-/**
- *
- */
 public class DriveToBlueBoilerPeg extends CommandGroup {
 
-    public DriveToBlueBoilerPeg() {
-        // Add Commands here:
-        // e.g. addSequential(new Command1());
-        //      addSequential(new Command2());
-        // these will run in order.
-
-        // To run multiple commands at the same time,
-        // use addParallel()
-        // e.g. addParallel(new Command1());
-        //      addSequential(new Command2());
-        // Command1 and Command2 will run in parallel.
-
-        // A command group will require all of the subsystems that each member
-        // would require.
-        // e.g. if Command1 requires chassis, and Command2 requires arm,
-        // a CommandGroup containing them would require both the chassis and the
-        // arm.
-    }
+	public DriveToBlueBoilerPeg() {
+		this.addSequential(new DriveDistance(DistanceConstants.BOILER_FIRST));
+		if (!Robot.gearOutput.leftIsAligned()) {
+			// Try -90
+			this.addSequential(new TurnToAngle(DistanceConstants.BOILER_BLUE_ANGLE));
+		} else if (Robot.gearOutput.leftIsAligned()) {
+			this.addSequential(new DriveDistance(DistanceConstants.BOILER_SECOND));
+		}
+		this.addSequential(new PlaceGear());
+	}
 }
