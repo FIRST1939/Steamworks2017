@@ -44,6 +44,8 @@ public class SmartDashboardUpdater extends Command {
 		SmartDashboard.putBoolean("On Peg", Robot.gearOutput.onPeg());
 		SmartDashboard.putBoolean("Is Moving", Robot.drivetrain.isMoving());
 		SmartDashboard.putBoolean("Test", Robot.gearIntake.test());
+		SmartDashboard.putBoolean("Right Is Aligned", Robot.gearOutput.rightIsAligned());
+		SmartDashboard.putBoolean("Left Is Aligned", Robot.gearOutput.leftIsAligned());
 
 		Robot.drivetrain.setDriveBySpeed(SmartDashboard.getBoolean("Drive By Speed", true));
 		SmartDashboard.putData("Turn PID", Robot.drivetrain.turnPID);
