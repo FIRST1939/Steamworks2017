@@ -1,8 +1,8 @@
 package com.frcteam1939.steamworks2017.robot;
 
-import com.frcteam1939.steamworks2017.robot.commands.auton.BoilerPegBackup;
 import com.frcteam1939.steamworks2017.robot.commands.auton.CenterPegBackup;
-import com.frcteam1939.steamworks2017.robot.commands.auton.SlotsPegBackup;
+import com.frcteam1939.steamworks2017.robot.commands.auton.DriveToBoilerPeg;
+import com.frcteam1939.steamworks2017.robot.commands.auton.DriveToSlotsPeg;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.DriveDistance;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.FindMaxSpeed;
 import com.frcteam1939.steamworks2017.robot.commands.drivetrain.FindRightDriveF;
@@ -68,8 +68,8 @@ public class Robot extends IterativeRobot {
 		oi = new OI();
 
 		this.chooser.addObject("Center Peg Backup", new CenterPegBackup());
-		this.chooser.addObject("Boiler Peg Backup", new BoilerPegBackup());
-		this.chooser.addObject("Slots Peg Backup", new SlotsPegBackup());
+		this.chooser.addObject("Boiler Peg", new DriveToBoilerPeg());
+		this.chooser.addObject("Slots Peg", new DriveToSlotsPeg());
 		this.chooser.addDefault("Do Nothing", new DoNothing());
 		SmartDashboard.putData("Autonomous Chooser", this.chooser);
 

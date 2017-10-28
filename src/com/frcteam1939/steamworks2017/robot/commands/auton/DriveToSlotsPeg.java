@@ -10,7 +10,9 @@ public class DriveToSlotsPeg extends CommandGroup {
 	public DriveToSlotsPeg() {
 		this.addSequential(new DriveDistance(DistanceConstants.SLOTS_FIRST));
 		this.addSequential(new TurnByAlliance(DistanceConstants.SLOTS_RED_ANGLE, DistanceConstants.SLOTS_BLUE_ANGLE));
+		System.out.println("Slots Test 1");
 		this.addSequential(new DriveDistance(DistanceConstants.SLOTS_SECOND));
+		System.out.println("Slots Test 2");
 		this.addSequential(new PlaceGear());
 	}
 }
