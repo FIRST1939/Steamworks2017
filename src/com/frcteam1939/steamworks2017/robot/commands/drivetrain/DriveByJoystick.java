@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.command.Command;
 public class DriveByJoystick extends Command {
 
 	private static double DEAD_BAND = 0.1;
+	private static double ROTATE_DEAD_BAND;
 
 	public DriveByJoystick() {
 		this.requires(Robot.drivetrain);
@@ -32,7 +33,7 @@ public class DriveByJoystick extends Command {
 				move = map(move, 0, 0.5);
 			}
 		}
-		if (Math.abs(rotate) < DEAD_BAND) {
+		if (Math.abs(rotate) < ROTATE_DEAD_BAND) {
 			rotate = 0;
 		} else {
 			if (turbo) {
@@ -78,8 +79,11 @@ public class DriveByJoystick extends Command {
 	private static double map(double x, double in_min, double in_max, double out_min, double out_max) {
 		boolean negative = x < 0;
 		double newValue = (Math.abs(x) - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-		if (negative) return -newValue;
-		else return newValue;
+		if (negative) {
+			return -newValue;
+		} else {
+			return newValue;
+		}
 	}
 
 }
